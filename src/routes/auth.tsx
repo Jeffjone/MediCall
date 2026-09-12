@@ -21,14 +21,25 @@ export const Route = createFileRoute("/auth")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//")
+      ? s.next
+      : undefined,
+  }),
   component: SignInPage,
 });
 
 function SignInPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  function goNext() {
+    if (next) window.location.href = next;
+    else navigate({ to: "/dashboard" });
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,7 +48,7 @@ function SignInPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       toast.success("Signed in.");
-      navigate({ to: "/dashboard" });
+      goNext();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not sign in.");
     } finally {
@@ -48,7 +59,7 @@ function SignInPage() {
   async function handleGoogle() {
     try {
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: next ? window.location.origin + next : window.location.origin,
       });
       if (result.error) throw result.error;
       if (result.redirected) return;
