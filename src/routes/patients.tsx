@@ -115,7 +115,7 @@ function PatientsPage() {
         </div>
         <div className="flex items-center gap-3">
           <Select value={filter} onValueChange={(v) => setFilter(v as FilterKey)}>
-            <SelectTrigger size="sm" className="w-[190px]" aria-label="Filter patients">
+            <SelectTrigger className="h-9 w-[190px]" aria-label="Filter patients">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -127,7 +127,7 @@ function PatientsPage() {
             </SelectContent>
           </Select>
           <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
-            <SelectTrigger size="sm" className="w-[170px]" aria-label="Sort patients">
+            <SelectTrigger className="h-9 w-[170px]" aria-label="Sort patients">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
