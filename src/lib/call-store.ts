@@ -12,6 +12,34 @@ export type CallRecord = {
   startedAt: string;
   detail: string;
   conversationId?: string;
+  /** Audit trail details */
+  completedAt?: string;
+  dialedNumber?: string;
+  reason?: string;
+  approvedAlternative?: string;
+  patient?: {
+    dateOfBirth: string;
+    phone: string;
+    email: string;
+    preferredLanguage: string;
+  };
+  prescription?: {
+    strength: string;
+    ndc: string;
+    prescriber: string;
+    fillDate: string;
+    quantity: number;
+    daysSupply: number;
+  };
+  recall?: {
+    classification: string;
+    reasonForRecall: string;
+    recallingFirm: string;
+    lotNumbers: string;
+    recallInitiationDate: string;
+    status: string;
+    productDescription: string;
+  };
 };
 
 type State = {
