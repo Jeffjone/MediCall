@@ -5,7 +5,7 @@ import { analysisSchema, type AnalysisResult } from './analysis-types';
 import { getFinancialProfile } from './financial';
 import { estimatePrices } from './drug-pricing';
 import { resolveDrug } from './rxnorm.server';
-import { matchPatients, normalizeNdc } from './recall-matching';
+import { matchPatients, normalizeNdc, type Recall } from './recall-matching';
 
 function secret() { const key = process.env['LOVABLE_API_KEY']; if (!key) throw new Error('AI is not configured.'); return key; }
 export function signReceipt(payload: object) {
@@ -22,14 +22,14 @@ export function readReceipt(token: string, userId: string) {
   if (data.userId !== userId || data.expires < Date.now()) throw new Error('Review expired. Analyse this patient again.');
   return data;
 }
-export function findCase(patientId: string, recallNumber: string, ndc: string) {
-  const patient = matchPatients().find(p => p.patient.id === patientId);
+export function findCase(patientId: string, recallNumber: string, ndc: string, recallList?: Recall[]) {
+  const patient = matchPatients(undefined, recallList).find(p => p.patient.id === patientId);
   const flagged = patient?.flagged.find(f => f.recall.recallNumber === recallNumber && normalizeNdc(f.prescription.ndc) === normalizeNdc(ndc));
   if (!patient || !flagged) throw new Error('This prescription does not match the recall.');
   return { patient, flagged };
 }
-export async function analyseCase(patientId: string, recallNumber: string, ndc: string, userId: string): Promise<AnalysisResult> {
-  const { flagged } = findCase(patientId, recallNumber, ndc);
+export async function analyseCase(patientId: string, recallNumber: string, ndc: string, userId: string, recallList?: Recall[]): Promise<AnalysisResult> {
+  const { flagged } = findCase(patientId, recallNumber, ndc, recallList);
   const identity = await resolveDrug(normalizeNdc(ndc));
   const financial = getFinancialProfile(patientId);
   let runId: string | undefined;

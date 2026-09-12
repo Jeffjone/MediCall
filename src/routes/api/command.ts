@@ -12,7 +12,7 @@ export const Route = createFileRoute('/api/command')({ server: { handlers: {
       if (!token) return new Response('Please sign in to use the command center.', { status: 401 });
       const url = process.env['SUPABASE_URL']; const key = process.env['SUPABASE_PUBLISHABLE_KEY'];
       if (!url || !key) return new Response('Account service is not configured.', { status: 503 });
-      const db = createClient(url, key, { accessToken: async () => token, auth: { persistSession: false } });
+      const db = createClient(url, key, { global: { headers: { Authorization: `Bearer ${token}` } }, auth: { persistSession: false } });
       const { data, error } = await db.auth.getUser(token);
       if (error || !data.user) return new Response('Your session expired. Please sign in again.', { status: 401 });
       const { data: profile } = await db.from('profiles').select('approval_status').eq('id', data.user.id).single();

@@ -22,11 +22,11 @@ export function commandTools(userId: string, signal: AbortSignal) {
       inputSchema: z.object({ patientId: z.string(), recallNumber: z.string(), ndc: z.string() }),
       execute: async ({ patientId, recallNumber, ndc }) => {
         signal.throwIfAborted();
-        const { matched } = await load();
+        const { matched, feed } = await load();
         const match = matched.find(p => p.patient.id === patientId);
         const flagged = match?.flagged.find(f => f.recall.recallNumber === recallNumber && normalizeNdc(f.prescription.ndc) === normalizeNdc(ndc));
         if (!match || !flagged) throw new Error('No matching recalled prescription.');
-        const result = await analyseCase(patientId, recallNumber, ndc, userId);
+        const result = await analyseCase(patientId, recallNumber, ndc, userId, feed.recalls);
         return { match, flagged, result, status: 'Awaiting pharmacist review' };
       },
       toModelOutput: ({ output }) => ({ type: 'json', value: { status: output.status, patient: output.match.fullName, clinical: output.result.clinical, alternatives: output.result.alternatives } }),
