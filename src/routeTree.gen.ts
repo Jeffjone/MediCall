@@ -19,6 +19,7 @@ import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedOutreachRouteImport } from './routes/_authenticated/outreach'
 import { Route as AuthenticatedPatientsRouteImport } from './routes/_authenticated/patients'
+import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedRecallsRouteImport } from './routes/_authenticated/recalls'
 
 const IndexRoute = IndexRouteImport.update({
@@ -70,6 +71,11 @@ const AuthenticatedPatientsRoute = AuthenticatedPatientsRouteImport.update({
   path: '/patients',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedRecallsRoute = AuthenticatedRecallsRouteImport.update({
   id: '/recalls',
   path: '/recalls',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/outreach': typeof AuthenticatedOutreachRoute
   '/patients': typeof AuthenticatedPatientsRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/recalls': typeof AuthenticatedRecallsRoute
 }
 export interface FileRoutesByTo {
@@ -98,6 +105,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/outreach': typeof AuthenticatedOutreachRoute
   '/patients': typeof AuthenticatedPatientsRoute
+  '/profile': typeof AuthenticatedProfileRoute
   '/recalls': typeof AuthenticatedRecallsRoute
 }
 export interface FileRoutesById {
@@ -112,6 +120,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/outreach': typeof AuthenticatedOutreachRoute
   '/_authenticated/patients': typeof AuthenticatedPatientsRoute
+  '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/recalls': typeof AuthenticatedRecallsRoute
 }
 export interface FileRouteTypes {
@@ -126,6 +135,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/outreach'
     | '/patients'
+    | '/profile'
     | '/recalls'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/outreach'
     | '/patients'
+    | '/profile'
     | '/recalls'
   id:
     | '__root__'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/outreach'
     | '/_authenticated/patients'
+    | '/_authenticated/profile'
     | '/_authenticated/recalls'
   fileRoutesById: FileRoutesById
 }
@@ -235,6 +247,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPatientsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/profile': {
+      id: '/_authenticated/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof AuthenticatedProfileRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/recalls': {
       id: '/_authenticated/recalls'
       path: '/recalls'
@@ -250,6 +269,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOutreachRoute: typeof AuthenticatedOutreachRoute
   AuthenticatedPatientsRoute: typeof AuthenticatedPatientsRoute
+  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRecallsRoute: typeof AuthenticatedRecallsRoute
 }
 
@@ -258,6 +278,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOutreachRoute: AuthenticatedOutreachRoute,
   AuthenticatedPatientsRoute: AuthenticatedPatientsRoute,
+  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRecallsRoute: AuthenticatedRecallsRoute,
 }
 

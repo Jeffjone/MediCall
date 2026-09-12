@@ -17,33 +17,63 @@ export type Database = {
       profiles: {
         Row: {
           approval_status: string
+          city: string | null
           created_at: string
+          dea_number: string | null
           email: string | null
           full_name: string | null
+          hours: string | null
           id: string
           license_number: string | null
+          notes: string | null
+          npi_number: string | null
           pharmacy_location: string | null
           pharmacy_name: string
+          phone: string | null
+          postal_code: string | null
+          state: string | null
+          street_address: string | null
+          updated_at: string
         }
         Insert: {
           approval_status?: string
+          city?: string | null
           created_at?: string
+          dea_number?: string | null
           email?: string | null
           full_name?: string | null
+          hours?: string | null
           id: string
           license_number?: string | null
+          notes?: string | null
+          npi_number?: string | null
           pharmacy_location?: string | null
           pharmacy_name: string
+          phone?: string | null
+          postal_code?: string | null
+          state?: string | null
+          street_address?: string | null
+          updated_at?: string
         }
         Update: {
           approval_status?: string
+          city?: string | null
           created_at?: string
+          dea_number?: string | null
           email?: string | null
           full_name?: string | null
+          hours?: string | null
           id?: string
           license_number?: string | null
+          notes?: string | null
+          npi_number?: string | null
           pharmacy_location?: string | null
           pharmacy_name?: string
+          phone?: string | null
+          postal_code?: string | null
+          state?: string | null
+          street_address?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
