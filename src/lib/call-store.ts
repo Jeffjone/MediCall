@@ -77,12 +77,20 @@ export function finishCall(
   status: Exclude<CallStatus, "idle" | "dialing">,
   detail: string,
   conversationId?: string,
+  dialedNumber?: string,
 ) {
   state = {
     byPatient: { ...state.byPatient, [patientId]: status },
     log: state.log.map((entry) =>
       entry.id === id
-        ? { ...entry, status, detail, ...(conversationId ? { conversationId } : {}) }
+        ? {
+            ...entry,
+            status,
+            detail,
+            completedAt: new Date().toISOString(),
+            ...(conversationId ? { conversationId } : {}),
+            ...(dialedNumber ? { dialedNumber } : {}),
+          }
         : entry,
     ),
   };
