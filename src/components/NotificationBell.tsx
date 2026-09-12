@@ -7,7 +7,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useNotifications, type AppNotification } from "@/lib/notifications";
 
@@ -33,8 +32,12 @@ export function NotificationBell() {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-96 p-0">
-        <div className="flex items-center justify-between px-4 py-3">
+      <PopoverContent
+        align="end"
+        collisionPadding={12}
+        className="flex max-h-[var(--radix-popover-content-available-height)] w-96 max-w-[calc(100vw-1.5rem)] flex-col overflow-hidden p-0"
+      >
+        <div className="flex shrink-0 items-center justify-between gap-2 px-4 py-3">
           <div>
             <p className="text-sm font-semibold">Notifications</p>
             <p className="text-xs text-muted-foreground">
@@ -45,8 +48,13 @@ export function NotificationBell() {
             Mark all read
           </Button>
         </div>
-        <Separator />
-        <ScrollArea className="max-h-96">
+        <Separator className="shrink-0" />
+        <div
+          role="region"
+          aria-label="Notification list"
+          tabIndex={0}
+          className="min-h-0 max-h-96 overflow-y-auto overscroll-contain focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+        >
           <ul className="divide-y">
             {notifications.map((n) => {
               const isRead = read.includes(n.id);
@@ -71,7 +79,7 @@ export function NotificationBell() {
                     <span className="min-w-0 flex-1">
                       <span className="flex items-center gap-2">
                         <span
-                          className={`truncate text-sm ${isRead ? "font-normal text-muted-foreground" : "font-medium"}`}
+                          className={`break-words text-sm ${isRead ? "font-normal text-muted-foreground" : "font-medium"}`}
                         >
                           {n.title}
                         </span>
@@ -79,7 +87,7 @@ export function NotificationBell() {
                           <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
                         )}
                       </span>
-                      <span className="mt-0.5 line-clamp-2 block text-xs text-muted-foreground">
+                      <span className="mt-0.5 block break-words text-xs text-muted-foreground">
                         {n.body}
                       </span>
                       <span className="mt-1 block text-[11px] text-muted-foreground">
@@ -96,7 +104,7 @@ export function NotificationBell() {
               </li>
             )}
           </ul>
-        </ScrollArea>
+        </div>
       </PopoverContent>
     </Popover>
   );
