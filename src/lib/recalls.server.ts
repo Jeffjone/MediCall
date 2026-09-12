@@ -80,10 +80,12 @@ function toRecall(record: OpenFdaRecord): Recall | null {
 }
 
 async function queryOpenFda(search: string, limit: number, sort?: string): Promise<OpenFdaRecord[]> {
-  const params = new URLSearchParams({ search, limit: String(limit) });
-  if (sort) params.set("sort", sort);
+  // Built by hand: openFDA uses "+" as its term separator, which
+  // URLSearchParams would percent-encode into a literal plus sign.
+  let url = `${OPENFDA_ENDPOINT}?search=${search}&limit=${limit}`;
+  if (sort) url += `&sort=${sort}`;
 
-  const response = await fetch(`${OPENFDA_ENDPOINT}?${params.toString()}`, {
+  const response = await fetch(url, {
     headers: { accept: "application/json" },
   });
 
@@ -106,11 +108,13 @@ export async function fetchRecalls(): Promise<{ recalls: Recall[]; source: "open
   }
 
   try {
-    const pinnedQuery = PINNED_RECALL_NUMBERS.map((n) => `recall_number:"${n}"`).join("+OR+");
+    const pinnedQuery = PINNED_RECALL_NUMBERS.map(
+      (n) => `recall_number:${encodeURIComponent(`"${n}"`)}`,
+    ).join("+OR+");
 
     const [pinned, latest] = await Promise.all([
       queryOpenFda(pinnedQuery, PINNED_RECALL_NUMBERS.length),
-      queryOpenFda('product_type:"Drugs"', 100, "report_date:desc"),
+      queryOpenFda(`product_type:${encodeURIComponent('"Drugs"')}`, 100, "report_date:desc"),
     ]);
 
     const byNumber = new Map<string, Recall>();
