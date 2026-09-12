@@ -18,11 +18,13 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedCommandCenterRouteImport } from './routes/_authenticated/command-center'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedOutreachRouteImport } from './routes/_authenticated/outreach'
 import { Route as AuthenticatedPatientsRouteImport } from './routes/_authenticated/patients'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedRecallsRouteImport } from './routes/_authenticated/recalls'
+import { Route as ApiCommandRouteImport } from './routes/api/command'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
 const IndexRoute = IndexRouteImport.update({
@@ -70,6 +72,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedCommandCenterRoute =
+  AuthenticatedCommandCenterRouteImport.update({
+    id: '/command-center',
+    path: '/command-center',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -95,6 +103,11 @@ const AuthenticatedRecallsRoute = AuthenticatedRecallsRouteImport.update({
   path: '/recalls',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiCommandRoute = ApiCommandRouteImport.update({
+  id: '/api/command',
+  path: '/api/command',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   id: '/.lovable/oauth/consent',
   path: '/.lovable/oauth/consent',
@@ -110,11 +123,13 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/command-center': typeof AuthenticatedCommandCenterRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/outreach': typeof AuthenticatedOutreachRoute
   '/patients': typeof AuthenticatedPatientsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/recalls': typeof AuthenticatedRecallsRoute
+  '/api/command': typeof ApiCommandRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
 }
 export interface FileRoutesByTo {
@@ -126,11 +141,13 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/command-center': typeof AuthenticatedCommandCenterRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/outreach': typeof AuthenticatedOutreachRoute
   '/patients': typeof AuthenticatedPatientsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/recalls': typeof AuthenticatedRecallsRoute
+  '/api/command': typeof ApiCommandRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
 }
 export interface FileRoutesById {
@@ -144,11 +161,13 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/command-center': typeof AuthenticatedCommandCenterRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/outreach': typeof AuthenticatedOutreachRoute
   '/_authenticated/patients': typeof AuthenticatedPatientsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/recalls': typeof AuthenticatedRecallsRoute
+  '/api/command': typeof ApiCommandRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
 }
 export interface FileRouteTypes {
@@ -162,11 +181,13 @@ export interface FileRouteTypes {
     | '/signup'
     | '/.well-known/oauth-protected-resource'
     | '/admin'
+    | '/command-center'
     | '/dashboard'
     | '/outreach'
     | '/patients'
     | '/profile'
     | '/recalls'
+    | '/api/command'
     | '/.lovable/oauth/consent'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -178,11 +199,13 @@ export interface FileRouteTypes {
     | '/signup'
     | '/.well-known/oauth-protected-resource'
     | '/admin'
+    | '/command-center'
     | '/dashboard'
     | '/outreach'
     | '/patients'
     | '/profile'
     | '/recalls'
+    | '/api/command'
     | '/.lovable/oauth/consent'
   id:
     | '__root__'
@@ -195,11 +218,13 @@ export interface FileRouteTypes {
     | '/signup'
     | '/.well-known/oauth-protected-resource'
     | '/_authenticated/admin'
+    | '/_authenticated/command-center'
     | '/_authenticated/dashboard'
     | '/_authenticated/outreach'
     | '/_authenticated/patients'
     | '/_authenticated/profile'
     | '/_authenticated/recalls'
+    | '/api/command'
     | '/.lovable/oauth/consent'
   fileRoutesById: FileRoutesById
 }
@@ -212,6 +237,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  ApiCommandRoute: typeof ApiCommandRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
 }
 
@@ -280,6 +306,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/command-center': {
+      id: '/_authenticated/command-center'
+      path: '/command-center'
+      fullPath: '/command-center'
+      preLoaderRoute: typeof AuthenticatedCommandCenterRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -315,6 +348,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecallsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/command': {
+      id: '/api/command'
+      path: '/api/command'
+      fullPath: '/api/command'
+      preLoaderRoute: typeof ApiCommandRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/.lovable/oauth/consent': {
       id: '/.lovable/oauth/consent'
       path: '/.lovable/oauth/consent'
@@ -327,6 +367,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedCommandCenterRoute: typeof AuthenticatedCommandCenterRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOutreachRoute: typeof AuthenticatedOutreachRoute
   AuthenticatedPatientsRoute: typeof AuthenticatedPatientsRoute
@@ -336,6 +377,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedCommandCenterRoute: AuthenticatedCommandCenterRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOutreachRoute: AuthenticatedOutreachRoute,
   AuthenticatedPatientsRoute: AuthenticatedPatientsRoute,
@@ -356,6 +398,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  ApiCommandRoute: ApiCommandRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
 }
 export const routeTree = rootRouteImport
