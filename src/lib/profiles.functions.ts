@@ -78,7 +78,15 @@ export const listPendingProfiles = createServerFn({ method: "GET" })
       .eq("approval_status", "pending")
       .order("created_at", { ascending: true });
 
-    return (data ?? []) as PendingProfile[];
+    return (data ?? []).map((row) => ({
+      id: row.id,
+      email: row.email,
+      pharmacyName: row.pharmacy_name,
+      pharmacyLocation: row.pharmacy_location,
+      licenseNumber: row.license_number,
+      fullName: row.full_name,
+      createdAt: row.created_at,
+    })) as PendingProfile[];
   });
 
 /** Admin-only: approve or reject a pharmacy profile. */
