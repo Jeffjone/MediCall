@@ -40,7 +40,9 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
   .handler(async ({ data, context }): Promise<CallResult> => {
     const { data: profile } = await context.supabase.from("profiles").select("approval_status, pharmacy_name").eq("id", context.userId).single();
     if (profile?.approval_status !== "approved") return { ok: false, message: "An approved pharmacy account is required." };
-    const { patient, flagged } = findCase(data.patientId, data.recallNumber, data.ndc);
+    const { fetchRecalls } = await import("./recalls.server");
+    const feed = await fetchRecalls();
+    const { patient, flagged } = findCase(data.patientId, data.recallNumber, data.ndc, feed.recalls);
     data = { ...data, patientName: patient.fullName, drugName: flagged.prescription.drugName, strength: flagged.prescription.strength, recallReason: flagged.recall.reasonForRecall, classification: flagged.recall.classification, pharmacyName: profile.pharmacy_name };
     const approved = data.approval ? readReceipt(data.approval, context.userId) : null;
     if (approved && (!approved.approvedName || !approved.script || approved.patientId !== data.patientId || approved.recallNumber !== data.recallNumber || approved.ndc !== normalizeNdc(data.ndc))) return { ok: false, message: "Approval does not match this prescription." };
