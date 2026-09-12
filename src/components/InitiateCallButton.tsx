@@ -49,6 +49,31 @@ export function InitiateCallButton({
       recallNumber: flagged.recall.recallNumber,
       startedAt: new Date().toISOString(),
       detail: "Dialing the demo number…",
+      reason: `${flagged.recall.classification} recall of ${flagged.prescription.drugName} ${flagged.prescription.strength} (NDC ${flagged.prescription.ndc}) — ${flagged.recall.reasonForRecall}`,
+      ...(review?.approvedName ? { approvedAlternative: review.approvedName } : {}),
+      patient: {
+        dateOfBirth: match.patient.dateOfBirth,
+        phone: match.patient.phone,
+        email: match.patient.email,
+        preferredLanguage: match.patient.preferredLanguage,
+      },
+      prescription: {
+        strength: flagged.prescription.strength,
+        ndc: flagged.prescription.ndc,
+        prescriber: flagged.prescription.prescriber,
+        fillDate: flagged.prescription.fillDate,
+        quantity: flagged.prescription.quantity,
+        daysSupply: flagged.prescription.daysSupply,
+      },
+      recall: {
+        classification: flagged.recall.classification,
+        reasonForRecall: flagged.recall.reasonForRecall,
+        recallingFirm: flagged.recall.recallingFirm,
+        lotNumbers: flagged.recall.lotNumbers,
+        recallInitiationDate: flagged.recall.recallInitiationDate,
+        status: flagged.recall.status,
+        productDescription: flagged.recall.productDescription,
+      },
     });
 
     try {
