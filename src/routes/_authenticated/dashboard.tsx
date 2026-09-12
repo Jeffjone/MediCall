@@ -27,9 +27,8 @@ import {
   formatFdaDate,
   getStats,
   matchPatients,
-  recalls,
 } from "@/lib/recall-matching";
-import { useRouteContext } from "@/routes/_authenticated/route";
+import { useRecalls, useRouteContext } from "@/routes/_authenticated/route";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -58,8 +57,9 @@ function Dashboard() {
   const { byPatient } = useCallStore();
   const { session } = useRouteContext();
 
-  const matched = useMemo(() => matchPatients(), []);
-  const stats = useMemo(() => getStats(matched), [matched]);
+  const recalls = useRecalls();
+  const matched = useMemo(() => matchPatients(undefined, recalls), [recalls]);
+  const stats = useMemo(() => getStats(matched, recalls), [matched, recalls]);
 
   const affected = useMemo(
     () =>

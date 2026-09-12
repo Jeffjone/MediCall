@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { matchPatients, type MatchedPatient } from "@/lib/recall-matching";
-import { useRouteContext } from "@/routes/_authenticated/route";
+import { useRecalls, useRouteContext } from "@/routes/_authenticated/route";
 
 export const Route = createFileRoute("/_authenticated/patients")({
   head: () => ({
@@ -80,7 +80,8 @@ function PatientsPage() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("name-asc");
   const [filter, setFilter] = useState<FilterKey>("all");
-  const matched = useMemo(() => matchPatients(), []);
+  const recalls = useRecalls();
+  const matched = useMemo(() => matchPatients(undefined, recalls), [recalls]);
   const { session } = useRouteContext();
 
   const visible = useMemo(() => {
