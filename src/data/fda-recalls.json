@@ -1,0 +1,183 @@
+[
+  {
+    "recallNumber": "D-0771-2026",
+    "productDescription": "Carbamazepine Tablets, USP, 200mg, packaged in a)1000-count bottles (NDC 51407-215-10), b) 100-count bottles (NDC 51407-215-01), Rx Only, Manufactured by: Taro Pharmaceutical Industries Ltd., Marketed by: GSMS, Incorporated, Camarillo, CA 93012 USA",
+    "drugName": "Carbamazepine Tablets",
+    "ndcCodes": [
+      "51407-215-01",
+      "51407-215-10"
+    ],
+    "lotNumbers": "Lot #: a) GS067429, GS068091, Exp 5/31/2028; b) GS067430, GS068090, Exp 5/31/2028",
+    "reasonForRecall": "CGMP deviations: tablets with black specks.",
+    "classification": "Class II",
+    "recallingFirm": "Golden State Medical Supply Inc.",
+    "recallInitiationDate": "20260807",
+    "reportDate": "20260826",
+    "status": "Ongoing",
+    "distributionPattern": "USA Nationwide",
+    "city": "Camarillo",
+    "state": "CA"
+  },
+  {
+    "recallNumber": "D-0733-2026",
+    "productDescription": "Dicyclomine Hydrochloride Capsules, USP, 10mg, 1,000 bottles, Rx only, Distributed by: Aurobindo Pharma USA, Inc., 279 Princeton-Hightstown Road, East Windsor, NJ 08520, Made in India, NDC 59651-719-99",
+    "drugName": "Dicyclomine Hydrochloride Capsules",
+    "ndcCodes": [
+      "59651-719-99"
+    ],
+    "lotNumbers": "Batch # DMC125018A, Exp Date: 07/2027.",
+    "reasonForRecall": "shortfill; reports of empty capsules.",
+    "classification": "Class II",
+    "recallingFirm": "Aurobindo Pharma USA Inc",
+    "recallInitiationDate": "20260723",
+    "reportDate": "20260812",
+    "status": "Ongoing",
+    "distributionPattern": "US Nationwide.",
+    "city": "East Windsor",
+    "state": "NJ"
+  },
+  {
+    "recallNumber": "D-0745-2026",
+    "productDescription": "Mirabegron Extended-Release Tablets, 25 mg, 30-count bottle, Rx only, Manufactured by: Zydus Lifesciences Ltd., Matoda, Ahmedabad, India, Distributed by: Zydus Pharmaceuticals (USA) Inc., Pennington, NJ 08534, NDC 70710-1159-3.",
+    "drugName": "Mirabegron Extended-Release Tablets",
+    "ndcCodes": [
+      "70710-1159-3"
+    ],
+    "lotNumbers": "Lot # E408618, Expiry: 11/30/2026, NDC #: 70710-1159-3",
+    "reasonForRecall": "CGMP: Due to Out of Specification (OOS) result for N-Nitroso Mirabegron impurity.",
+    "classification": "Class II",
+    "recallingFirm": "Zydus Pharmaceuticals (USA) Inc",
+    "recallInitiationDate": "20260805",
+    "reportDate": "20260812",
+    "status": "Ongoing",
+    "distributionPattern": "Nationwide in the USA",
+    "city": "Pennington",
+    "state": "NJ"
+  },
+  {
+    "recallNumber": "D-0709-2026",
+    "productDescription": "Levothyroxine Sodium Tablets, USP, 75 mcg (0.075 mg), 10 Tablets (10 x 1) unit dose blisters per carton, Rx only, Packaged and Distributed by: MAJOR PHARMACEUTICALS, Indianapolis, IN 46268 USA. Distributed by Cardinal Health, Dublin, OH 43017. NDC Bag: 55154-3560-0; NDC Blister: 0904-6951-61",
+    "drugName": "Levothyroxine Sodium Tablets",
+    "ndcCodes": [
+      "55154-3560-0"
+    ],
+    "lotNumbers": "Bag lot #: N02172A, N02172B, Exp. Date 07/2026; N02288A, N02288B, Exp. Date 12/2026;  Blister lot #: N02172, Exp. Date 07/2026; N02288, Exp. Date 12/2026",
+    "reasonForRecall": "Subpotent Drug",
+    "classification": "Class II",
+    "recallingFirm": "Major Pharmaceuticals",
+    "recallInitiationDate": "20260713",
+    "reportDate": "20260729",
+    "status": "Ongoing",
+    "distributionPattern": "Nationwide in the USA.",
+    "city": "Dublin",
+    "state": "OH"
+  },
+  {
+    "recallNumber": "D-0758-2026",
+    "productDescription": "Trokendi XR, topiramate extended-release capsules, 25mg, 30 Capsules, Rx only, Manufactured by: Catalent Pharma Solutions, Winchester, KY 40391 USA, Manufactured for: Supernus Pharmaceuticals, Inc., Rockville, MD 20850 USA, NDC 17772-101-30.",
+    "drugName": "Trokendi XR",
+    "ndcCodes": [
+      "17772-101-30"
+    ],
+    "lotNumbers": "Lot # 2075801, Exp Date: 31-Oct-2029.",
+    "reasonForRecall": "Failed Dissolution Specifications",
+    "classification": "Class III",
+    "recallingFirm": "Supernus Pharmaceuticals, Inc.",
+    "recallInitiationDate": "20260706",
+    "reportDate": "20260729",
+    "status": "Ongoing",
+    "distributionPattern": "US Nationwide.",
+    "city": "Rockville",
+    "state": "MD"
+  },
+  {
+    "recallNumber": "D-0742-2026",
+    "productDescription": "Divalproex Sodium Delayed-Release Tablets, USP, 500 mg, 500 Tablets bottles, Rx only, Distributed by: Bionpharma Inc., Princeton, NJ 08540, Made in India, NDC 69452-435-30.",
+    "drugName": "Divalproex Sodium Delayed-Release Tablets",
+    "ndcCodes": [
+      "69452-435-30"
+    ],
+    "lotNumbers": "Lot# 704C003, Exp. 12/31/2028",
+    "reasonForRecall": "Presence of Foreign Tablets/Capsules",
+    "classification": "Class II",
+    "recallingFirm": "Bionpharma Inc.",
+    "recallInitiationDate": "20260626",
+    "reportDate": "20260729",
+    "status": "Ongoing",
+    "distributionPattern": "US Nationwide.",
+    "city": "Princeton",
+    "state": "NJ"
+  },
+  {
+    "recallNumber": "D-0712-2026",
+    "productDescription": "Amlodipine and Olmesartan Medoxomil Tablets, 10 mg/20 mg, 30 Tablets per bottle, Rx Only, Manufactured by: Alkem Laboratories Ltd., INDIA; Distributed by: Ascend Laboratories, LLC., Parsnippany, NJ 07054.  NDC: 67877-500-30",
+    "drugName": "Amlodipine and Olmesartan Medoxomil Tablets",
+    "ndcCodes": [
+      "67877-500-30"
+    ],
+    "lotNumbers": "Lot 25121311, expiry 3/31/2028",
+    "reasonForRecall": "Failed Dissolution Specifications; Olmesartan Medoxomil content below specifications",
+    "classification": "Class II",
+    "recallingFirm": "Ascend Laboratories, LLC",
+    "recallInitiationDate": "20260708",
+    "reportDate": "20260729",
+    "status": "Ongoing",
+    "distributionPattern": "Nationwide in the USA",
+    "city": "Bedminster",
+    "state": "NJ"
+  },
+  {
+    "recallNumber": "D-0732-2026",
+    "productDescription": "Cetirizine Hydrochloride Tablets USP 5 mg, 100-count bottle, Manufactured by: Unique Pharmaceuticals Labs, (A Div. of J.B. Chemicals & Pharmaceuticals, Ltd.), Mumbai 400 030, India. Distributed by: Rising Pharma Holdings, Inc., East Brunswick, NJ 08816, NDC 16571-401-10.",
+    "drugName": "Cetirizine Hydrochloride Tablets USP 5 mg",
+    "ndcCodes": [
+      "16571-401-10"
+    ],
+    "lotNumbers": "Lots: GY825029, GY825030, GY825031, GY825032, expires: 2028-OCT",
+    "reasonForRecall": "Cross Contamination with Other Products: Customer complaints for appearance of  discolored tablets and red dots observed on Cetirizine Hydrochloride Tablets USP 5 mg. Determined to be Ranitidine.",
+    "classification": "Class I",
+    "recallingFirm": "JB Chemicals and Pharmaceuticals Ltd",
+    "recallInitiationDate": "20260624",
+    "reportDate": "20260729",
+    "status": "Ongoing",
+    "distributionPattern": "Nationwide in the USA",
+    "city": "Mumbai",
+    "state": "N/A"
+  },
+  {
+    "recallNumber": "D-0661-2026",
+    "productDescription": "Cinacalcet Hydrochloride Tablets, 30 mg, 30-count bottle, Rx Only, Manufactured by: Cipla Ltd., MIDC, Patalganga, India; Manufactured for: Cipla USA, Inc., 10 Independence Boulevard, Suite 300, Warren, NJ 07059, NDC 69097-410-02",
+    "drugName": "Cinacalcet Hydrochloride Tablets",
+    "ndcCodes": [
+      "69097-410-02"
+    ],
+    "lotNumbers": "Lot #: 5PB0465, 5PB0466, 5PB0557, Exp 4/30/2027; 5PB0629, 5PB0630, 5PB0633, 5PB0637, 5PB0638, Exp 6/30/2027",
+    "reasonForRecall": "cGMP Deviations: presence of N-nitroso-cinacalcet, above the acceptable daily intake (ADI).",
+    "classification": "Class II",
+    "recallingFirm": "Cipla USA, Inc.",
+    "recallInitiationDate": "20260629",
+    "reportDate": "20260708",
+    "status": "Ongoing",
+    "distributionPattern": "USA Nationwide",
+    "city": "Warren",
+    "state": "NJ"
+  },
+  {
+    "recallNumber": "D-0654-2026",
+    "productDescription": "Fexofenadine Hydrochloride Tablets, USP 180 mg, Antihistamine, 150 Tablets per bottle, Distributed by: Ohm Laboratories, Inc., New Brunswick, NJ 08901. NDC 66336-561-30",
+    "drugName": "Fexofenadine Hydrochloride Tablets",
+    "ndcCodes": [
+      "66336-561-30"
+    ],
+    "lotNumbers": "Lot, expiry:  Lot DNG0283A, exp 03/31/2027; Lots DNF0922A and DNF0923B, exp 10/31/2026",
+    "reasonForRecall": "Failed Impurities/Degradation Specifications",
+    "classification": "Class III",
+    "recallingFirm": "SUN PHARMACEUTICAL INDUSTRIES INC",
+    "recallInitiationDate": "20260601",
+    "reportDate": "20260708",
+    "status": "Ongoing",
+    "distributionPattern": "U.S. Nationwide",
+    "city": "Princeton",
+    "state": "NJ"
+  }
+]
