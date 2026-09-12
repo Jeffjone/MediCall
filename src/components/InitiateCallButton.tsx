@@ -13,6 +13,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { AnalysisReview } from "@/components/AnalysisReview";
+import { useReviews } from "@/lib/analysis-store";
+import { analysisKey } from "@/lib/analysis-types";
 import { Button } from "@/components/ui/button";
 import { finishCall, startCall, useCallStore } from "@/lib/call-store";
 import { placeOutreachCall } from "@/lib/outreach.functions";
@@ -28,6 +31,7 @@ export function InitiateCallButton({
   size?: "sm" | "default";
 }) {
   const [open, setOpen] = useState(false);
+  const review = useReviews()[analysisKey(match.patient.id, flagged.recall.recallNumber, flagged.prescription.ndc)];
   const { byPatient } = useCallStore();
   const call = useServerFn(placeOutreachCall);
   const status = byPatient[match.patient.id] ?? "idle";
@@ -47,6 +51,7 @@ export function InitiateCallButton({
       detail: "Dialing the demo number…",
     });
 
+    try {
     const result = await call({
       data: {
         patientName: match.fullName,
@@ -58,6 +63,7 @@ export function InitiateCallButton({
         recallReason: flagged.recall.reasonForRecall,
         classification: flagged.recall.classification,
         pharmacyName: "Riverside Pharmacy",
+        approval: review?.approval,
       },
     });
 
@@ -68,10 +74,16 @@ export function InitiateCallButton({
       finishCall(id, match.patient.id, "failed", result.message);
       toast.error("Call could not be placed", { description: result.message });
     }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Call failed.";
+      finishCall(id, match.patient.id, "failed", message);
+      toast.error(message);
+    }
   }
 
   return (
     <>
+      <AnalysisReview match={match} flagged={flagged} />
       <Button
         size={size}
         className="gap-1"
@@ -95,7 +107,7 @@ export function InitiateCallButton({
               The AI agent will explain the {flagged.recall.classification} recall of{" "}
               {flagged.prescription.drugName} {flagged.prescription.strength} to{" "}
               {match.fullName}. In demo mode the call dials your verified test number,
-              not the patient.
+              not the patient. {review?.approvedName ? `The call will discuss the approved option: ${review.approvedName}.` : "No alternative medication will be recommended."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

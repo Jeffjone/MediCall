@@ -1,5 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { readReceipt, findCase } from "./analysis.server";
+import { normalizeNdc } from "./recall-matching";
 
 import {
   OUTREACH_FIRST_MESSAGE,
@@ -15,6 +18,7 @@ const CallInput = z.object({
   recallNumber: z.string(),
   recallReason: z.string(),
   classification: z.string(),
+  approval: z.string().optional(),
   pharmacyName: z.string().default("Riverside Pharmacy"),
 });
 
@@ -31,8 +35,15 @@ export type CallResult = {
  * DEMO_CALL_NUMBER, never the fake patient's number.
  */
 export const placeOutreachCall = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => CallInput.parse(input))
-  .handler(async ({ data }): Promise<CallResult> => {
+  .handler(async ({ data, context }): Promise<CallResult> => {
+    const { data: profile } = await context.supabase.from("profiles").select("approval_status, pharmacy_name").eq("id", context.userId).single();
+    if (profile?.approval_status !== "approved") return { ok: false, message: "An approved pharmacy account is required." };
+    const { patient, flagged } = findCase(data.patientId, data.recallNumber, data.ndc);
+    data = { ...data, patientName: patient.fullName, drugName: flagged.prescription.drugName, strength: flagged.prescription.strength, recallReason: flagged.recall.reasonForRecall, classification: flagged.recall.classification, pharmacyName: profile.pharmacy_name };
+    const approved = data.approval ? readReceipt(data.approval, context.userId) : null;
+    if (approved && (!approved.approvedName || !approved.script || approved.patientId !== data.patientId || approved.recallNumber !== data.recallNumber || approved.ndc !== normalizeNdc(data.ndc))) return { ok: false, message: "Approval does not match this prescription." };
     const apiKey = process.env["ELEVENLABS_API_KEY"];
     const agentId = process.env["ELEVENLABS_AGENT_ID"];
     const phoneNumberId = process.env["ELEVENLABS_PHONE_NUMBER_ID"];
@@ -86,7 +97,7 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
               overrides: {
                 agent: {
                   first_message: OUTREACH_FIRST_MESSAGE,
-                  prompt: { prompt: OUTREACH_SYSTEM_PROMPT },
+                  prompt: { prompt: OUTREACH_SYSTEM_PROMPT + (approved?.script ? "\nPharmacist-approved discussion plan:\n" + approved.script : "\nNo alternative has been approved. Do not recommend a replacement.") },
                 },
               },
             },
@@ -119,7 +130,7 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
 
       return {
         ok: true,
-        message: `Call placed to the demo number about ${data.drugName}.`,
+        message: `Call requested for ${data.drugName}. ${approved?.approvedName ? "Approved option: " + approved.approvedName : "Recall notice only; no approved alternative"}. Delivery is not yet confirmed.`,
         dialed: toNumber as string,
         ...(conversationId ? { conversationId } : {}),
       };

@@ -72,7 +72,7 @@ function OutreachPage() {
                 }
               >
                 {entry.status === "called"
-                  ? "Completed"
+                  ? "Requested"
                   : entry.status === "dialing"
                     ? "Dialing"
                     : "Failed"}
