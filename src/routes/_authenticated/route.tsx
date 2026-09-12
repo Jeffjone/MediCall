@@ -39,10 +39,24 @@ export const Route = createFileRoute("/_authenticated")({
       };
     }
   },
+  loader: async () => {
+    const feed = await getRecallFeed();
+    setRecalls(feed.recalls);
+    return feed;
+  },
   component: AuthLayout,
 });
 
 export const useRouteContext = Route.useRouteContext;
+
+/** Live openFDA recall feed loaded once for the whole authenticated area. */
+export function useRecallFeed() {
+  return Route.useLoaderData();
+}
+
+export function useRecalls() {
+  return Route.useLoaderData().recalls;
+}
 
 function AuthLayout() {
   const { session } = Route.useRouteContext();
