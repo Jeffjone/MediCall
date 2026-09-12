@@ -59,7 +59,68 @@ export const getMySession = createServerFn({ method: "GET" })
       approvalStatus:
         (profile?.approval_status as SessionProfile["approvalStatus"]) ?? "pending",
       role,
+      phone: profile?.phone ?? null,
+      streetAddress: profile?.street_address ?? null,
+      city: profile?.city ?? null,
+      state: profile?.state ?? null,
+      postalCode: profile?.postal_code ?? null,
+      npiNumber: profile?.npi_number ?? null,
+      deaNumber: profile?.dea_number ?? null,
+      hours: profile?.hours ?? null,
+      notes: profile?.notes ?? null,
     } satisfies SessionProfile;
+  });
+
+const optionalText = z.string().trim().max(500).optional().nullable();
+
+/** Update the signed-in pharmacy's own profile details. */
+export const updateMyProfile = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input) =>
+    z
+      .object({
+        pharmacyName: z.string().trim().min(1).max(200),
+        fullName: optionalText,
+        pharmacyLocation: optionalText,
+        licenseNumber: optionalText,
+        phone: optionalText,
+        streetAddress: optionalText,
+        city: optionalText,
+        state: optionalText,
+        postalCode: optionalText,
+        npiNumber: optionalText,
+        deaNumber: optionalText,
+        hours: optionalText,
+        notes: z.string().trim().max(2000).optional().nullable(),
+      })
+      .parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const empty = (v: string | null | undefined) => (v ? v : null);
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        pharmacy_name: data.pharmacyName,
+        full_name: empty(data.fullName),
+        pharmacy_location: empty(data.pharmacyLocation),
+        license_number: empty(data.licenseNumber),
+        phone: empty(data.phone),
+        street_address: empty(data.streetAddress),
+        city: empty(data.city),
+        state: empty(data.state),
+        postal_code: empty(data.postalCode),
+        npi_number: empty(data.npiNumber),
+        dea_number: empty(data.deaNumber),
+        hours: empty(data.hours),
+        notes: empty(data.notes),
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", userId);
+
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
 
 export interface PendingProfile {
