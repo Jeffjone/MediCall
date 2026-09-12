@@ -84,6 +84,8 @@ async function queryOpenFda(search: string, limit: number, sort?: string): Promi
   // URLSearchParams would percent-encode into a literal plus sign.
   let url = `${OPENFDA_ENDPOINT}?search=${search}&limit=${limit}`;
   if (sort) url += `&sort=${sort}`;
+  const apiKey = process.env["OPENFDA_API_KEY"];
+  if (apiKey) url += `&api_key=${encodeURIComponent(apiKey)}`;
 
   const response = await fetch(url, {
     headers: { accept: "application/json" },
