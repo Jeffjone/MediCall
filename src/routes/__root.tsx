@@ -13,6 +13,7 @@ import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { clearReviews } from "@/lib/analysis-store";
 import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
@@ -133,6 +134,7 @@ function RootComponent() {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") {
         return;
       }
+      clearReviews();
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
     });
