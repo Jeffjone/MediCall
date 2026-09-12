@@ -6,8 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/.lovable/oauth/consent")({
   ssr: false,
-  validateSearch: (s: Record<string, unknown>) => ({
-    authorization_id: typeof s.authorization_id === "string" ? s.authorization_id : "",
+  validateSearch: (s: Record<string, unknown>): { authorization_id: string } => ({
+    authorization_id: typeof s["authorization_id"] === "string" ? s["authorization_id"] : "",
   }),
   beforeLoad: async ({ search, location }) => {
     if (!search.authorization_id) throw new Error("Missing authorization_id");
@@ -19,9 +19,14 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
     const authorizationId = new URLSearchParams(location.search).get("authorization_id")!;
     const { data, error } = await supabase.auth.oauth.getAuthorizationDetails(authorizationId);
     if (error) throw error;
-    const immediate = data?.redirect_url ?? data?.redirect_to;
-    if (immediate && !data?.client) throw redirect({ href: immediate });
-    return data;
+    const details = data as unknown as {
+      redirect_url?: string;
+      redirect_to?: string;
+      client?: { name?: string };
+    } | null;
+    const immediate = details?.redirect_url ?? details?.redirect_to;
+    if (immediate && !details?.client) throw redirect({ href: immediate });
+    return details;
   },
   component: Consent,
   errorComponent: ({ error }) => (
