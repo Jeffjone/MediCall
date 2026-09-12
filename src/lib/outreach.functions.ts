@@ -86,7 +86,7 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
               overrides: {
                 agent: {
                   first_message: OUTREACH_FIRST_MESSAGE,
-                  prompt: OUTREACH_SYSTEM_PROMPT,
+                  prompt: { prompt: OUTREACH_SYSTEM_PROMPT },
                 },
               },
             },
@@ -100,7 +100,9 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
         console.error(`ElevenLabs outbound call failed [${response.status}]: ${bodyText}`);
         return {
           ok: false,
-          message: `The calling service refused the call (${response.status}). ${bodyText.slice(0, 300)}`,
+          message: response.status === 404
+            ? "The configured ElevenLabs voice agent or calling number could not be found. Connect a real agent and an imported Twilio calling number from the same ElevenLabs account before trying again."
+            : `The calling service refused the call (${response.status}). ${bodyText.slice(0, 300)}`,
         };
       }
 
