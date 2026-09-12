@@ -5,13 +5,14 @@ import {
   Users,
   PhoneCall,
   LayoutDashboard,
-  Bell,
   LogOut,
   ShieldCheck,
+  Building2,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
+import { NotificationBell } from "@/components/NotificationBell";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
@@ -22,6 +23,7 @@ const navItems = [
   { to: "/patients", icon: Users, label: "Patients" },
   { to: "/recalls", icon: AlertTriangle, label: "Recalls" },
   { to: "/outreach", icon: PhoneCall, label: "Outreach" },
+  { to: "/profile", icon: Building2, label: "Pharmacy profile" },
 ] as const;
 
 export function AppShell({
