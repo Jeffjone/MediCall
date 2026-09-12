@@ -12,6 +12,34 @@ export type CallRecord = {
   startedAt: string;
   detail: string;
   conversationId?: string;
+  /** Audit trail details */
+  completedAt?: string;
+  dialedNumber?: string;
+  reason?: string;
+  approvedAlternative?: string;
+  patient?: {
+    dateOfBirth: string;
+    phone: string;
+    email: string;
+    preferredLanguage: string;
+  };
+  prescription?: {
+    strength: string;
+    ndc: string;
+    prescriber: string;
+    fillDate: string;
+    quantity: number;
+    daysSupply: number;
+  };
+  recall?: {
+    classification: string;
+    reasonForRecall: string;
+    recallingFirm: string;
+    lotNumbers: string;
+    recallInitiationDate: string;
+    status: string;
+    productDescription: string;
+  };
 };
 
 type State = {
@@ -49,12 +77,20 @@ export function finishCall(
   status: Exclude<CallStatus, "idle" | "dialing">,
   detail: string,
   conversationId?: string,
+  dialedNumber?: string,
 ) {
   state = {
     byPatient: { ...state.byPatient, [patientId]: status },
     log: state.log.map((entry) =>
       entry.id === id
-        ? { ...entry, status, detail, ...(conversationId ? { conversationId } : {}) }
+        ? {
+            ...entry,
+            status,
+            detail,
+            completedAt: new Date().toISOString(),
+            ...(conversationId ? { conversationId } : {}),
+            ...(dialedNumber ? { dialedNumber } : {}),
+          }
         : entry,
     ),
   };
