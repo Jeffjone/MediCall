@@ -14,25 +14,34 @@ export function AuthCard({
   footer?: ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-10">
+    <div className="flex min-h-screen items-center justify-center bg-sidebar px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="mb-6 flex flex-col items-center gap-2 text-center">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+        <div className="mb-8 flex flex-col items-center gap-3 text-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_24px_color-mix(in_oklab,var(--primary)_35%,transparent)]">
             <Pill className="h-6 w-6" />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-xl font-semibold tracking-tight">Medicall</span>
-            <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
-              Know Sooner. Act Faster.
+            <span className="font-display text-2xl font-bold tracking-tight text-sidebar-foreground">
+              Medicall
+            </span>
+            <span className="mt-1 text-sm text-sidebar-foreground/50">
+              Pharmacy recall-readiness workspace
             </span>
           </div>
         </div>
-        <div className="rounded-xl border bg-card p-6 shadow-sm">
-          <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+        <div className="rounded-2xl bg-card p-8 shadow-2xl">
+          <h1 className="font-display text-xl font-bold tracking-tight">{title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>
-          <div className="mt-5">{children}</div>
-          {footer && <div className="mt-5 border-t pt-4 text-center text-sm text-muted-foreground">{footer}</div>}
+          <div className="mt-6">{children}</div>
+          {footer && (
+            <div className="mt-8 border-t pt-6 text-center text-sm text-muted-foreground">
+              {footer}
+            </div>
+          )}
         </div>
+        <p className="mt-8 text-center text-xs text-sidebar-foreground/40">
+          Know Sooner. Act Faster. · Secure pharmacy access
+        </p>
       </div>
     </div>
   );
@@ -40,7 +49,7 @@ export function AuthCard({
 
 export function AuthLink({ to, children }: { to: string; children: ReactNode }) {
   return (
-    <Link to={to} className="font-medium text-primary hover:underline">
+    <Link to={to} className="font-semibold text-primary hover:underline">
       {children}
     </Link>
   );
