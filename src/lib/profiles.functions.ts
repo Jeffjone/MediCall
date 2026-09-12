@@ -13,6 +13,15 @@ export interface SessionProfile {
   fullName: string | null;
   approvalStatus: "pending" | "approved" | "rejected";
   role: AppRole;
+  phone: string | null;
+  streetAddress: string | null;
+  city: string | null;
+  state: string | null;
+  postalCode: string | null;
+  npiNumber: string | null;
+  deaNumber: string | null;
+  hours: string | null;
+  notes: string | null;
 }
 
 /**
