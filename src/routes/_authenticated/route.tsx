@@ -35,6 +35,7 @@ export const Route = createFileRoute("/_authenticated")({
 
 function AuthLayout() {
   const { session } = Route.useRouteContext();
+  const navigate = useNavigate();
 
   if (session.approvalStatus !== "approved") {
     return (
@@ -58,7 +59,7 @@ function AuthLayout() {
             <button
               onClick={async () => {
                 await supabase.auth.signOut();
-                window.location.href = "/auth";
+                navigate({ to: "/auth", replace: true });
               }}
               className="mt-2 text-xs font-medium text-primary hover:underline"
             >
@@ -72,5 +73,3 @@ function AuthLayout() {
 
   return <Outlet />;
 }
-
-export { AppShell };
