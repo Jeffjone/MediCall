@@ -108,17 +108,19 @@ export async function fetchRecalls(): Promise<{ recalls: Recall[]; source: "open
   }
 
   try {
-    const pinnedQuery = PINNED_RECALL_NUMBERS.map(
-      (n) => `recall_number:${encodeURIComponent(`"${n}"`)}`,
-    ).join("+OR+");
+    // recall_number is tokenized by openFDA, so an OR-joined query is
+    // unreliable — each pinned recall is fetched with its own exact query.
+    const pinnedRequests = PINNED_RECALL_NUMBERS.map((n) =>
+      queryOpenFda(`recall_number:${encodeURIComponent(`"${n}"`)}`, 1).catch(() => []),
+    );
 
-    const [pinned, latest] = await Promise.all([
-      queryOpenFda(pinnedQuery, PINNED_RECALL_NUMBERS.length),
+    const [latest, ...pinnedResults] = await Promise.all([
       queryOpenFda(`product_type:${encodeURIComponent('"Drugs"')}`, 100, "report_date:desc"),
+      ...pinnedRequests,
     ]);
 
     const byNumber = new Map<string, Recall>();
-    for (const record of [...pinned, ...latest]) {
+    for (const record of [...pinnedResults.flat(), ...latest]) {
       const recall = toRecall(record);
       if (recall && !byNumber.has(recall.recallNumber)) {
         byNumber.set(recall.recallNumber, recall);
