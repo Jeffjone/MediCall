@@ -12,8 +12,9 @@ import {
   matchPatients,
   recalls,
 } from "@/lib/recall-matching";
+import { useRouteContext } from "@/routes/_authenticated/route";
 
-export const Route = createFileRoute("/recalls")({
+export const Route = createFileRoute("/_authenticated/recalls")({
   head: () => ({
     meta: [
       { title: "FDA Recalls — Medicall" },
@@ -37,6 +38,7 @@ export const Route = createFileRoute("/recalls")({
 function RecallsPage() {
   const matched = useMemo(() => matchPatients(), []);
   const counts = useMemo(() => affectedCountByRecall(matched), [matched]);
+  const { session } = useRouteContext();
   const sorted = useMemo(
     () =>
       [...recalls].sort(
@@ -49,6 +51,7 @@ function RecallsPage() {
     <AppShell
       title="FDA Recalls"
       subtitle="Sourced from the openFDA Drug Enforcement (RES) database. Matching is done on NDC."
+      session={session}
     >
       <div className="grid gap-4 lg:grid-cols-2">
         {sorted.map((recall) => {

@@ -5,8 +5,9 @@ import { AppShell } from "@/components/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCallStore } from "@/lib/call-store";
+import { useRouteContext } from "@/routes/_authenticated/route";
 
-export const Route = createFileRoute("/outreach")({
+export const Route = createFileRoute("/_authenticated/outreach")({
   head: () => ({
     meta: [
       { title: "Outreach Log — Medicall" },
@@ -29,11 +30,13 @@ export const Route = createFileRoute("/outreach")({
 
 function OutreachPage() {
   const { log } = useCallStore();
+  const { session } = useRouteContext();
 
   return (
     <AppShell
       title="Outreach"
       subtitle="AI voice calls placed from this dashboard. The log resets when the page reloads."
+      session={session}
     >
       <Card>
         <CardHeader>

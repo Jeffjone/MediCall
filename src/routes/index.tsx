@@ -1,227 +1,146 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
+  Pill,
   AlertTriangle,
-  Users,
   PhoneCall,
-  Activity,
-  Search,
+  Users,
+  ArrowRight,
 } from "lucide-react";
-import { useMemo, useState } from "react";
 
-import { AppShell } from "@/components/AppShell";
-import { InitiateCallButton } from "@/components/InitiateCallButton";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { useCallStore } from "@/lib/call-store";
-import {
-  classificationRank,
-  formatFdaDate,
-  getStats,
-  matchPatients,
-  recalls,
-} from "@/lib/recall-matching";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Medicall" },
+      { title: "Medicall — Know Sooner. Act Faster." },
       {
         name: "description",
         content:
-          "Medicall live view of patients prescribed FDA-recalled medications, matched by NDC, with one-click AI outreach calls.",
+          "Medicall helps pharmacies track patients on recalled medications and trigger AI outreach calls. Know Sooner. Act Faster.",
       },
-      { property: "og:title", content: "Dashboard — Medicall" },
+      { property: "og:title", content: "Medicall — Know Sooner. Act Faster." },
       {
         property: "og:description",
         content:
-          "Live view of patients prescribed FDA-recalled medications, matched by NDC.",
+          "Medicall helps pharmacies track patients on recalled medications and trigger AI outreach calls.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Dashboard,
+  component: LandingPage,
 });
 
-function Dashboard() {
-  const [query, setQuery] = useState("");
-  const { byPatient } = useCallStore();
+function LandingPage() {
+  const navigate = useNavigate();
+  const [checking, setChecking] = useState(true);
 
-  const matched = useMemo(() => matchPatients(), []);
-  const stats = useMemo(() => getStats(matched), [matched]);
+  useEffect(() => {
+    let active = true;
+    supabase.auth.getSession().then(({ data }) => {
+      if (active && data.session) {
+        navigate({ to: "/dashboard", replace: true });
+      }
+      setChecking(false);
+    });
+    return () => {
+      active = false;
+    };
+  }, [navigate]);
 
-  const affected = useMemo(
-    () =>
-      matched
-        .filter((m) => m.isFlagged)
-        .filter((m) => {
-          const q = query.trim().toLowerCase();
-          if (!q) return true;
-          return (
-            m.fullName.toLowerCase().includes(q) ||
-            m.patient.id.toLowerCase().includes(q) ||
-            m.flagged.some(
-              (f) =>
-                f.prescription.drugName.toLowerCase().includes(q) ||
-                f.prescription.ndc.includes(q) ||
-                f.recall.recallNumber.toLowerCase().includes(q),
-            )
-          );
-        }),
-    [matched, query],
-  );
-
-  const topRecall = useMemo(
-    () =>
-      [...recalls].sort(
-        (a, b) => classificationRank(a.classification) - classificationRank(b.classification),
-      )[0],
-    [],
-  );
-
-  const cards = [
-    { icon: Users, label: "Active Patients", value: stats.totalPatients, hint: "in the pharmacy record" },
-    { icon: AlertTriangle, label: "Open FDA Recalls", value: stats.totalRecalls, hint: "monitored by NDC" },
-    { icon: Activity, label: "Patients Affected", value: stats.affectedPatients, hint: "matched to a recall" },
-    { icon: PhoneCall, label: "Calls Placed", value: Object.values(byPatient).filter((s) => s === "called").length, hint: "this session" },
+  const features = [
+    {
+      icon: Users,
+      title: "Patient records",
+      body: "Every pharmacy patient and prescription, with NDC codes, at a glance.",
+    },
+    {
+      icon: AlertTriangle,
+      title: "Recall matching",
+      body: "Prescriptions are matched against live FDA drug enforcement recalls by NDC.",
+    },
+    {
+      icon: PhoneCall,
+      title: "AI outreach",
+      body: "Trigger a scripted AI voice call to alert affected patients in seconds.",
+    },
   ];
 
   return (
-    <AppShell
-      title="Dashboard"
-      subtitle="Patient prescriptions are matched against FDA recall NDCs in real time."
-    >
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {cards.map((c) => (
-          <Card key={c.label}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {c.label}
-              </CardTitle>
-              <c.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold">{c.value}</div>
-              <p className="text-xs text-muted-foreground">{c.hint}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      {topRecall && (
-        <Card className="border-destructive/30 bg-destructive/5">
-          <CardContent className="flex items-start gap-3 py-4">
-            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
-            <div className="flex-1">
-              <p className="font-medium text-foreground">
-                {topRecall.classification} recall — {topRecall.drugName} (
-                {topRecall.recallNumber})
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {topRecall.reasonForRecall}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {topRecall.recallingFirm} · reported {formatFdaDate(topRecall.reportDate)}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      <Card>
-        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <CardTitle>Flagged patients ({affected.length})</CardTitle>
-          <div className="relative w-full sm:max-w-xs">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search name, NDC, or recall…"
-              className="pl-9"
-            />
+    <div className="min-h-screen bg-background">
+      <header className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+        <div className="flex items-center gap-2">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Pill className="h-5 w-5" />
           </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Patient</TableHead>
-                  <TableHead>Recalled medication</TableHead>
-                  <TableHead>Matched NDC</TableHead>
-                  <TableHead>Recall</TableHead>
-                  <TableHead>Outreach</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {affected.map((m) =>
-                  m.flagged.map((f) => (
-                    <TableRow
-                      key={`${m.patient.id}-${f.prescription.ndc}`}
-                      className="bg-destructive/5"
-                    >
-                      <TableCell>
-                        <div className="font-medium">{m.fullName}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {m.patient.id} · {m.patient.phone}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div>{f.prescription.drugName}</div>
-                        <div className="text-xs text-muted-foreground">
-                          {f.prescription.strength} · filled {f.prescription.fillDate}
-                        </div>
-                      </TableCell>
-                      <TableCell className="font-mono text-xs">
-                        {f.prescription.ndc}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="destructive">
-                          <AlertTriangle className="mr-1 h-3 w-3" />
-                          {f.recall.classification}
-                        </Badge>
-                        <div className="mt-1 text-xs text-muted-foreground">
-                          {f.recall.recallNumber}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <OutreachBadge status={byPatient[m.patient.id] ?? "idle"} />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <InitiateCallButton match={m} flagged={f} />
-                      </TableCell>
-                    </TableRow>
-                  )),
-                )}
-                {affected.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={6} className="py-10 text-center text-sm text-muted-foreground">
-                      No flagged patients match your search.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+          <div className="flex flex-col leading-tight">
+            <span className="text-lg font-semibold tracking-tight">Medicall</span>
+            <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+              Know Sooner. Act Faster.
+            </span>
           </div>
-        </CardContent>
-      </Card>
-    </AppShell>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link to="/auth">
+            <Button variant="ghost" size="sm">
+              Sign in
+            </Button>
+          </Link>
+          <Link to="/signup">
+            <Button size="sm">Register pharmacy</Button>
+          </Link>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-5xl px-6 pb-20">
+        <section className="py-16 text-center sm:py-24">
+          <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs text-muted-foreground">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            Pharmacy recall readiness
+          </div>
+          <h1 className="mx-auto max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
+            Know Sooner.{" "}
+            <span className="text-primary">Act Faster.</span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground">
+            Medicall matches your patients' prescriptions to FDA drug recalls by NDC and
+            lets your team trigger a scripted AI outreach call the moment a recall hits.
+          </p>
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            <Link to="/signup">
+              <Button size="lg">
+                Register your pharmacy
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/auth">
+              <Button size="lg" variant="outline">
+                Sign in
+              </Button>
+            </Link>
+          </div>
+          {checking && (
+            <p className="mt-4 text-xs text-muted-foreground">Checking your session…</p>
+          )}
+        </section>
+
+        <section className="grid gap-4 sm:grid-cols-3">
+          {features.map((f) => (
+            <Card key={f.title}>
+              <CardContent className="pt-6">
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                  <f.icon className="h-5 w-5" />
+                </div>
+                <h3 className="font-semibold">{f.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{f.body}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </section>
+      </main>
+    </div>
   );
-}
-
-export function OutreachBadge({ status }: { status: string }) {
-  if (status === "called") return <Badge variant="outline">Called</Badge>;
-  if (status === "dialing") return <Badge variant="outline">Dialing…</Badge>;
-  if (status === "failed") return <Badge variant="destructive">Failed</Badge>;
-  return <Badge variant="secondary">Pending</Badge>;
 }

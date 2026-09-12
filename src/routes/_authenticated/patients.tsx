@@ -15,8 +15,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { matchPatients, type MatchedPatient } from "@/lib/recall-matching";
+import { useRouteContext } from "@/routes/_authenticated/route";
 
-export const Route = createFileRoute("/patients")({
+export const Route = createFileRoute("/_authenticated/patients")({
   head: () => ({
     meta: [
       { title: "Patients — Medicall" },
@@ -80,6 +81,7 @@ function PatientsPage() {
   const [sort, setSort] = useState<SortKey>("name-asc");
   const [filter, setFilter] = useState<FilterKey>("all");
   const matched = useMemo(() => matchPatients(), []);
+  const { session } = useRouteContext();
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -102,6 +104,7 @@ function PatientsPage() {
     <AppShell
       title="Patients"
       subtitle="All patients on file. Rows shaded red hold at least one recalled medication."
+      session={session}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
         <div className="relative w-full sm:max-w-sm">
