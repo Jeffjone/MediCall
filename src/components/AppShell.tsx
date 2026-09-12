@@ -114,17 +114,18 @@ export function AppShell({
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <Button variant="ghost" size="icon" aria-label="Notifications">
-              <Bell className="h-5 w-5" />
-            </Button>
-            <div className="flex items-center gap-2 rounded-full border px-3 py-1.5">
+            <NotificationBell />
+            <Link
+              to="/profile"
+              className="flex items-center gap-2 rounded-full border px-3 py-1.5 transition-colors hover:bg-accent"
+            >
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
                 {initials || "RX"}
               </div>
               <span className="hidden text-sm font-medium sm:inline">
                 {session.pharmacyName}
               </span>
-            </div>
+            </Link>
             <Button
               variant="ghost"
               size="icon"
