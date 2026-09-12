@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, ExternalLink } from "lucide-react";
 import { useMemo } from "react";
 
 import { AppShell } from "@/components/AppShell";
@@ -93,6 +93,15 @@ function RecallsPage() {
                 <p className="text-xs text-muted-foreground">
                   Lots: {recall.lotNumbers || "not specified"}
                 </p>
+                <a
+                  href={`https://api.fda.gov/drug/enforcement.json?search=recall_number:%22${encodeURIComponent(recall.recallNumber)}%22`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-xs font-medium text-primary underline-offset-4 hover:underline"
+                >
+                  View official FDA record
+                  <ExternalLink className="h-3 w-3" />
+                </a>
                 <div className="flex items-center justify-between border-t pt-3 text-xs">
                   <span className="text-muted-foreground">
                     Initiated {formatFdaDate(recall.recallInitiationDate)} · {recall.status}
