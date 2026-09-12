@@ -5,10 +5,16 @@ import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { InitiateCallButton } from "@/components/InitiateCallButton";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { matchPatients } from "@/lib/recall-matching";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { matchPatients, type MatchedPatient } from "@/lib/recall-matching";
 
 export const Route = createFileRoute("/patients")({
   head: () => ({
@@ -31,15 +37,54 @@ export const Route = createFileRoute("/patients")({
   component: PatientsPage,
 });
 
+type SortKey = "name-asc" | "name-desc" | "flagged-first" | "flagged-last";
+type FilterKey = "all" | "flagged" | "clear" | "flagged-class1" | "flagged-class2";
+
+const sortOptions: Record<SortKey, { label: string; compare: (a: MatchedPatient, b: MatchedPatient) => number }> = {
+  "name-asc": {
+    label: "Name (A–Z)",
+    compare: (a, b) => a.fullName.localeCompare(b.fullName),
+  },
+  "name-desc": {
+    label: "Name (Z–A)",
+    compare: (a, b) => b.fullName.localeCompare(a.fullName),
+  },
+  "flagged-first": {
+    label: "Flagged first",
+    compare: (a, b) => Number(b.isFlagged) - Number(a.isFlagged) || a.fullName.localeCompare(b.fullName),
+  },
+  "flagged-last": {
+    label: "Flagged last",
+    compare: (a, b) => Number(a.isFlagged) - Number(b.isFlagged) || a.fullName.localeCompare(b.fullName),
+  },
+};
+
+function matchesFilter(m: MatchedPatient, filter: FilterKey): boolean {
+  switch (filter) {
+    case "flagged":
+      return m.isFlagged;
+    case "clear":
+      return !m.isFlagged;
+    case "flagged-class1":
+      return m.flagged.some((f) => f.recall.classification === "Class I");
+    case "flagged-class2":
+      return m.flagged.some((f) => f.recall.classification === "Class II");
+    case "all":
+    default:
+      return true;
+  }
+}
+
 function PatientsPage() {
   const [query, setQuery] = useState("");
-  const [onlyFlagged, setOnlyFlagged] = useState(false);
+  const [sort, setSort] = useState<SortKey>("name-asc");
+  const [filter, setFilter] = useState<FilterKey>("all");
   const matched = useMemo(() => matchPatients(), []);
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
     return matched
-      .filter((m) => (onlyFlagged ? m.isFlagged : true))
+      .filter((m) => matchesFilter(m, filter))
       .filter((m) => {
         if (!q) return true;
         return (
@@ -50,15 +95,15 @@ function PatientsPage() {
           )
         );
       })
-      .sort((a, b) => Number(b.isFlagged) - Number(a.isFlagged));
-  }, [matched, query, onlyFlagged]);
+      .sort(sortOptions[sort].compare);
+  }, [matched, query, filter, sort]);
 
   return (
     <AppShell
       title="Patients"
       subtitle="All patients on file. Rows shaded red hold at least one recalled medication."
     >
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
         <div className="relative w-full sm:max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -68,13 +113,31 @@ function PatientsPage() {
             className="pl-9"
           />
         </div>
-        <Button
-          variant={onlyFlagged ? "default" : "outline"}
-          size="sm"
-          onClick={() => setOnlyFlagged((v) => !v)}
-        >
-          {onlyFlagged ? "Showing flagged only" : "Show flagged only"}
-        </Button>
+        <div className="flex items-center gap-3">
+          <Select value={filter} onValueChange={(v) => setFilter(v as FilterKey)}>
+            <SelectTrigger className="h-9 w-[190px]" aria-label="Filter patients">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All patients</SelectItem>
+              <SelectItem value="flagged">Show flagged only</SelectItem>
+              <SelectItem value="clear">Show clear only</SelectItem>
+              <SelectItem value="flagged-class1">Flagged — Class I</SelectItem>
+              <SelectItem value="flagged-class2">Flagged — Class II</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+            <SelectTrigger className="h-9 w-[170px]" aria-label="Sort patients">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="name-asc">Name (A–Z)</SelectItem>
+              <SelectItem value="name-desc">Name (Z–A)</SelectItem>
+              <SelectItem value="flagged-first">Flagged first</SelectItem>
+              <SelectItem value="flagged-last">Flagged last</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         <span className="text-sm text-muted-foreground">{visible.length} patients</span>
       </div>
 
