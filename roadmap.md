@@ -13,3 +13,8 @@
 - Approved call context includes AI rationale and calculated estimates inside a safety-controlled template, not a fully AI-written opening.
 - No runtime MCP connection, arbitrary code execution, or separate URL-context tool configured.
 - Recall feed remains the original static FDA snapshot; analyses reset on reload. No durable approval audit history.
+
+# Command center
+- [ ] Add authenticated Gemini coordinator and read/analysis/outreach preparation tools.
+- [ ] Add conversation page with inline review and confirmed calling.
+- [ ] Verify real Gemini interaction, auth boundary, and page rendering.
