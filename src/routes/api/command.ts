@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { createClient } from '@supabase/supabase-js';
-import { convertToModelMessages, streamText, stepCountIs, validateUIMessages } from 'ai';
+import { convertToModelMessages, streamText, stepCountIs, validateUIMessages, type UIMessage, type InferUITools } from 'ai';
 import { createCommandGateway } from '@/lib/command-gateway.server';
 import { commandTools } from '@/lib/command-tools.server';
 import { gatewayMessage } from '@/lib/analysis.server';
@@ -21,7 +21,7 @@ export const Route = createFileRoute('/api/command')({ server: { handlers: {
       if (!apiKey) return new Response('AI is not configured.', { status: 503 });
       const body = await request.json();
       const tools = commandTools(data.user.id, request.signal);
-      const messages = await validateUIMessages({ messages: body.messages, tools });
+      const messages = await validateUIMessages<UIMessage<unknown, never, InferUITools<typeof tools>>>({ messages: body.messages, tools });
       const gateway = createCommandGateway(apiKey, request.headers.get('X-Lovable-AIG-Run-ID') ?? undefined);
       const result = streamText({
         model: gateway.provider('google/gemini-3.1-pro-preview'),
