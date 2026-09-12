@@ -21,11 +21,12 @@ export const Route = createFileRoute("/auth")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  validateSearch: (s: Record<string, unknown>) => ({
-    next: typeof s.next === "string" && s.next.startsWith("/") && !s.next.startsWith("//")
-      ? s.next
-      : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { next?: string } => {
+    const raw = s["next"];
+    return typeof raw === "string" && raw.startsWith("/") && !raw.startsWith("//")
+      ? { next: raw }
+      : {};
+  },
   component: SignInPage,
 });
 
