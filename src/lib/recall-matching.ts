@@ -123,14 +123,17 @@ export type DashboardStats = {
   classOneRecalls: number;
 };
 
-export function getStats(matched: MatchedPatient[]): DashboardStats {
+export function getStats(
+  matched: MatchedPatient[],
+  recallList: Recall[] = recalls,
+): DashboardStats {
   const affected = matched.filter((m) => m.isFlagged);
   return {
     totalPatients: matched.length,
-    totalRecalls: recalls.length,
+    totalRecalls: recallList.length,
     affectedPatients: affected.length,
     affectedPrescriptions: affected.reduce((sum, m) => sum + m.flagged.length, 0),
-    classOneRecalls: recalls.filter((r) => r.classification === "Class I").length,
+    classOneRecalls: recallList.filter((r) => r.classification === "Class I").length,
   };
 }
 

@@ -87,7 +87,7 @@ function Dashboard() {
       [...recalls].sort(
         (a, b) => classificationRank(a.classification) - classificationRank(b.classification),
       )[0],
-    [],
+    [recalls],
   );
 
   const cards = [

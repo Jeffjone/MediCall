@@ -50,7 +50,11 @@ function RecallsPage() {
   return (
     <AppShell
       title="FDA Recalls"
-      subtitle="Sourced from the openFDA Drug Enforcement (RES) database. Matching is done on NDC."
+      subtitle={
+        source === "openfda"
+          ? `Live from the openFDA Drug Enforcement (RES) API — ${recalls.length} drug recalls, refreshed ${new Date(fetchedAt).toLocaleString()}. Matching is done on NDC.`
+          : "openFDA is unreachable right now, showing the last bundled snapshot. Matching is done on NDC."
+      }
       session={session}
     >
       <div className="grid gap-4 lg:grid-cols-2">
