@@ -22,7 +22,7 @@ export const Route = createFileRoute("/recalls")({
         content:
           "Ten live FDA drug enforcement recalls with NDC codes, lot numbers, and the number of pharmacy patients affected.",
       },
-      { property: "og:title", content: "FDA Recalls — RecallGuard" },
+      { property: "og:title", content: "FDA Recalls — Medicall" },
       {
         property: "og:description",
         content: "Live FDA drug enforcement recalls and affected patient counts.",
