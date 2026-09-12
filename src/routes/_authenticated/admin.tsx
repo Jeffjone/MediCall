@@ -41,7 +41,7 @@ function AdminPage() {
 
   const { data: pending = [], isLoading } = useQuery({
     queryKey: ["pending-profiles"],
-    queryFn: () => fetchPending({ data: {} }),
+    queryFn: () => fetchPending(),
   });
 
   async function handleAction(profileId: string, status: "approved" | "rejected") {

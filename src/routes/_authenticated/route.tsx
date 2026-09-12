@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_authenticated")({
       throw redirect({ to: "/auth" });
     }
     try {
-      const session = await getMySession({ data: {} });
+      const session = await getMySession();
       return { session };
     } catch {
       // Profile not built yet (e.g. trigger lag). Treat as pending.
