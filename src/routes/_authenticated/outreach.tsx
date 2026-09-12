@@ -28,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/outreach")({
   component: OutreachPage,
 });
 
-function Field({ label, value }: { label: string; value?: string | number }) {
+function Field({ label, value }: { label: string; value: string | number | undefined }) {
   if (value === undefined || value === "") return null;
   return (
     <div className="space-y-0.5">
