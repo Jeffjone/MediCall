@@ -1,6 +1,8 @@
 import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { getMySession } from "@/lib/profiles.functions";
+import { getRecallFeed } from "@/lib/recalls.functions";
+import { setRecalls } from "@/lib/recall-matching";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Clock } from "lucide-react";
 
@@ -39,10 +41,24 @@ export const Route = createFileRoute("/_authenticated")({
       };
     }
   },
+  loader: async () => {
+    const feed = await getRecallFeed();
+    setRecalls(feed.recalls);
+    return feed;
+  },
   component: AuthLayout,
 });
 
 export const useRouteContext = Route.useRouteContext;
+
+/** Live openFDA recall feed loaded once for the whole authenticated area. */
+export function useRecallFeed() {
+  return Route.useLoaderData();
+}
+
+export function useRecalls() {
+  return Route.useLoaderData().recalls;
+}
 
 function AuthLayout() {
   const { session } = Route.useRouteContext();

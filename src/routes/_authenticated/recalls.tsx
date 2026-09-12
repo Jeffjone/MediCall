@@ -10,9 +10,8 @@ import {
   classificationRank,
   formatFdaDate,
   matchPatients,
-  recalls,
 } from "@/lib/recall-matching";
-import { useRouteContext } from "@/routes/_authenticated/route";
+import { useRecallFeed, useRouteContext } from "@/routes/_authenticated/route";
 
 export const Route = createFileRoute("/_authenticated/recalls")({
   head: () => ({
@@ -21,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/recalls")({
       {
         name: "description",
         content:
-          "Ten live FDA drug enforcement recalls with NDC codes, lot numbers, and the number of pharmacy patients affected.",
+          "Live FDA drug enforcement recalls with NDC codes, lot numbers, and the number of pharmacy patients affected.",
       },
       { property: "og:title", content: "FDA Recalls — Medicall" },
       {
@@ -36,7 +35,8 @@ export const Route = createFileRoute("/_authenticated/recalls")({
 });
 
 function RecallsPage() {
-  const matched = useMemo(() => matchPatients(), []);
+  const { recalls, source, fetchedAt } = useRecallFeed();
+  const matched = useMemo(() => matchPatients(undefined, recalls), [recalls]);
   const counts = useMemo(() => affectedCountByRecall(matched), [matched]);
   const { session } = useRouteContext();
   const sorted = useMemo(
@@ -44,13 +44,17 @@ function RecallsPage() {
       [...recalls].sort(
         (a, b) => classificationRank(a.classification) - classificationRank(b.classification),
       ),
-    [],
+    [recalls],
   );
 
   return (
     <AppShell
       title="FDA Recalls"
-      subtitle="Sourced from the openFDA Drug Enforcement (RES) database. Matching is done on NDC."
+      subtitle={
+        source === "openfda"
+          ? `Live from the openFDA Drug Enforcement (RES) API — ${recalls.length} drug recalls, refreshed ${new Date(fetchedAt).toLocaleString()}. Matching is done on NDC.`
+          : "openFDA is unreachable right now, showing the last bundled snapshot. Matching is done on NDC."
+      }
       session={session}
     >
       <div className="grid gap-4 lg:grid-cols-2">

@@ -51,8 +51,16 @@ export type MatchedPatient = {
   isFlagged: boolean;
 };
 
-export const recalls = recallsData as Recall[];
+/**
+ * Recall list used by the app. Seeded with the bundled openFDA snapshot and
+ * replaced with live openFDA data once the authenticated layout loads it.
+ */
+export let recalls = recallsData as Recall[];
 export const patients = patientsData as Patient[];
+
+export function setRecalls(next: Recall[]) {
+  if (next.length > 0) recalls = next;
+}
 
 /**
  * Normalise an NDC to the 11-digit (5-4-2) form so codes written in the
@@ -115,14 +123,17 @@ export type DashboardStats = {
   classOneRecalls: number;
 };
 
-export function getStats(matched: MatchedPatient[]): DashboardStats {
+export function getStats(
+  matched: MatchedPatient[],
+  recallList: Recall[] = recalls,
+): DashboardStats {
   const affected = matched.filter((m) => m.isFlagged);
   return {
     totalPatients: matched.length,
-    totalRecalls: recalls.length,
+    totalRecalls: recallList.length,
     affectedPatients: affected.length,
     affectedPrescriptions: affected.reduce((sum, m) => sum + m.flagged.length, 0),
-    classOneRecalls: recalls.filter((r) => r.classification === "Class I").length,
+    classOneRecalls: recallList.filter((r) => r.classification === "Class I").length,
   };
 }
 
