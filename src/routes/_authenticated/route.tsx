@@ -26,6 +26,15 @@ export const Route = createFileRoute("/_authenticated")({
           fullName: null,
           approvalStatus: "pending" as const,
           role: "staff" as const,
+          phone: null,
+          streetAddress: null,
+          city: null,
+          state: null,
+          postalCode: null,
+          npiNumber: null,
+          deaNumber: null,
+          hours: null,
+          notes: null,
         },
       };
     }
