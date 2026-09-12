@@ -68,9 +68,10 @@ export function AppShell({
             </div>
             <div className="flex flex-col leading-tight">
               <span className="font-display text-lg font-bold tracking-tight">Medicall</span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sidebar-foreground/50">
+              <span className="whitespace-nowrap text-[9px] font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/50">
                 Know Sooner. Act Faster.
               </span>
+
             </div>
           </div>
         </div>
