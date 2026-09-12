@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "sdk_version": "2.0.4",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://gyytpqfljyhszdpdjsmu.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "medicall",
+      "version": "0.1.0",
+      "title": "Medicall"
+    },
+    "tools": [
+      {
+        "name": "list_recalls",
+        "title": "List drug recalls",
+        "description": "List current FDA drug recalls tracked by Medicall, with how many pharmacy patients each one affects.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "affecting_patients_only": {
+              "description": "When true, return only recalls that match at least one patient prescription.",
+              "type": "boolean"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_flagged_patients",
+        "title": "List flagged patients",
+        "description": "List every pharmacy patient whose filled prescription NDC matches an active FDA drug recall.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "search_patients",
+        "title": "Search patients",
+        "description": "Search pharmacy patients by name, patient ID, medication name, or NDC. Returns each match with its recall status.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "query": {
+              "type": "string",
+              "description": "Name, patient ID, drug name, or NDC to search for."
+            }
+          },
+          "required": [
+            "query"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_patient",
+        "title": "Get patient",
+        "description": "Get one patient's full prescription list and any FDA recall matches, by patient ID.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "patient_id": {
+              "type": "string",
+              "description": "Patient ID, for example PT-1075."
+            }
+          },
+          "required": [
+            "patient_id"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
