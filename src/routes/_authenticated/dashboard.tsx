@@ -189,7 +189,8 @@ function Dashboard() {
                         {f.prescription.ndc}
                       </TableCell>
                       <TableCell>
-                        <Badge variant="destructive">
+                        <Badge variant="destructive" className="whitespace-nowrap">
+
                           <AlertTriangle className="mr-1 h-3 w-3" />
                           {f.recall.classification}
                         </Badge>
