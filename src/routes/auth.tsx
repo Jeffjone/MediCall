@@ -68,6 +68,26 @@ function SignInPage() {
         </>
       }
     >
+      <section className="mb-5 space-y-2 border-b pb-5">
+        <h2 className="text-sm font-semibold">Riverside Pharmacy demo</h2>
+        <p className="text-xs text-muted-foreground">40 demo patients · 10 affected by recalls</p>
+        <dl className="text-sm">
+          <div><dt className="inline font-medium">Email: </dt><dd className="inline">demo@medicall.example</dd></div>
+          <div><dt className="inline font-medium">Password: </dt><dd className="inline">MedicallDemo2026!</dd></div>
+        </dl>
+        <Button
+          type="button"
+          variant="secondary"
+          className="w-full"
+          disabled={loading}
+          onClick={() => {
+            setEmail("demo@medicall.example");
+            setPassword("MedicallDemo2026!");
+          }}
+        >
+          Use demo login
+        </Button>
+      </section>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>
