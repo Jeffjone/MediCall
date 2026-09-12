@@ -79,18 +79,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "RecallGuard — Pharmacy Recall Dashboard" },
+      { title: "Medicall — Know Sooner. Act Faster." },
       {
         name: "description",
         content:
-          "Dashboard for pharmacies to track patients on recalled medications and trigger AI outreach calls.",
+          "Medicall helps pharmacies track patients on recalled medications and trigger AI outreach calls. Know Sooner. Act Faster.",
       },
-      { name: "author", content: "RecallGuard" },
-      { property: "og:title", content: "RecallGuard — Pharmacy Recall Dashboard" },
+      { name: "author", content: "Medicall" },
+      { property: "og:title", content: "Medicall — Know Sooner. Act Faster." },
       {
         property: "og:description",
         content:
-          "Dashboard for pharmacies to track patients on recalled medications and trigger AI outreach calls.",
+          "Medicall helps pharmacies track patients on recalled medications and trigger AI outreach calls. Know Sooner. Act Faster.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

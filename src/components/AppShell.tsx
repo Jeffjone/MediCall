@@ -31,11 +31,18 @@ export function AppShell({
   return (
     <div className="flex min-h-screen bg-muted/30">
       <aside className="hidden w-60 shrink-0 flex-col border-r bg-card md:flex">
-        <div className="flex items-center gap-2 px-6 py-5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Pill className="h-5 w-5" />
+        <div className="flex flex-col gap-0.5 px-6 py-5">
+          <div className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <Pill className="h-5 w-5" />
+            </div>
+            <div className="flex flex-col leading-tight">
+              <span className="text-lg font-semibold tracking-tight">Medicall</span>
+              <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                Know Sooner. Act Faster.
+              </span>
+            </div>
           </div>
-          <span className="text-lg font-semibold tracking-tight">RecallGuard</span>
         </div>
         <Separator />
         <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
@@ -63,7 +70,7 @@ export function AppShell({
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <Pill className="h-4 w-4" />
             </div>
-            <span className="font-semibold">RecallGuard</span>
+            <span className="font-semibold">Medicall</span>
           </div>
           <nav className="flex gap-1 overflow-x-auto md:hidden">
             {navItems.map((item) => (

@@ -16,7 +16,7 @@ import {
 export const Route = createFileRoute("/recalls")({
   head: () => ({
     meta: [
-      { title: "FDA Recalls — RecallGuard" },
+      { title: "FDA Recalls — Medicall" },
       {
         name: "description",
         content:

@@ -9,7 +9,7 @@ import { useCallStore } from "@/lib/call-store";
 export const Route = createFileRoute("/outreach")({
   head: () => ({
     meta: [
-      { title: "Outreach Log — RecallGuard" },
+      { title: "Outreach Log — Medicall" },
       {
         name: "description",
         content:
