@@ -36,7 +36,9 @@ export const getMySession = createServerFn({ method: "GET" })
     const [{ data: profile }, { data: roles }] = await Promise.all([
       supabase
         .from("profiles")
-        .select("id, email, pharmacy_name, pharmacy_location, license_number, full_name, approval_status")
+        .select(
+          "id, email, pharmacy_name, pharmacy_location, license_number, full_name, approval_status, phone, street_address, city, state, postal_code, npi_number, dea_number, hours, notes",
+        )
         .eq("id", userId)
         .single(),
       supabase.from("user_roles").select("role").eq("user_id", userId),
