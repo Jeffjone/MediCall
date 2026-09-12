@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OutreachRouteImport } from './routes/outreach'
+import { Route as PatientsRouteImport } from './routes/patients'
+import { Route as RecallsRouteImport } from './routes/recalls'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OutreachRoute = OutreachRouteImport.update({
+  id: '/outreach',
+  path: '/outreach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PatientsRoute = PatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecallsRoute = RecallsRouteImport.update({
+  id: '/recalls',
+  path: '/recalls',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/outreach': typeof OutreachRoute
+  '/patients': typeof PatientsRoute
+  '/recalls': typeof RecallsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/outreach': typeof OutreachRoute
+  '/patients': typeof PatientsRoute
+  '/recalls': typeof RecallsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/outreach': typeof OutreachRoute
+  '/patients': typeof PatientsRoute
+  '/recalls': typeof RecallsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/outreach' | '/patients' | '/recalls'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/outreach' | '/patients' | '/recalls'
+  id: '__root__' | '/' | '/outreach' | '/patients' | '/recalls'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OutreachRoute: typeof OutreachRoute
+  PatientsRoute: typeof PatientsRoute
+  RecallsRoute: typeof RecallsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/outreach': {
+      id: '/outreach'
+      path: '/outreach'
+      fullPath: '/outreach'
+      preLoaderRoute: typeof OutreachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/patients': {
+      id: '/patients'
+      path: '/patients'
+      fullPath: '/patients'
+      preLoaderRoute: typeof PatientsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recalls': {
+      id: '/recalls'
+      path: '/recalls'
+      fullPath: '/recalls'
+      preLoaderRoute: typeof RecallsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OutreachRoute: OutreachRoute,
+  PatientsRoute: PatientsRoute,
+  RecallsRoute: RecallsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
