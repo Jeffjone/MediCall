@@ -93,7 +93,7 @@ export function InitiateCallButton({
     });
 
     if (result.ok) {
-      finishCall(id, match.patient.id, "called", result.message, result.conversationId);
+      finishCall(id, match.patient.id, "called", result.message, result.conversationId, result.dialed);
       toast.success("Call placed", { description: result.message });
     } else {
       finishCall(id, match.patient.id, "failed", result.message);
