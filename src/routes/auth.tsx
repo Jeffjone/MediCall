@@ -63,7 +63,7 @@ function SignInPage() {
       });
       if (result.error) throw result.error;
       if (result.redirected) return;
-      navigate({ to: "/dashboard" });
+      goNext();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Google sign-in failed.");
     }
