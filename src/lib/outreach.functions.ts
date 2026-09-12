@@ -1,6 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
+import {
+  OUTREACH_FIRST_MESSAGE,
+  OUTREACH_SYSTEM_PROMPT,
+} from "@/lib/outreach-script";
+
 const CallInput = z.object({
   patientName: z.string().min(1),
   patientId: z.string().min(1),
@@ -77,6 +82,12 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
                 recall_classification: data.classification,
                 pharmacy_name: data.pharmacyName,
                 recall_summary: summary,
+              },
+              overrides: {
+                agent: {
+                  first_message: OUTREACH_FIRST_MESSAGE,
+                  prompt: OUTREACH_SYSTEM_PROMPT,
+                },
               },
             },
           }),
