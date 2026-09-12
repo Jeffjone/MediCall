@@ -33,6 +33,8 @@ export const Route = createFileRoute("/_authenticated")({
   component: AuthLayout,
 });
 
+export const useRouteContext = Route.useRouteContext;
+
 function AuthLayout() {
   const { session } = Route.useRouteContext();
   const navigate = useNavigate();
