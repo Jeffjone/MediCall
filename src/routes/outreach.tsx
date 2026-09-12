@@ -9,13 +9,13 @@ import { useCallStore } from "@/lib/call-store";
 export const Route = createFileRoute("/outreach")({
   head: () => ({
     meta: [
-      { title: "Outreach Log — RecallGuard" },
+      { title: "Outreach Log — Medicall" },
       {
         name: "description",
         content:
           "Record of AI voice outreach calls placed to patients holding recalled medications.",
       },
-      { property: "og:title", content: "Outreach Log — RecallGuard" },
+      { property: "og:title", content: "Outreach Log — Medicall" },
       {
         property: "og:description",
         content: "Record of AI voice outreach calls placed about medication recalls.",

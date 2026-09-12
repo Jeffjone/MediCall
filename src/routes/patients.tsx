@@ -13,13 +13,13 @@ import { matchPatients } from "@/lib/recall-matching";
 export const Route = createFileRoute("/patients")({
   head: () => ({
     meta: [
-      { title: "Patients — RecallGuard" },
+      { title: "Patients — Medicall" },
       {
         name: "description",
         content:
           "Every pharmacy patient with their prescriptions, NDC codes, and recall status at a glance.",
       },
-      { property: "og:title", content: "Patients — RecallGuard" },
+      { property: "og:title", content: "Patients — Medicall" },
       {
         property: "og:description",
         content: "Pharmacy patients with prescriptions, NDC codes, and recall status.",

@@ -33,13 +33,13 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — RecallGuard Pharmacy Recall Monitor" },
+      { title: "Dashboard — Medicall" },
       {
         name: "description",
         content:
-          "Live view of patients prescribed FDA-recalled medications, matched by NDC, with one-click AI outreach calls.",
+          "Medicall live view of patients prescribed FDA-recalled medications, matched by NDC, with one-click AI outreach calls.",
       },
-      { property: "og:title", content: "Dashboard — RecallGuard" },
+      { property: "og:title", content: "Dashboard — Medicall" },
       {
         property: "og:description",
         content:
