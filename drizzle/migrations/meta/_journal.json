@@ -43,6 +43,13 @@
       "when": 1789273736660,
       "tag": "0005_create_saved_analyses",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789274489603,
+      "tag": "0006_patient_interaction_checks",
+      "breakpoints": true
     }
   ]
 }
