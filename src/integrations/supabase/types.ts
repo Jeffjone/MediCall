@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      fda_recalls: {
+        Row: {
+          city: string
+          classification: string
+          distribution_pattern: string
+          drug_name: string
+          first_seen_at: string
+          last_synced_at: string
+          lot_numbers: string
+          ndc_codes: string[]
+          product_description: string
+          reason_for_recall: string
+          recall_initiation_date: string
+          recall_number: string
+          recalling_firm: string
+          report_date: string
+          state: string
+          status: string
+        }
+        Insert: {
+          city?: string
+          classification?: string
+          distribution_pattern?: string
+          drug_name?: string
+          first_seen_at?: string
+          last_synced_at?: string
+          lot_numbers?: string
+          ndc_codes?: string[]
+          product_description?: string
+          reason_for_recall?: string
+          recall_initiation_date?: string
+          recall_number: string
+          recalling_firm?: string
+          report_date?: string
+          state?: string
+          status?: string
+        }
+        Update: {
+          city?: string
+          classification?: string
+          distribution_pattern?: string
+          drug_name?: string
+          first_seen_at?: string
+          last_synced_at?: string
+          lot_numbers?: string
+          ndc_codes?: string[]
+          product_description?: string
+          reason_for_recall?: string
+          recall_initiation_date?: string
+          recall_number?: string
+          recalling_firm?: string
+          report_date?: string
+          state?: string
+          status?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           approval_status: string
