@@ -1,19 +1,9 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
+
 import { geminiEndpoint } from './gemini.server';
 
 const HEADER = 'X-Lovable-AIG-Run-ID';
 export function createCommandGateway(_key: string, initial?: string) {
-  const googleKey = process.env['GOOGLE_AI_API_KEY'];
-  if (googleKey) {
-    const google = createGoogleGenerativeAI({ apiKey: googleKey });
-    return {
-      provider: (id: string) => google(id),
-      model: (_id: string) => 'gemini-3.8-flash',
-      direct: true,
-      async wrap(response: Response) { return response; },
-    };
-  }
   let runId = initial;
   let resolve: (value?: string) => void = () => {};
   const ready = new Promise<string | undefined>(r => { resolve = r; });
