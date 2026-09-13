@@ -78,6 +78,8 @@ function matchesFilter(m: MatchedPatient, filter: FilterKey): boolean {
       return m.flagged.some((f) => f.recall.classification === "Class I");
     case "flagged-class2":
       return m.flagged.some((f) => f.recall.classification === "Class II");
+    case "refill-overuse":
+      return patientRefillSummary(m.patient).hasOverutilization;
     case "all":
     default:
       return true;
