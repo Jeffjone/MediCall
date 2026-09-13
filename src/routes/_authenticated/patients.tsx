@@ -138,6 +138,7 @@ function PatientsPage() {
               <SelectItem value="clear">Show clear only</SelectItem>
               <SelectItem value="flagged-class1">Flagged — Class I</SelectItem>
               <SelectItem value="flagged-class2">Flagged — Class II</SelectItem>
+              <SelectItem value="refill-overuse">Refill overuse</SelectItem>
             </SelectContent>
           </Select>
           <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
