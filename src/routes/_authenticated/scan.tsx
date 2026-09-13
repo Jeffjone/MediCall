@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   Camera,
   CheckCircle2,
+  ImagePlus,
   Loader2,
   Monitor,
   RotateCcw,
@@ -58,6 +59,7 @@ function ScanPage() {
   const isMobile = useIsMobile();
   const run = useServerFn(scanLabel);
   const inputRef = useRef<HTMLInputElement>(null);
+  const uploadRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<ScanResponse | null>(null);
@@ -91,6 +93,7 @@ function ScanPage() {
     setPreview(null);
     setResult(null);
     if (inputRef.current) inputRef.current.value = "";
+    if (uploadRef.current) uploadRef.current.value = "";
   }
 
   return (
@@ -119,6 +122,16 @@ function ScanPage() {
             type="file"
             accept="image/*"
             capture="environment"
+            className="hidden"
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) void handleFile(file);
+            }}
+          />
+          <input
+            ref={uploadRef}
+            type="file"
+            accept="image/*"
             className="hidden"
             onChange={(event) => {
               const file = event.target.files?.[0];
@@ -165,6 +178,15 @@ function ScanPage() {
                   </Button>
                 ) : null}
               </div>
+
+              <Button
+                variant="outline"
+                className="w-full"
+                disabled={busy}
+                onClick={() => uploadRef.current?.click()}
+              >
+                <ImagePlus className="mr-2 h-4 w-4" /> Upload picture
+              </Button>
             </CardContent>
           </Card>
 
