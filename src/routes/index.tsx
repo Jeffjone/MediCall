@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import {
-  Pill,
   AlertTriangle,
   PhoneCall,
   Users,
@@ -13,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { BrandMark } from "@/components/BrandMark";
 import { GeometricBackdrop } from "@/components/GeometricBackdrop";
 import { getRecallPulse } from "@/lib/briefing.functions";
 import type { RecallPulse } from "@/lib/briefing.functions";
