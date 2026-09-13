@@ -29,6 +29,11 @@ const navItems = [
   { to: "/profile", icon: Building2, label: "Pharmacy profile" },
 ] as const;
 
+/** Camera scanner: mobile web only. */
+const mobileOnlyItems = [
+  { to: "/scan", icon: ScanLine, label: "Scan label" },
+] as const;
+
 export function AppShell({
   title,
   subtitle,
