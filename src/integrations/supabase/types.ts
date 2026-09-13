@@ -86,6 +86,30 @@ export type Database = {
         }
         Relationships: []
       }
+      patient_interaction_checks: {
+        Row: {
+          fingerprint: string
+          patient_id: string
+          result: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          fingerprint: string
+          patient_id: string
+          result: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          fingerprint?: string
+          patient_id?: string
+          result?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           approval_status: string

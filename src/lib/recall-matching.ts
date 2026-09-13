@@ -22,6 +22,7 @@ export type Recall = {
 
 
 export type Prescription = {
+  active?: boolean;
   drugName: string;
   strength: string;
   ndc: string;
@@ -32,6 +33,7 @@ export type Prescription = {
 };
 
 export type Patient = {
+  allergies?: string[];
   id: string;
   firstName: string;
   lastName: string;
