@@ -33,7 +33,7 @@ export const Route = createFileRoute('/api/command')({ server: { handlers: {
       catch { return new Response('This conversation contains invalid messages. Please start a new conversation.', { status: 400 }); }
       const gateway = createCommandGateway(apiKey, request.headers.get('X-Lovable-AIG-Run-ID') ?? undefined);
       const result = streamText({
-        model: gateway.provider('google/gemini-3.1-pro-preview'),
+        model: gateway.provider(gateway.model('google/gemini-3.1-pro-preview')),
         messages: await convertToModelMessages(messages), tools, stopWhen: [stepCountIs(50), ({ steps }) => steps.some(step => step.content.some(part => part.type === 'tool-error'))], maxRetries: 0,
         abortSignal: request.signal,
         providerOptions: { lovable: { reasoning: { effort: 'medium' } } },

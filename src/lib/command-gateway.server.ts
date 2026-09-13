@@ -1,13 +1,16 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+import { geminiEndpoint } from './gemini.server';
 
 const HEADER = 'X-Lovable-AIG-Run-ID';
-export function createCommandGateway(key: string, initial?: string) {
+export function createCommandGateway(_key: string, initial?: string) {
   let runId = initial;
   let resolve: (value?: string) => void = () => {};
   const ready = new Promise<string | undefined>(r => { resolve = r; });
+  const endpoint = geminiEndpoint();
+  if (!endpoint) throw new Error('AI is not configured.');
   const provider = createOpenAICompatible({
-    name: 'lovable', baseURL: 'https://ai.gateway.lovable.dev/v1',
-    headers: { 'Lovable-API-Key': key, 'X-Lovable-AIG-SDK': 'vercel-ai-sdk' },
+    name: 'lovable', baseURL: endpoint.baseURL,
+    headers: endpoint.headers,
     fetch: async (input, init) => {
       const headers = new Headers(init?.headers);
       if (runId) headers.set(HEADER, runId);
@@ -19,7 +22,7 @@ export function createCommandGateway(key: string, initial?: string) {
       } catch (error) { resolve(undefined); throw error; }
     },
   });
-  return { provider, async wrap(response: Response) {
+  return { provider, model: endpoint.model, async wrap(response: Response) {
     const reader = response.body?.getReader();
     if (!reader) return response;
     const first = reader.read();

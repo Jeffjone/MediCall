@@ -2,6 +2,7 @@ import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
 import { streamText, Output, NoObjectGeneratedError } from 'ai';
 import { z } from 'zod';
 import { createHash } from 'node:crypto';
+import { geminiEndpoint } from './gemini.server';
 
 export const briefingSchema = z.object({
   headline: z.string(),
@@ -42,13 +43,13 @@ async function writeCached(key: string, kind: string, value: z.infer<typeof brie
 
 /** Generates a short structured brief with Gemini. Returns null when AI is unavailable. */
 export async function generateBrief(kind: string, key: string, prompt: string): Promise<Briefing | null> {
-  const apiKey = process.env['LOVABLE_API_KEY'];
-  if (!apiKey) return null;
+  const endpoint = geminiEndpoint();
+  if (!endpoint) return null;
   let runId: string | undefined;
   const provider = createOpenAICompatible({
     name: 'lovable',
-    baseURL: 'https://ai.gateway.lovable.dev/v1',
-    headers: { 'Lovable-API-Key': apiKey, 'X-Lovable-AIG-SDK': 'vercel-ai-sdk' },
+    baseURL: endpoint.baseURL,
+    headers: endpoint.headers,
     fetch: async (input, init) => {
       const headers = new Headers(init?.headers);
       if (runId) headers.set('X-Lovable-AIG-Run-ID', runId);
@@ -59,7 +60,7 @@ export async function generateBrief(kind: string, key: string, prompt: string): 
   });
   try {
     const result = streamText({
-      model: provider('google/gemini-3.8-flash'),
+      model: provider(endpoint.model('google/gemini-3.8-flash')),
       maxRetries: 0,
       output: Output.object({ schema: briefingSchema }),
       prompt,

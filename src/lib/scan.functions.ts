@@ -81,8 +81,9 @@ export const scanLabel = createServerFn({ method: "POST" })
       return { ok: false, message: "An approved pharmacy account is required." };
     }
 
-    const key = process.env["LOVABLE_API_KEY"];
-    if (!key) return { ok: false, message: "AI is not configured." };
+    const { geminiEndpoint } = await import("./gemini.server");
+    const endpoint = geminiEndpoint();
+    if (!endpoint) return { ok: false, message: "AI is not configured." };
 
     if (!data.image.startsWith("data:image/")) {
       return { ok: false, message: "Unsupported image format. Take the photo again." };
@@ -90,15 +91,15 @@ export const scanLabel = createServerFn({ method: "POST" })
 
     let response: Response;
     try {
-      response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      response = await fetch(`${endpoint.baseURL}/chat/completions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Lovable-API-Key": key,
-          "X-Lovable-AIG-SDK": "fetch",
+          ...endpoint.headers,
+          ...(endpoint.direct ? {} : { "X-Lovable-AIG-SDK": "fetch" }),
         },
         body: JSON.stringify({
-          model: "google/gemini-3.8-flash",
+          model: endpoint.model("google/gemini-3.8-flash"),
           messages: [
             {
               role: "user",
