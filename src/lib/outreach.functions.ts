@@ -187,6 +187,19 @@ export const placeDoctorCall = createServerFn({ method: "POST" })
     const isDemo = flagged.recall.recallNumber.startsWith("DEMO-");
     const doctorName = flagged.prescription.prescriber || "the prescriber";
 
+    const docVars: Record<string, string> = {
+      doctor_name: doctorName,
+      patient_name: patient.fullName,
+      patient_id: patient.patient.id,
+      drug_name: flagged.prescription.drugName,
+      drug_strength: flagged.prescription.strength,
+      ndc: flagged.prescription.ndc,
+      recall_number: flagged.recall.recallNumber,
+      recall_reason: flagged.recall.reasonForRecall,
+      recall_classification: flagged.recall.classification,
+      pharmacy_name: profile.pharmacy_name,
+    };
+
     try {
       const response = await fetch("https://api.elevenlabs.io/v1/convai/twilio/outbound-call", {
         method: "POST",
