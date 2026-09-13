@@ -21,7 +21,9 @@ const GOOGLE_MODEL_MAP: Record<string, string> = {
   'gemini-3-flash': 'gemini-3.6-flash',
   'gemini-3.5-flash': 'gemini-3.6-flash',
   'gemini-3.8-flash-lite': 'gemini-3.1-flash-lite',
-  'gemini-3-pro': 'gemini-3.1-pro-preview',
+  'gemini-3-pro': 'gemini-3.6-flash',
+  // Google's free tier serves no quota for the Pro preview; use the supported Flash model.
+  'gemini-3.1-pro-preview': 'gemini-3.6-flash',
   'gemini-2.5-flash': 'gemini-3.6-flash',
 };
 
