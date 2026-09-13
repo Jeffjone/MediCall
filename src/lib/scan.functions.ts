@@ -91,15 +91,15 @@ export const scanLabel = createServerFn({ method: "POST" })
 
     let response: Response;
     try {
-      response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      response = await fetch(`${endpoint.baseURL}/chat/completions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Lovable-API-Key": key,
-          "X-Lovable-AIG-SDK": "fetch",
+          ...endpoint.headers,
+          ...(endpoint.direct ? {} : { "X-Lovable-AIG-SDK": "fetch" }),
         },
         body: JSON.stringify({
-          model: "google/gemini-3.8-flash",
+          model: endpoint.model("google/gemini-3.8-flash"),
           messages: [
             {
               role: "user",
