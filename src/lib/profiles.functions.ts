@@ -33,7 +33,7 @@ export const getMySession = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 
-    const [{ data: profile }, { data: roles }] = await Promise.all([
+    const [{ data: profile, error: profileError }, { data: roles, error: rolesError }] = await Promise.all([
       supabase
         .from("profiles")
         .select(
@@ -43,6 +43,10 @@ export const getMySession = createServerFn({ method: "GET" })
         .single(),
       supabase.from("user_roles").select("role").eq("user_id", userId),
     ]);
+
+    if (profileError || rolesError) {
+      throw Object.assign(new Error("Account details could not be loaded. Please try again later."), { status: 503 });
+    }
 
     const role: AppRole =
       roles && roles.length > 0 && (roles[0] as { role: AppRole }).role === "admin"
