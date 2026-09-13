@@ -61,20 +61,33 @@ function rng(seed: string) {
 }
 
 function toIso(date: Date): string {
+  if (Number.isNaN(date.getTime())) return "";
   return date.toISOString().slice(0, 10);
 }
 
+/** Normalize loosely formatted demo dates (e.g. 2026-5-9) to yyyy-mm-dd. */
+function normalizeIso(iso: string): string {
+  const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(String(iso ?? "").trim());
+  if (!m) return "";
+  return `${m[1]}-${m[2]!.padStart(2, "0")}-${m[3]!.padStart(2, "0")}`;
+}
+
 function addDays(iso: string, days: number): string {
-  const d = new Date(`${iso}T00:00:00Z`);
+  const base = normalizeIso(iso);
+  if (!base) return "";
+  const d = new Date(`${base}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return "";
   d.setUTCDate(d.getUTCDate() + days);
   return toIso(d);
 }
 
 function daysBetween(earlier: string, later: string): number {
-  const a = new Date(`${earlier}T00:00:00Z`).getTime();
-  const b = new Date(`${later}T00:00:00Z`).getTime();
+  const a = new Date(`${normalizeIso(earlier)}T00:00:00Z`).getTime();
+  const b = new Date(`${normalizeIso(later)}T00:00:00Z`).getTime();
+  if (Number.isNaN(a) || Number.isNaN(b)) return 0;
   return Math.round((b - a) / 86_400_000);
 }
+
 
 /**
  * Build a deterministic refill history ending on the prescription's most
