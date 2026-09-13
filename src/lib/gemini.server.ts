@@ -49,12 +49,5 @@ export function geminiEndpoint(): GeminiEndpoint | null {
       },
     };
   }
-  const key = process.env['LOVABLE_API_KEY'];
-  if (!key) return null;
-  return {
-    direct: false,
-    baseURL: 'https://ai.gateway.lovable.dev/v1',
-    headers: { 'Lovable-API-Key': key, 'X-Lovable-AIG-SDK': 'vercel-ai-sdk' },
-    model: id => id,
-  };
+  return null;
 }

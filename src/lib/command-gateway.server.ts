@@ -1,5 +1,5 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
+
 import { geminiEndpoint } from './gemini.server';
 
 const HEADER = 'X-Lovable-AIG-Run-ID';
