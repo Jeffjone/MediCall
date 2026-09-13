@@ -34,3 +34,19 @@ State: your patient {{patient_name}} (patient ID {{patient_id}}) is prescribed {
 Also state clearly that the pharmacy has already contacted the patient directly about this recall and advised them to speak with their prescriber and pharmacy before making any changes.
 Ask the prescriber how they would like to proceed and whether a replacement prescription should be sent. Do not recommend a specific therapy unless a pharmacist-approved option is appended below.
 Lot applicability must be confirmed by the pharmacy. Speak professionally, keep the call brief, identify this as an automated call, and offer a pharmacist callback for clinical questions.`;
+
+/**
+ * Renders {{placeholders}} with real values server-side so the spoken script
+ * always contains this patient's medication and recall, instead of relying on
+ * the voice provider to resolve variables (which can silently fall back to the
+ * agent's own configured prompt).
+ */
+export function renderScript(
+  template: string,
+  vars: Record<string, string | undefined>,
+): string {
+  return template.replace(/\{\{\s*([a-z_]+)\s*\}\}/gi, (match, key: string) => {
+    const value = vars[key];
+    return value && value.trim() ? value.trim() : match;
+  });
+}
