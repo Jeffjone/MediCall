@@ -1,4 +1,3 @@
-README.md
 <div align="center">
 
 MediCall
