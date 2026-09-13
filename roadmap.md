@@ -18,3 +18,8 @@
 - [x] Add authenticated Gemini coordinator and read/analysis/outreach preparation tools.
 - [x] Add conversation page with inline review and confirmed calling.
 - [x] Verify real Gemini interaction, auth boundary, and page rendering.
+
+# Demo recall simulation
+- [x] Add sidebar simulation, saved dummy recall and downloadable JSON.
+- [x] Refresh matching, notifications, analysis and outreach from shared recall history; label simulations as fictional.
+- [ ] Verify simulation in the signed-in browser without placing a call.

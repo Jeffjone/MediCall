@@ -40,8 +40,8 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
   .handler(async ({ data, context }): Promise<CallResult> => {
     const { data: profile } = await context.supabase.from("profiles").select("approval_status, pharmacy_name").eq("id", context.userId).single();
     if (profile?.approval_status !== "approved") return { ok: false, message: "An approved pharmacy account is required." };
-    const { fetchRecalls } = await import("./recalls.server");
-    const feed = await fetchRecalls();
+    const { readStoredFeed } = await import("./recall-sync.server");
+    const feed = await readStoredFeed();
     const { patient, flagged } = findCase(data.patientId, data.recallNumber, data.ndc, feed.recalls);
     data = { ...data, patientName: patient.fullName, drugName: flagged.prescription.drugName, strength: flagged.prescription.strength, recallReason: flagged.recall.reasonForRecall, classification: flagged.recall.classification, pharmacyName: profile.pharmacy_name };
     const approved = data.approval ? readReceipt(data.approval, context.userId) : null;
@@ -67,7 +67,7 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
 
     const summary =
       `${data.patientName} (patient ${data.patientId}) is currently prescribed ` +
-      `${data.drugName} ${data.strength}, NDC ${data.ndc}. The FDA has issued a ` +
+      `${data.drugName} ${data.strength}, NDC ${data.ndc}. ${data.recallNumber.startsWith("DEMO-") ? "This is a fictional demo, not an FDA recall. Simulated" : "The FDA has issued a"} ` +
       `${data.classification} recall (${data.recallNumber}). Reason: ${data.recallReason}`;
 
     try {
@@ -98,8 +98,8 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
               },
               overrides: {
                 agent: {
-                  first_message: OUTREACH_FIRST_MESSAGE,
-                  prompt: { prompt: OUTREACH_SYSTEM_PROMPT + (approved?.script ? "\nPharmacist-approved discussion plan:\n" + approved.script : "\nNo alternative has been approved. Do not recommend a replacement.") },
+                  first_message: (data.recallNumber.startsWith("DEMO-") ? "This is a Medicall demonstration, not a real medication recall. " : "") + OUTREACH_FIRST_MESSAGE,
+                  prompt: { prompt: OUTREACH_SYSTEM_PROMPT + (data.recallNumber.startsWith("DEMO-") ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication; do not instruct medication changes based on this simulation." : "") + (approved?.script ? "\nPharmacist-approved discussion plan:\n" + approved.script : "\nNo alternative has been approved. Do not recommend a replacement.") },
                 },
               },
             },
