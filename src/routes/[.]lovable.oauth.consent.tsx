@@ -67,7 +67,7 @@ function Consent() {
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 p-8">
       <div className="space-y-2">
-        <h1 className="text-2xl font-semibold">Connect {clientName} to Medicall</h1>
+        <h1 className="text-2xl font-semibold">Connect {clientName} to MediCall</h1>
         <p className="text-muted-foreground text-sm">
           {clientName} will be able to read your pharmacy's recall and patient data as you.
         </p>

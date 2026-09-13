@@ -1,5 +1,5 @@
 import { useServerFn } from "@tanstack/react-start";
-import { ChevronRight, Loader2, PhoneCall } from "lucide-react";
+import { Loader2, Stethoscope } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -13,16 +13,12 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AnalysisReview } from "@/components/AnalysisReview";
-import { CallDoctorButton } from "@/components/CallDoctorButton";
-import { useReviews } from "@/lib/analysis-store";
-import { analysisKey } from "@/lib/analysis-types";
 import { Button } from "@/components/ui/button";
 import { finishCall, startCall, useCallStore } from "@/lib/call-store";
-import { placeOutreachCall } from "@/lib/outreach.functions";
+import { placeDoctorCall } from "@/lib/outreach.functions";
 import type { FlaggedPrescription, MatchedPatient } from "@/lib/recall-matching";
 
-export function InitiateCallButton({
+export function CallDoctorButton({
   match,
   flagged,
   size = "sm",
@@ -32,26 +28,27 @@ export function InitiateCallButton({
   size?: "sm" | "default";
 }) {
   const [open, setOpen] = useState(false);
-  const review = useReviews()[analysisKey(match.patient.id, flagged.recall.recallNumber, flagged.prescription.ndc)];
-  const { byPatient } = useCallStore();
-  const call = useServerFn(placeOutreachCall);
-  const status = byPatient[match.patient.id] ?? "idle";
+  const { byDoctor } = useCallStore();
+  const call = useServerFn(placeDoctorCall);
+  const status = byDoctor[match.patient.id] ?? "idle";
   const dialing = status === "dialing";
+  const doctorName = flagged.prescription.prescriber || "the prescriber";
 
   async function confirm() {
     setOpen(false);
-    const id = `${match.patient.id}-${Date.now()}`;
+    const id = `${match.patient.id}-doctor-${Date.now()}`;
 
     startCall({
       id,
+      audience: "doctor",
+      doctorName,
       patientId: match.patient.id,
       patientName: match.fullName,
       drugName: flagged.prescription.drugName,
       recallNumber: flagged.recall.recallNumber,
       startedAt: new Date().toISOString(),
       detail: "Dialing the demo number…",
-      reason: `${flagged.recall.classification} recall of ${flagged.prescription.drugName} ${flagged.prescription.strength} (NDC ${flagged.prescription.ndc}) — ${flagged.recall.reasonForRecall}`,
-      ...(review?.approvedName ? { approvedAlternative: review.approvedName } : {}),
+      reason: `Prescriber notification to Dr. ${doctorName} — ${flagged.recall.classification} recall of ${flagged.prescription.drugName} ${flagged.prescription.strength} (NDC ${flagged.prescription.ndc}); patient already contacted.`,
       patient: {
         dateOfBirth: match.patient.dateOfBirth,
         phone: match.patient.phone,
@@ -78,28 +75,20 @@ export function InitiateCallButton({
     });
 
     try {
-    const result = await call({
-      data: {
-        patientName: match.fullName,
-        patientId: match.patient.id,
-        drugName: flagged.prescription.drugName,
-        strength: flagged.prescription.strength,
-        ndc: flagged.prescription.ndc,
-        recallNumber: flagged.recall.recallNumber,
-        recallReason: flagged.recall.reasonForRecall,
-        classification: flagged.recall.classification,
-        pharmacyName: "Riverside Pharmacy",
-        approval: review?.approval,
-      },
-    });
-
-    if (result.ok) {
-      finishCall(id, match.patient.id, "called", result.message, result.conversationId, result.dialed);
-      toast.success("Call placed", { description: result.message });
-    } else {
-      finishCall(id, match.patient.id, "failed", result.message);
-      toast.error("Call could not be placed", { description: result.message });
-    }
+      const result = await call({
+        data: {
+          patientId: match.patient.id,
+          recallNumber: flagged.recall.recallNumber,
+          ndc: flagged.prescription.ndc,
+        },
+      });
+      if (result.ok) {
+        finishCall(id, match.patient.id, "called", result.message, result.conversationId, result.dialed);
+        toast.success("Prescriber call placed", { description: result.message });
+      } else {
+        finishCall(id, match.patient.id, "failed", result.message);
+        toast.error("Prescriber call could not be placed", { description: result.message });
+      }
     } catch (error) {
       const message = error instanceof Error ? error.message : "Call failed.";
       finishCall(id, match.patient.id, "failed", message);
@@ -108,10 +97,10 @@ export function InitiateCallButton({
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-end gap-2">
-      <AnalysisReview match={match} flagged={flagged} />
+    <>
       <Button
         size={size}
+        variant="secondary"
         className="gap-1 whitespace-nowrap"
         disabled={dialing}
         onClick={() => setOpen(true)}
@@ -119,23 +108,21 @@ export function InitiateCallButton({
         {dialing ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
-          <PhoneCall className="h-4 w-4" />
+          <Stethoscope className="h-4 w-4" />
         )}
-        {dialing ? "Dialing…" : status === "called" ? "Call again" : "Initiate Call"}
-        <ChevronRight className="h-3 w-3" />
+        {dialing ? "Dialing…" : status === "called" ? "Call doctor again" : "Call doctor"}
       </Button>
-
-      {status === "called" && <CallDoctorButton match={match} flagged={flagged} size={size} />}
 
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Place an AI outreach call?</AlertDialogTitle>
+            <AlertDialogTitle>Notify the prescriber?</AlertDialogTitle>
             <AlertDialogDescription>
-              The AI agent will explain the {flagged.recall.classification} recall of{" "}
-              {flagged.prescription.drugName} {flagged.prescription.strength} to{" "}
-              {match.fullName}. In demo mode the call dials your verified test number,
-              not the patient. {review?.approvedName ? `The call will discuss the approved option: ${review.approvedName}.` : "No alternative medication will be recommended."}
+              The AI agent will inform Dr. {doctorName} about the{" "}
+              {flagged.recall.classification} recall of {flagged.prescription.drugName}{" "}
+              {flagged.prescription.strength} affecting {match.fullName}, and confirm that
+              the patient has already been contacted. In demo mode this dials the same
+              verified test number as patient calls.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -144,6 +131,6 @@ export function InitiateCallButton({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </>
   );
 }

@@ -95,7 +95,7 @@ export function AppShell({
               <Pill className="h-5 w-5" />
             </div>
             <div className="flex flex-col leading-tight">
-              <span className="font-display text-lg font-bold tracking-tight">Medicall</span>
+              <span className="font-display text-lg font-bold tracking-tight">MediCall</span>
               <span className="whitespace-nowrap text-[9px] font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/50">
                 Know Sooner. Act Faster.
               </span>
@@ -140,7 +140,7 @@ export function AppShell({
                     <Pill className="h-5 w-5" />
                   </span>
                   <span className="flex flex-col leading-tight">
-                    <span className="font-display text-lg font-bold tracking-tight">Medicall</span>
+                    <span className="font-display text-lg font-bold tracking-tight">MediCall</span>
                     <span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/50">
                       Know Sooner. Act Faster.
                     </span>
@@ -172,7 +172,7 @@ export function AppShell({
             <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <Pill className="h-4 w-4" />
             </div>
-            <span className="truncate font-display font-bold">Medicall</span>
+            <span className="truncate font-display font-bold">MediCall</span>
           </div>
 
           <div className="flex items-center gap-1 md:ml-auto md:gap-2">

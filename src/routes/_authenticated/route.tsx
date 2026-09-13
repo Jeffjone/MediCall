@@ -125,7 +125,7 @@ function AuthLayout() {
               your pharmacy license information before activating your account.
             </p>
             <p>
-              You’ll get access to Medicall as soon as your account is approved.
+              You’ll get access to MediCall as soon as your account is approved.
               Contact your account administrator if you have questions.
             </p>
             <button

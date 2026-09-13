@@ -33,13 +33,13 @@ import { useRecalls, useRouteContext } from "@/routes/_authenticated/route";
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Dashboard — Medicall" },
+      { title: "Dashboard — MediCall" },
       {
         name: "description",
         content:
-          "Medicall live view of patients prescribed FDA-recalled medications, matched by NDC, with one-click AI outreach calls.",
+          "MediCall live view of patients prescribed FDA-recalled medications, matched by NDC, with one-click AI outreach calls.",
       },
-      { property: "og:title", content: "Dashboard — Medicall" },
+      { property: "og:title", content: "Dashboard — MediCall" },
       {
         property: "og:description",
         content:
@@ -54,7 +54,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function Dashboard() {
   const [query, setQuery] = useState("");
-  const { byPatient } = useCallStore();
+  const { byPatient, byDoctor } = useCallStore();
   const { session } = useRouteContext();
 
   const recalls = useRecalls();
@@ -164,7 +164,7 @@ function Dashboard() {
                   <TableHead>Matched NDC</TableHead>
                   <TableHead>Recall</TableHead>
                   <TableHead>Outreach</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
+                  <TableHead className="w-px whitespace-nowrap text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -201,11 +201,17 @@ function Dashboard() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <OutreachBadge status={byPatient[m.patient.id] ?? "idle"} />
+                        <div className="flex flex-col items-start gap-1">
+                          <OutreachBadge status={byPatient[m.patient.id] ?? "idle"} />
+                          {byDoctor[m.patient.id] === "called" && (
+                            <Badge variant="outline" className="whitespace-nowrap">Doctor notified</Badge>
+                          )}
+                        </div>
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="w-px whitespace-nowrap py-3 text-right align-middle">
                         <InitiateCallButton match={m} flagged={f} />
                       </TableCell>
+
                     </TableRow>
                   )),
                 )}

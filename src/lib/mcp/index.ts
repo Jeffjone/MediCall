@@ -9,13 +9,13 @@ const projectRef = import.meta.env["VITE_SUPABASE_PROJECT_ID"] ?? "project-ref-u
 
 export default defineMcp({
   name: "medicall",
-  title: "Medicall",
+  title: "MediCall",
   version: "0.1.0",
   instructions:
-    "Pharmacy recall-readiness tools for Medicall. Use `list_recalls` for current FDA drug recalls, " +
+    "Pharmacy recall-readiness tools for MediCall. Use `list_recalls` for current FDA drug recalls, " +
     "`list_flagged_patients` for patients taking recalled medication, `search_patients` to find a patient " +
     "by name, ID, drug, or NDC, and `get_patient` for one patient's full record. Read-only; outbound " +
-    "patient calls are placed in the Medicall app.",
+    "patient calls are placed in the MediCall app.",
   auth: auth.oauth.issuer({
     issuer: `https://${projectRef}.supabase.co/auth/v1`,
     acceptedAudiences: "authenticated",

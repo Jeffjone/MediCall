@@ -26,14 +26,14 @@ export function AuthCard({
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
           <Link
             to="/"
-            aria-label="Medicall home"
+            aria-label="MediCall home"
             className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_24px_color-mix(in_oklab,var(--primary)_35%,transparent)]"
           >
             <Pill className="h-6 w-6" />
           </Link>
           <div className="flex flex-col leading-tight">
             <span className="font-display text-2xl font-bold tracking-tight text-sidebar-foreground">
-              Medicall
+              MediCall
             </span>
             <span className="mt-1 text-sm text-sidebar-foreground/50">
               Pharmacy recall-readiness workspace

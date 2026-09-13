@@ -10,13 +10,13 @@ import { useRouteContext } from "@/routes/_authenticated/route";
 export const Route = createFileRoute("/_authenticated/outreach")({
   head: () => ({
     meta: [
-      { title: "Outreach Log — Medicall" },
+      { title: "Outreach Log — MediCall" },
       {
         name: "description",
         content:
           "Record of AI voice outreach calls placed to patients holding recalled medications.",
       },
-      { property: "og:title", content: "Outreach Log — Medicall" },
+      { property: "og:title", content: "Outreach Log — MediCall" },
       {
         property: "og:description",
         content: "Record of AI voice outreach calls placed about medication recalls.",

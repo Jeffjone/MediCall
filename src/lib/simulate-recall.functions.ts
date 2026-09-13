@@ -22,7 +22,7 @@ export const simulateRecall = createServerFn({ method: "POST" })
       lotNumbers: "DEMO-LOT-001",
       reasonForRecall: "DEMO ONLY: simulated quality-control failure detected during routine testing. Not an actual FDA recall.",
       classification: "Class II",
-      recallingFirm: "Medicall Demo Manufacturer (fictional)",
+      recallingFirm: "MediCall Demo Manufacturer (fictional)",
       recallInitiationDate: date, reportDate: date,
       status: "Demo simulation", distributionPattern: "Demo pharmacy only",
       city: "Chicago", state: "IL", firstSeenAt: now,

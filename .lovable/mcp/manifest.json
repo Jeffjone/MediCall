@@ -13,13 +13,13 @@
     "server": {
       "name": "medicall",
       "version": "0.1.0",
-      "title": "Medicall"
+      "title": "MediCall"
     },
     "tools": [
       {
         "name": "list_recalls",
         "title": "List drug recalls",
-        "description": "List current FDA drug recalls tracked by Medicall, with how many pharmacy patients each one affects.",
+        "description": "List current FDA drug recalls tracked by MediCall, with how many pharmacy patients each one affects.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,

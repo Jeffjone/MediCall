@@ -16,17 +16,17 @@ import { GeometricBackdrop } from "@/components/GeometricBackdrop";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Medicall — Know Sooner. Act Faster." },
+      { title: "MediCall — Know Sooner. Act Faster." },
       {
         name: "description",
         content:
-          "Medicall helps pharmacies track patients on recalled medications and trigger AI outreach calls. Know Sooner. Act Faster.",
+          "MediCall helps pharmacies track patients on recalled medications and trigger AI outreach calls. Know Sooner. Act Faster.",
       },
-      { property: "og:title", content: "Medicall — Know Sooner. Act Faster." },
+      { property: "og:title", content: "MediCall — Know Sooner. Act Faster." },
       {
         property: "og:description",
         content:
-          "Medicall helps pharmacies track patients on recalled medications and trigger AI outreach calls.",
+          "MediCall helps pharmacies track patients on recalled medications and trigger AI outreach calls.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -82,7 +82,7 @@ function LandingPage() {
             <Pill className="h-5 w-5" />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-lg font-semibold tracking-tight">Medicall</span>
+            <span className="text-lg font-semibold tracking-tight">MediCall</span>
             <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
               Know Sooner. Act Faster.
             </span>
@@ -107,7 +107,7 @@ function LandingPage() {
             <span className="text-primary">Act Faster.</span>
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base text-muted-foreground">
-            Medicall matches your patients' prescriptions to FDA drug recalls by NDC and
+            MediCall matches your patients' prescriptions to FDA drug recalls by NDC and
             lets your team trigger a scripted AI outreach call the moment a recall hits.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -150,7 +150,7 @@ function LandingPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                 <Pill className="h-4 w-4" />
               </div>
-              <span className="font-display text-base font-bold tracking-tight">Medicall</span>
+              <span className="font-display text-base font-bold tracking-tight">MediCall</span>
             </div>
             <p className="mt-3 max-w-xs text-sm text-muted-foreground">
               Pharmacy recall readiness — match patients to FDA drug recalls and reach them fast.

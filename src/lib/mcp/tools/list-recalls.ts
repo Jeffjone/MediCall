@@ -7,7 +7,7 @@ export default defineTool({
   name: "list_recalls",
   title: "List drug recalls",
   description:
-    "List current FDA drug recalls tracked by Medicall, with how many pharmacy patients each one affects.",
+    "List current FDA drug recalls tracked by MediCall, with how many pharmacy patients each one affects.",
   inputSchema: {
     affecting_patients_only: z
       .boolean()
