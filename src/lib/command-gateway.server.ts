@@ -6,7 +6,13 @@ export function createCommandGateway(_key: string, initial?: string) {
   let runId = initial;
   let resolve: (value?: string) => void = () => {};
   const ready = new Promise<string | undefined>(r => { resolve = r; });
-  const endpoint = geminiEndpoint();
+  // Google's OpenAI-compatible endpoint rejects multi-step tool calling for Gemini 3
+  // (it demands thought signatures), so the command center always runs on the Lovable
+  // gateway when that key is available and only falls back to the direct Google route.
+  const lovable = process.env['LOVABLE_API_KEY'];
+  const endpoint = lovable
+    ? { direct: false, baseURL: 'https://ai.gateway.lovable.dev/v1', headers: { 'Lovable-API-Key': lovable, 'X-Lovable-AIG-SDK': 'vercel-ai-sdk' }, model: (id: string) => id }
+    : geminiEndpoint();
   if (!endpoint) throw new Error('AI is not configured.');
   const provider = createOpenAICompatible({
     name: 'lovable', baseURL: endpoint.baseURL,
