@@ -19,7 +19,7 @@ export const Route = createFileRoute('/api/command')({ server: { handlers: {
       const { data: profile, error: profileError } = await db.from('profiles').select('approval_status').eq('id', data.user.id).single();
       if (profileError) return new Response('Account details could not be loaded. Please try again later.', { status: 503 });
       if (profile?.approval_status !== 'approved') return new Response('An approved pharmacy account is required.', { status: 403 });
-      const apiKey = process.env['LOVABLE_API_KEY'];
+      const apiKey = process.env['GOOGLE_AI_API_KEY'] ?? process.env['LOVABLE_API_KEY'];
       if (!apiKey) return new Response('AI is not configured.', { status: 503 });
       let body;
       try { body = await request.json(); }
