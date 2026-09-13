@@ -23,7 +23,7 @@ export const getRecallPulse = createServerFn({ method: "GET" }).handler(
       totalRecalls: base.totalRecalls,
       fdaRecalls: real.length,
       affectedPatients: base.affectedPatients,
-      classOne: base.classOneCount,
+      classOne: base.classOneRecalls,
       totalPatients: base.totalPatients,
     };
 
