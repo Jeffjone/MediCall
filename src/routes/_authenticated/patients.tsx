@@ -131,13 +131,22 @@ function PatientsPage() {
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setPage(1);
+            }}
             placeholder="Search patients, medications, or NDC…"
             className="pl-9"
           />
         </div>
         <div className="flex items-center gap-3">
-          <Select value={filter} onValueChange={(v) => setFilter(v as FilterKey)}>
+          <Select
+            value={filter}
+            onValueChange={(v) => {
+              setFilter(v as FilterKey);
+              setPage(1);
+            }}
+          >
             <SelectTrigger className="h-9 w-[190px]" aria-label="Filter patients">
               <SelectValue />
             </SelectTrigger>
@@ -150,7 +159,13 @@ function PatientsPage() {
               <SelectItem value="refill-overuse">Refill overuse</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+          <Select
+            value={sort}
+            onValueChange={(v) => {
+              setSort(v as SortKey);
+              setPage(1);
+            }}
+          >
             <SelectTrigger className="h-9 w-[170px]" aria-label="Sort patients">
               <SelectValue />
             </SelectTrigger>
@@ -162,12 +177,17 @@ function PatientsPage() {
             </SelectContent>
           </Select>
         </div>
-        <span className="text-sm text-muted-foreground">{visible.length} patients</span>
+        <span className="text-sm text-muted-foreground">
+          {visible.length === 0
+            ? "No patients"
+            : `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, visible.length)} of ${visible.length} patients`}
+        </span>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        {visible.map((m) => (
+        {pageItems.map((m) => (
           <Card
+
             key={m.patient.id}
             className={m.isFlagged ? "border-destructive/40 bg-destructive/5" : ""}
           >
