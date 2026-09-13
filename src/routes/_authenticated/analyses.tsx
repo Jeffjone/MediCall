@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { ClipboardList, Search } from 'lucide-react';
 import { AppShell } from '@/components/AppShell';
+import { InteractionGraph } from '@/components/InteractionGraph';
 import { AnalysisReview } from '@/components/AnalysisReview';
 import { Badge } from '@/components/ui/badge';
 import { useReviews } from '@/lib/analysis-store';
@@ -27,7 +28,7 @@ function AnalysesPage() {
     {!filtered.length && <div className="py-16 text-center"><ClipboardList className="mx-auto mb-4 h-9 w-9 text-muted-foreground" /><h2 className="font-semibold">{entries.length ? 'No matching analyses' : 'No saved analyses yet'}</h2></div>}
     <div className="divide-y">{filtered.map(([key, r]) => {
       if (!r.match || !r.flagged) return null;
-      return <article key={key} className="flex flex-col justify-between gap-4 py-5 sm:flex-row sm:items-center"><div className="min-w-0 space-y-2"><div className="flex flex-wrap items-center gap-2"><h2 className="font-semibold">{r.match.fullName}</h2><Badge variant={r.approval ? 'secondary' : 'outline'}>{r.approval ? 'Approved for discussion' : r.rejected ? 'Alternatives rejected' : 'Awaiting pharmacist review'}</Badge></div><p className="text-sm">{r.flagged.prescription.drugName} · {r.flagged.recall.classification}</p><p className="text-xs text-muted-foreground">{r.flagged.recall.recallNumber} · {r.savedAt ? new Date(r.savedAt).toLocaleString() : 'Current session'}</p>{r.approvedName && <p className="text-sm text-primary">Discussion option: {r.approvedName}</p>}</div><div className="shrink-0"><AnalysisReview match={r.match} flagged={r.flagged} /></div></article>;
+      return <article key={key} className="flex flex-col justify-between gap-4 py-5 sm:flex-row sm:items-center"><div className="min-w-0 space-y-2"><div className="flex flex-wrap items-center gap-2"><h2 className="font-semibold">{r.match.fullName}</h2><Badge variant={r.approval ? 'secondary' : 'outline'}>{r.approval ? 'Approved for discussion' : r.rejected ? 'Alternatives rejected' : 'Awaiting pharmacist review'}</Badge></div><p className="text-sm">{r.flagged.prescription.drugName} · {r.flagged.recall.classification}</p><p className="text-xs text-muted-foreground">{r.flagged.recall.recallNumber} · {r.savedAt ? new Date(r.savedAt).toLocaleString() : 'Current session'}</p>{r.approvedName && <p className="text-sm text-primary">Discussion option: {r.approvedName}</p>}</div><div className="flex shrink-0 flex-wrap gap-2 sm:max-w-80 sm:justify-end"><AnalysisReview match={r.match} flagged={r.flagged} /><InteractionGraph patientId={r.match.patient.id} name={r.match.fullName} /></div></article>;
     })}</div>
   </AppShell>;
 }

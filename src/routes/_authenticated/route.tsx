@@ -8,6 +8,7 @@ import { setRecalls, matchPatients } from "@/lib/recall-matching";
 import { collectUnseenRecalls } from "@/lib/recall-news";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { InteractionMonitor } from "@/components/InteractionMonitor";
 import { loadReviews, clearReviews } from "@/lib/analysis-store";
 import { Clock } from "lucide-react";
 
@@ -146,5 +147,5 @@ function AuthLayout() {
     );
   }
 
-  return <Outlet />;
+  return <><InteractionMonitor userId={session.userId} /><Outlet /></>;
 }
