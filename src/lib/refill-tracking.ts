@@ -102,9 +102,11 @@ export function refillHistory(
   const supply = Math.max(prescription.daysSupply, 7);
   const maxFills = Math.max(2, Math.min(8, Math.floor(365 / supply) + 1));
   const fillCount = 2 + Math.floor(random() * (maxFills - 1));
+  const latestFill = normalizeIso(prescription.fillDate) || toIso(new Date());
 
   // Walk backwards from the latest fill, then reverse to chronological order.
-  const dates: string[] = [prescription.fillDate];
+  const dates: string[] = [latestFill];
+
   const earlyBy: number[] = [0];
   for (let i = 1; i < fillCount; i += 1) {
     const early = random() < 0.3 ? 3 + Math.floor(random() * 10) : 0;
