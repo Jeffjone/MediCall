@@ -102,10 +102,6 @@ function LandingPage() {
 
       <main className="relative mx-auto max-w-5xl px-6 pb-20">
         <section className="py-16 text-center sm:py-24">
-          <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs text-muted-foreground">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            Pharmacy recall readiness
-          </div>
           <h1 className="mx-auto max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
             Know Sooner.{" "}
             <span className="text-primary">Act Faster.</span>
