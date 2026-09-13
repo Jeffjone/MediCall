@@ -29,6 +29,13 @@
       "when": 1789267680583,
       "tag": "0003_create_cron_config",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789267705201,
+      "tag": "0004_grant_cron_config_sandbox",
+      "breakpoints": true
     }
   ]
 }
