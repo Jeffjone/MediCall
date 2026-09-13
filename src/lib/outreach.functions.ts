@@ -9,6 +9,7 @@ import {
   OUTREACH_SYSTEM_PROMPT,
   DOCTOR_FIRST_MESSAGE,
   DOCTOR_SYSTEM_PROMPT,
+  renderScript,
 } from "@/lib/outreach-script";
 
 const CallInput = z.object({
@@ -72,6 +73,19 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
       `${data.drugName} ${data.strength}, NDC ${data.ndc}. ${data.recallNumber.startsWith("DEMO-") ? "This is a fictional demo, not an FDA recall. Simulated" : "The FDA has issued a"} ` +
       `${data.classification} recall (${data.recallNumber}). Reason: ${data.recallReason}`;
 
+    const vars: Record<string, string> = {
+      patient_name: data.patientName,
+      patient_id: data.patientId,
+      drug_name: data.drugName,
+      drug_strength: data.strength,
+      ndc: data.ndc,
+      recall_number: data.recallNumber,
+      recall_reason: data.recallReason,
+      recall_classification: data.classification,
+      pharmacy_name: data.pharmacyName,
+      recall_summary: summary,
+    };
+
     try {
       const response = await fetch(
         "https://api.elevenlabs.io/v1/convai/twilio/outbound-call",
@@ -86,22 +100,11 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
             agent_phone_number_id: phoneNumberId,
             to_number: toNumber,
             conversation_initiation_client_data: {
-              dynamic_variables: {
-                patient_name: data.patientName,
-                patient_id: data.patientId,
-                drug_name: data.drugName,
-                drug_strength: data.strength,
-                ndc: data.ndc,
-                recall_number: data.recallNumber,
-                recall_reason: data.recallReason,
-                recall_classification: data.classification,
-                pharmacy_name: data.pharmacyName,
-                recall_summary: summary,
-              },
+              dynamic_variables: vars,
               overrides: {
                 agent: {
-                  first_message: (data.recallNumber.startsWith("DEMO-") ? "This is a MediCall demonstration, not a real medication recall. " : "") + OUTREACH_FIRST_MESSAGE,
-                  prompt: { prompt: OUTREACH_SYSTEM_PROMPT + (data.recallNumber.startsWith("DEMO-") ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication; do not instruct medication changes based on this simulation." : "") + (approved?.script ? "\nPharmacist-approved discussion plan:\n" + approved.script : "\nNo alternative has been approved. Do not recommend a replacement.") },
+                  first_message: (data.recallNumber.startsWith("DEMO-") ? "This is a MediCall demonstration, not a real medication recall. " : "") + renderScript(OUTREACH_FIRST_MESSAGE, vars),
+                  prompt: { prompt: renderScript(OUTREACH_SYSTEM_PROMPT, vars) + (data.recallNumber.startsWith("DEMO-") ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication; do not instruct medication changes based on this simulation." : "") + (approved?.script ? "\nPharmacist-approved discussion plan:\n" + approved.script : "\nNo alternative has been approved. Do not recommend a replacement.") + `\nAuthoritative case facts for THIS call (use these exact values and no others): ${summary}. Never mention any other medication as the patient's prescription.` },
                 },
               },
             },
@@ -184,6 +187,19 @@ export const placeDoctorCall = createServerFn({ method: "POST" })
     const isDemo = flagged.recall.recallNumber.startsWith("DEMO-");
     const doctorName = flagged.prescription.prescriber || "the prescriber";
 
+    const docVars: Record<string, string> = {
+      doctor_name: doctorName,
+      patient_name: patient.fullName,
+      patient_id: patient.patient.id,
+      drug_name: flagged.prescription.drugName,
+      drug_strength: flagged.prescription.strength,
+      ndc: flagged.prescription.ndc,
+      recall_number: flagged.recall.recallNumber,
+      recall_reason: flagged.recall.reasonForRecall,
+      recall_classification: flagged.recall.classification,
+      pharmacy_name: profile.pharmacy_name,
+    };
+
     try {
       const response = await fetch("https://api.elevenlabs.io/v1/convai/twilio/outbound-call", {
         method: "POST",
@@ -193,29 +209,19 @@ export const placeDoctorCall = createServerFn({ method: "POST" })
           agent_phone_number_id: phoneNumberId,
           to_number: toNumber,
           conversation_initiation_client_data: {
-            dynamic_variables: {
-              doctor_name: doctorName,
-              patient_name: patient.fullName,
-              patient_id: patient.patient.id,
-              drug_name: flagged.prescription.drugName,
-              drug_strength: flagged.prescription.strength,
-              ndc: flagged.prescription.ndc,
-              recall_number: flagged.recall.recallNumber,
-              recall_reason: flagged.recall.reasonForRecall,
-              recall_classification: flagged.recall.classification,
-              pharmacy_name: profile.pharmacy_name,
-            },
+            dynamic_variables: docVars,
             overrides: {
               agent: {
                 first_message:
                   (isDemo ? "This is a MediCall demonstration, not a real medication recall. " : "") +
-                  DOCTOR_FIRST_MESSAGE,
+                  renderScript(DOCTOR_FIRST_MESSAGE, docVars),
                 prompt: {
                   prompt:
-                    DOCTOR_SYSTEM_PROMPT +
+                    renderScript(DOCTOR_SYSTEM_PROMPT, docVars) +
                     (isDemo
                       ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication."
-                      : ""),
+                      : "") +
+                    `\nAuthoritative case facts for THIS call (use these exact values and no others): patient ${patient.fullName} (${patient.patient.id}) takes ${flagged.prescription.drugName} ${flagged.prescription.strength}, NDC ${flagged.prescription.ndc}, recall ${flagged.recall.recallNumber} (${flagged.recall.classification}). Never mention any other medication.`,
                 },
               },
             },
