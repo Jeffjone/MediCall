@@ -1,4 +1,9 @@
 # Intelligence workflow
+## Pharmacy analysis workspace
+- [ ] Refocus review on patient safety, next steps, and pharmacist decisions.
+- [ ] Save analyses privately and add an Analyses sidebar page.
+- [ ] Paginate recalls at 20 per page and verify changes.
+
 - [x] Add RxNorm enrichment, simulated finances and replaceable pricing.
 - [x] Add authenticated AI analysis and signed pharmacist approval receipts.
 - [x] Add patient review UI and approved dynamic outreach context.

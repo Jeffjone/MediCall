@@ -149,6 +149,30 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_analyses: {
+        Row: {
+          case_key: string
+          id: string
+          snapshot: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          case_key: string
+          id?: string
+          snapshot: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Update: {
+          case_key?: string
+          id?: string
+          snapshot?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
