@@ -10,14 +10,22 @@ import {
   Building2,
   Sparkles,
   ScanLine,
+  Menu,
 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { NotificationBell } from "@/components/NotificationBell";
 import { SimulateRecallButton } from "@/components/SimulateRecallButton";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import type { SessionProfile } from "@/lib/profiles.functions";
