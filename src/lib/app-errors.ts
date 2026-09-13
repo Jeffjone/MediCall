@@ -31,8 +31,8 @@ export function errorMessage(error: unknown): string {
   if (error instanceof Error) {
     if (error.name === 'TimeoutError') return messages[504]!;
     if (error.name === 'AbortError') return 'The request was cancelled.';
-    if (/failed to fetch|fetch failed|networkerror|network request|load failed/i.test(error.message)) return 'Connection lost. Check your internet connection and try again.';
     if (/chunk|dynamically imported module/i.test(error.message)) return 'A new version of MediCall is available. Reload the page to continue.';
+    if (/failed to fetch|fetch failed|networkerror|network request|load failed/i.test(error.message)) return 'Connection lost. Check your internet connection and try again.';
     if (error.message && !/<(?:html|body|script|!doctype)|stack trace|api[_-]?key|bearer |postgres|supabase|select .* from|https?:\/\//i.test(error.message)) return error.message.slice(0, 600);
   }
   return 'Something went wrong. Please try again later.';
