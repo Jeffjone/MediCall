@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
-  Pill,
   ClipboardList,
   AlertTriangle,
   Users,
