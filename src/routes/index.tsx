@@ -154,31 +154,8 @@ function LandingPage() {
             )}
           </div>
 
-          <dl className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
-            {[
-              { label: "FDA recalls tracked", value: live?.stats.fdaRecalls },
-              { label: "Patients monitored", value: live?.stats.totalPatients },
-              { label: "Patients flagged", value: live?.stats.affectedPatients },
-              { label: "Class I recalls", value: live?.stats.classOne },
-            ].map((s) => (
-              <div key={s.label} className="rounded-lg border bg-card px-3 py-4">
-                <dt className="text-xs text-muted-foreground">{s.label}</dt>
-                <dd className="mt-1 text-2xl font-semibold">
-                  {pulseLoading || s.value === undefined ? (
-                    <span className="inline-block h-6 w-10 animate-pulse rounded bg-muted align-middle" />
-                  ) : (
-                    s.value
-                  )}
-                </dd>
-              </div>
-            ))}
-          </dl>
-          {live?.lastSyncedAt && (
-            <p className="mt-3 text-xs text-muted-foreground">
-              FDA feed last refreshed {new Date(live.lastSyncedAt).toLocaleString()}
-            </p>
-          )}
         </section>
+
 
         {(pulseLoading || live?.pulse) && (
           <section className="mb-10">
