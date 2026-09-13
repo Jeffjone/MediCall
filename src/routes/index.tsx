@@ -41,6 +41,20 @@ export const Route = createFileRoute("/")({
 
 function LandingPage() {
   const [signedIn, setSignedIn] = useState(false);
+  const loadPulse = useServerFn(getRecallPulse);
+  const [live, setLive] = useState<RecallPulse | null>(null);
+  const [pulseLoading, setPulseLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    loadPulse()
+      .then((data) => { if (active) setLive(data); })
+      .catch(() => { if (active) setLive(null); })
+      .finally(() => { if (active) setPulseLoading(false); });
+    return () => { active = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   useEffect(() => {
     let active = true;
