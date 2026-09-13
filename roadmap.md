@@ -1,8 +1,8 @@
 # Intelligence workflow
 ## Pharmacy analysis workspace
-- [ ] Refocus review on patient safety, next steps, and pharmacist decisions.
-- [ ] Save analyses privately and add an Analyses sidebar page.
-- [ ] Paginate recalls at 20 per page and verify changes.
+- [x] Refocus review on patient safety, next steps, and pharmacist decisions.
+- [x] Save analyses privately and add an Analyses sidebar page.
+- [x] Paginate recalls at 20 per page; verified authenticated navigation and next-page counts.
 
 - [x] Add RxNorm enrichment, simulated finances and replaceable pricing.
 - [x] Add authenticated AI analysis and signed pharmacist approval receipts.
@@ -17,7 +17,7 @@
 - Financial summaries are simulated app-owned aggregates, not raw Nessie API payloads. Unknown prices/popularity remain unknown.
 - Approved call context includes AI rationale and calculated estimates inside a safety-controlled template, not a fully AI-written opening.
 - No runtime MCP connection, arbitrary code execution, or separate URL-context tool configured.
-- Recall feed remains the original static FDA snapshot; analyses reset on reload. No durable approval audit history.
+- Analyses now retain the latest review per patient/recall/prescription in private Cloud storage; signed outreach approvals still expire after one hour.
 
 # Command center
 - [x] Add authenticated Gemini coordinator and read/analysis/outreach preparation tools.
