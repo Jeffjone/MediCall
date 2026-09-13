@@ -58,6 +58,7 @@ function ScanPage() {
   const isMobile = useIsMobile();
   const run = useServerFn(scanLabel);
   const inputRef = useRef<HTMLInputElement>(null);
+  const uploadRef = useRef<HTMLInputElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<ScanResponse | null>(null);
@@ -91,6 +92,7 @@ function ScanPage() {
     setPreview(null);
     setResult(null);
     if (inputRef.current) inputRef.current.value = "";
+    if (uploadRef.current) uploadRef.current.value = "";
   }
 
   return (
