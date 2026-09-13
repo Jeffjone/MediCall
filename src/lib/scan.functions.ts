@@ -81,8 +81,9 @@ export const scanLabel = createServerFn({ method: "POST" })
       return { ok: false, message: "An approved pharmacy account is required." };
     }
 
-    const key = process.env["LOVABLE_API_KEY"];
-    if (!key) return { ok: false, message: "AI is not configured." };
+    const { geminiEndpoint } = await import("./gemini.server");
+    const endpoint = geminiEndpoint();
+    if (!endpoint) return { ok: false, message: "AI is not configured." };
 
     if (!data.image.startsWith("data:image/")) {
       return { ok: false, message: "Unsupported image format. Take the photo again." };
