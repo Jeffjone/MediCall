@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { GeometricBackdrop } from "@/components/GeometricBackdrop";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -71,10 +72,8 @@ function LandingPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-background">
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[120vh] overflow-hidden">
-        <div className="medicall-orb medicall-orb-a left-[-10%] top-[-8%] h-[38rem] w-[38rem] opacity-[0.28]" />
-        <div className="medicall-orb medicall-orb-b right-[-12%] top-[6%] h-[32rem] w-[32rem] opacity-[0.22]" />
-        <div className="medicall-orb medicall-orb-c left-[30%] top-[45%] h-[30rem] w-[30rem] opacity-[0.18]" />
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[110vh] overflow-hidden">
+        <GeometricBackdrop />
       </div>
 
       <header className="relative mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
