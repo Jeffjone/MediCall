@@ -19,7 +19,10 @@ export async function loadReviews() {
   state = { ...loaded, ...state }; emit();
 }
 export function setReview(key: string, value: SavedReview) {
-  const snapshot = { ...state[key], ...value, approval: value.approval, approvedName: value.approvedName, rejected: value.rejected, savedAt: new Date().toISOString() };
+  const snapshot = { ...state[key], ...value, savedAt: new Date().toISOString() };
+  if (!value.approval) delete snapshot.approval;
+  if (!value.approvedName) delete snapshot.approvedName;
+  if (!value.rejected) delete snapshot.rejected;
   state = { ...state, [key]: snapshot }; emit();
   void supabase.from('saved_analyses').upsert({ case_key: key, snapshot: JSON.parse(JSON.stringify(snapshot)) as Json, updated_at: snapshot.savedAt }, { onConflict: 'user_id,case_key' }).then(({ error }) => { if (error) toast.error('Analysis could not be saved. Keep this page open and try again.'); });
 }
