@@ -1,9 +1,13 @@
-import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useNavigate, useRouter } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getMySession } from "@/lib/profiles.functions";
 import { getRecallFeed } from "@/lib/recalls.functions";
-import { setRecalls } from "@/lib/recall-matching";
+import { setRecalls, matchPatients } from "@/lib/recall-matching";
+import { collectUnseenRecalls } from "@/lib/recall-news";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { Clock } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
