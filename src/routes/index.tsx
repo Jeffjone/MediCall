@@ -97,9 +97,7 @@ function LandingPage() {
 
       <header className="relative mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
         <div className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Pill className="h-5 w-5" />
-          </div>
+          <BrandMark className="h-9 w-9" />
           <div className="flex flex-col leading-tight">
             <span className="text-lg font-semibold tracking-tight">MediCall</span>
             <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
@@ -216,9 +214,7 @@ function LandingPage() {
         <div className="mx-auto grid max-w-5xl gap-8 px-6 py-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <Pill className="h-4 w-4" />
-              </div>
+              <BrandMark className="h-8 w-8" />
               <span className="font-display text-base font-bold tracking-tight">MediCall</span>
             </div>
             <p className="mt-3 max-w-xs text-sm text-muted-foreground">

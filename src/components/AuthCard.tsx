@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Pill, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+
+import { BrandMark } from "@/components/BrandMark";
 
 export function AuthCard({
   title,
@@ -24,12 +26,8 @@ export function AuthCard({
           Back to home
         </Link>
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <Link
-            to="/"
-            aria-label="MediCall home"
-            className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_24px_color-mix(in_oklab,var(--primary)_35%,transparent)]"
-          >
-            <Pill className="h-6 w-6" />
+          <Link to="/" aria-label="MediCall home" className="flex items-center justify-center">
+            <BrandMark className="h-14 w-14" />
           </Link>
           <div className="flex flex-col leading-tight">
             <span className="font-display text-2xl font-bold tracking-tight text-sidebar-foreground">
