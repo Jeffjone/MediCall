@@ -11,6 +11,19 @@ export type GeminiEndpoint = {
   model: (id: string) => string;
 };
 
+/**
+ * Google AI Studio serves a different model catalogue than the Lovable gateway,
+ * so gateway-only ids are mapped onto their closest AI Studio equivalent.
+ * An unmapped id would fail with a 404 "model not found".
+ */
+const GOOGLE_MODEL_MAP: Record<string, string> = {
+  'gemini-3.8-flash': 'gemini-flash-latest',
+  'gemini-3-flash': 'gemini-flash-latest',
+  'gemini-3.5-flash': 'gemini-flash-latest',
+  'gemini-3.8-flash-lite': 'gemini-flash-lite-latest',
+  'gemini-3-pro': 'gemini-pro-latest',
+};
+
 export function geminiEndpoint(): GeminiEndpoint | null {
   const google = process.env['GOOGLE_AI_API_KEY'];
   if (google) {
@@ -18,7 +31,10 @@ export function geminiEndpoint(): GeminiEndpoint | null {
       direct: true,
       baseURL: 'https://generativelanguage.googleapis.com/v1beta/openai',
       headers: { Authorization: `Bearer ${google}` },
-      model: id => id.replace(/^google\//, ''),
+      model: id => {
+        const bare = id.replace(/^google\//, '');
+        return GOOGLE_MODEL_MAP[bare] ?? bare;
+      },
     };
   }
   const key = process.env['LOVABLE_API_KEY'];
