@@ -8,6 +8,7 @@ import { setRecalls, matchPatients } from "@/lib/recall-matching";
 import { collectUnseenRecalls } from "@/lib/recall-news";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { loadReviews, clearReviews } from "@/lib/analysis-store";
 import { Clock } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -69,6 +70,8 @@ function AuthLayout() {
   const navigate = useNavigate();
   const router = useRouter();
   const { recalls } = Route.useLoaderData();
+
+  useEffect(() => { void loadReviews().catch(() => toast.error("Saved analyses could not be loaded.")); return () => clearReviews(); }, [session.userId]);
 
   // Re-check the stored FDA feed twice a day for long-running sessions.
   useEffect(() => {

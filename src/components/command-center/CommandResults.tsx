@@ -8,7 +8,7 @@ type Case = { match: MatchedPatient; flagged: FlaggedPrescription };
 export function CommandResults({ output }: { output: unknown }) {
   const value = output as { result?: AnalysisResult; match?: MatchedPatient; flagged?: FlaggedPrescription; cases?: Case[]; destination?: string; source?: string };
   useEffect(() => {
-    if (value.result && value.match && value.flagged) setReview(analysisKey(value.match.patient.id, value.flagged.recall.recallNumber, value.flagged.prescription.ndc), { result: value.result });
+    if (value.result && value.match && value.flagged) setReview(analysisKey(value.match.patient.id, value.flagged.recall.recallNumber, value.flagged.prescription.ndc), { result: value.result, match: value.match, flagged: value.flagged });
   }, [output]);
   const cases = value.cases ?? (value.match && value.flagged ? [{ match: value.match, flagged: value.flagged }] : []);
   return <div className="space-y-3">

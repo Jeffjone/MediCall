@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AlertTriangle, ExternalLink } from "lucide-react";
+import { AlertTriangle, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -41,6 +42,7 @@ function RecallsPage() {
   const matched = useMemo(() => matchPatients(undefined, recalls), [recalls]);
   const counts = useMemo(() => affectedCountByRecall(matched), [matched]);
   const { session } = useRouteContext();
+  const [page, setPage] = useState(1);
   const [lastViewed, setLastViewed] = useState(0);
 
   useEffect(() => {
@@ -62,6 +64,11 @@ function RecallsPage() {
     [recalls, lastViewed],
   );
 
+  const pageCount = Math.max(1, Math.ceil(sorted.length / 20));
+  const currentPage = Math.min(page, pageCount);
+  const visible = sorted.slice((currentPage - 1) * 20, currentPage * 20);
+  useEffect(() => { setPage(1); }, [recalls.length]);
+
   const syncedLabel = lastSyncedAt
     ? new Date(lastSyncedAt).toLocaleString()
     : new Date(fetchedAt).toLocaleString();
@@ -77,7 +84,7 @@ function RecallsPage() {
       session={session}
     >
       <div className="grid gap-4 lg:grid-cols-2">
-        {sorted.map((recall) => {
+        {visible.map((recall) => {
           const affected = counts.get(recall.recallNumber) ?? 0;
           const isNew = isNewSince(recall, lastViewed);
           return (
@@ -153,6 +160,10 @@ function RecallsPage() {
           );
         })}
       </div>
+      <nav aria-label="Recall pagination" className="flex flex-wrap items-center justify-between gap-3 border-t pt-4">
+        <p className="text-sm text-muted-foreground">{sorted.length ? (currentPage - 1) * 20 + 1 : 0}–{Math.min(currentPage * 20, sorted.length)} of {sorted.length} recalls</p>
+        <div className="flex items-center gap-3"><Button variant="outline" size="icon" aria-label="Previous recall page" disabled={currentPage === 1} onClick={() => { setPage(currentPage - 1); window.scrollTo({ top: 0 }); }}><ChevronLeft className="h-4 w-4" /></Button><span className="text-sm">Page {currentPage} of {pageCount}</span><Button variant="outline" size="icon" aria-label="Next recall page" disabled={currentPage === pageCount} onClick={() => { setPage(currentPage + 1); window.scrollTo({ top: 0 }); }}><ChevronRight className="h-4 w-4" /></Button></div>
+      </nav>
     </AppShell>
   );
 }

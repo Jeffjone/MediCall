@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import {
   Pill,
+  ClipboardList,
   AlertTriangle,
   Users,
   PhoneCall,
@@ -34,6 +35,7 @@ import { clearSimulatedRecalls } from "@/lib/simulate-recall.functions";
 const navItems = [
   { to: "/command-center", icon: Sparkles, label: "Command center" },
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/analyses", icon: ClipboardList, label: "Analyses" },
   { to: "/patients", icon: Users, label: "Patients" },
   { to: "/recalls", icon: AlertTriangle, label: "Recalls" },
   { to: "/outreach", icon: PhoneCall, label: "Outreach" },
