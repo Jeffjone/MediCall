@@ -6,7 +6,7 @@ An AI-assisted pharmacy recall-response platform that connects FDA safety data t
 
 Live Demo · Repository · openFDA
 
-Built for the HackRice 2026 Healthcare Track.
+Built for the HackRice 16 Healthcare Track.
 
 </div>
 
