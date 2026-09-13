@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, ExternalLink } from "lucide-react";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,9 @@ import {
   formatFdaDate,
   matchPatients,
 } from "@/lib/recall-matching";
+import { isNewSince, markRecallsViewed, readLastViewed } from "@/lib/recall-news";
 import { useRecallFeed, useRouteContext } from "@/routes/_authenticated/route";
+
 
 export const Route = createFileRoute("/_authenticated/recalls")({
   head: () => ({
