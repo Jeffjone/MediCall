@@ -54,7 +54,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 
 function Dashboard() {
   const [query, setQuery] = useState("");
-  const { byPatient } = useCallStore();
+  const { byPatient, byDoctor } = useCallStore();
   const { session } = useRouteContext();
 
   const recalls = useRecalls();
@@ -164,7 +164,7 @@ function Dashboard() {
                   <TableHead>Matched NDC</TableHead>
                   <TableHead>Recall</TableHead>
                   <TableHead>Outreach</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
+                  <TableHead className="w-px whitespace-nowrap text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
