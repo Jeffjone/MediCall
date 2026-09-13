@@ -28,6 +28,15 @@ const GOOGLE_MODEL_MAP: Record<string, string> = {
 };
 
 export function geminiEndpoint(): GeminiEndpoint | null {
+  const lovableKey = process.env['LOVABLE_API_KEY'];
+  if (lovableKey) {
+    return {
+      direct: false,
+      baseURL: 'https://ai.gateway.lovable.dev/v1',
+      headers: { 'Lovable-API-Key': lovableKey, 'X-Lovable-AIG-SDK': 'vercel-ai-sdk' },
+      model: id => id,
+    };
+  }
   const google = process.env['GOOGLE_AI_API_KEY'];
   if (google) {
     return {
