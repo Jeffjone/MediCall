@@ -1,4 +1,4 @@
-# Medicall
+# MediCall
 
 Here is our project idea MVP: Use data from a drug/medication recall data subset and a patient data subset (of those who have those medications), create a dashboard for pharmacies to access all of the patient data with their prescribed medications, then flag patients/customers who have/are using the recalled medications. Have a button, per patient, to initiate the command for an AI agent to call the patient to make them aware.
 
