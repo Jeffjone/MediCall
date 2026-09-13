@@ -114,6 +114,12 @@ function RecallsPage() {
                 <p className="text-xs text-muted-foreground">
                   Lots: {recall.lotNumbers || "not specified"}
                 </p>
+                {recall.firstSeenAt && (
+                  <p className="text-xs text-muted-foreground">
+                    Added to Medicall {new Date(recall.firstSeenAt).toLocaleString()}
+                  </p>
+                )}
+
                 <a
                   href={`https://api.fda.gov/drug/enforcement.json?search=recall_number:%22${encodeURIComponent(recall.recallNumber)}%22`}
                   target="_blank"
