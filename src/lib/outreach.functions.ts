@@ -98,7 +98,7 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
               },
               overrides: {
                 agent: {
-                  first_message: (data.recallNumber.startsWith("DEMO-") ? "This is a Medicall demonstration, not a real medication recall. " : "") + OUTREACH_FIRST_MESSAGE,
+                  first_message: (data.recallNumber.startsWith("DEMO-") ? "This is a MediCall demonstration, not a real medication recall. " : "") + OUTREACH_FIRST_MESSAGE,
                   prompt: { prompt: OUTREACH_SYSTEM_PROMPT + (data.recallNumber.startsWith("DEMO-") ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication; do not instruct medication changes based on this simulation." : "") + (approved?.script ? "\nPharmacist-approved discussion plan:\n" + approved.script : "\nNo alternative has been approved. Do not recommend a replacement.") },
                 },
               },

@@ -25,13 +25,13 @@ import { useRouteContext } from "@/routes/_authenticated/route";
 export const Route = createFileRoute("/_authenticated/scan")({
   head: () => ({
     meta: [
-      { title: "Label Scanner — Medicall" },
+      { title: "Label Scanner — MediCall" },
       {
         name: "description",
         content:
           "Scan a prescription or OTC bottle label with your phone camera to digitise the medication details and check it against active FDA recalls.",
       },
-      { property: "og:title", content: "Label Scanner — Medicall" },
+      { property: "og:title", content: "Label Scanner — MediCall" },
       {
         property: "og:description",
         content: "Photograph a medication label and instantly check it against active FDA recalls.",
@@ -108,11 +108,11 @@ function ScanPage() {
             <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
               <Monitor className="h-6 w-6" />
             </div>
-            <CardTitle>Open Medicall on your phone</CardTitle>
+            <CardTitle>Open MediCall on your phone</CardTitle>
           </CardHeader>
           <CardContent className="text-center text-sm text-muted-foreground">
             The label scanner uses your phone camera, so it is only available on the mobile
-            version of Medicall. Open this page on a phone or tablet to scan a bottle.
+            version of MediCall. Open this page on a phone or tablet to scan a bottle.
           </CardContent>
         </Card>
       ) : (
@@ -241,7 +241,7 @@ function ScanPage() {
                     </>
                   ) : (
                     <p className="text-muted-foreground">
-                      This label does not match any of the {result.recallsChecked} recalls Medicall
+                      This label does not match any of the {result.recallsChecked} recalls MediCall
                       is tracking. Recheck if a new recall is published.
                     </p>
                   )}

@@ -81,18 +81,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Medicall — Know Sooner. Act Faster." },
+      { title: "MediCall — Know Sooner. Act Faster." },
       {
         name: "description",
         content:
-          "Medicall helps pharmacies track patients on recalled medications and trigger AI outreach calls. Know Sooner. Act Faster.",
+          "MediCall helps pharmacies track patients on recalled medications and trigger AI outreach calls. Know Sooner. Act Faster.",
       },
-      { name: "author", content: "Medicall" },
-      { property: "og:title", content: "Medicall — Know Sooner. Act Faster." },
+      { name: "author", content: "MediCall" },
+      { property: "og:title", content: "MediCall — Know Sooner. Act Faster." },
       {
         property: "og:description",
         content:
-          "Medicall helps pharmacies track patients on recalled medications and trigger AI outreach calls. Know Sooner. Act Faster.",
+          "MediCall helps pharmacies track patients on recalled medications and trigger AI outreach calls. Know Sooner. Act Faster.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

@@ -16,13 +16,13 @@ import { useRouteContext } from "@/routes/_authenticated/route";
 export const Route = createFileRoute("/_authenticated/profile")({
   head: () => ({
     meta: [
-      { title: "Pharmacy Profile — Medicall" },
+      { title: "Pharmacy Profile — MediCall" },
       {
         name: "description",
         content:
-          "Update your pharmacy's contact details, licensing information, and hours in Medicall.",
+          "Update your pharmacy's contact details, licensing information, and hours in MediCall.",
       },
-      { property: "og:title", content: "Pharmacy Profile — Medicall" },
+      { property: "og:title", content: "Pharmacy Profile — MediCall" },
       {
         property: "og:description",
         content: "Manage pharmacy contact, licensing, and hours details.",

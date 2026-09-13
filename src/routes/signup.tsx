@@ -13,13 +13,13 @@ import { lovable } from "@/integrations/lovable";
 export const Route = createFileRoute("/signup")({
   head: () => ({
     meta: [
-      { title: "Register your pharmacy — Medicall" },
+      { title: "Register your pharmacy — MediCall" },
       {
         name: "description",
-        content: "Register your pharmacy on Medicall to track recalled medications.",
+        content: "Register your pharmacy on MediCall to track recalled medications.",
       },
-      { property: "og:title", content: "Register — Medicall" },
-      { property: "og:description", content: "Register your pharmacy on Medicall." },
+      { property: "og:title", content: "Register — MediCall" },
+      { property: "og:description", content: "Register your pharmacy on MediCall." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

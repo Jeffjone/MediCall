@@ -16,7 +16,7 @@ export type Recall = {
   distributionPattern: string;
   city: string;
   state: string;
-  /** When Medicall first stored this recall (ISO). Absent for bundled data. */
+  /** When MediCall first stored this recall (ISO). Absent for bundled data. */
   firstSeenAt?: string;
 };
 

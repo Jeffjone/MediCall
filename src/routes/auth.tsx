@@ -13,10 +13,10 @@ import { lovable } from "@/integrations/lovable";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — Medicall" },
-      { name: "description", content: "Pharmacy staff sign in to Medicall." },
-      { property: "og:title", content: "Sign in — Medicall" },
-      { property: "og:description", content: "Pharmacy staff sign in to Medicall." },
+      { title: "Sign in — MediCall" },
+      { name: "description", content: "Pharmacy staff sign in to MediCall." },
+      { property: "og:title", content: "Sign in — MediCall" },
+      { property: "og:description", content: "Pharmacy staff sign in to MediCall." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -85,7 +85,7 @@ function SignInPage() {
         <p className="text-xs text-muted-foreground">40 demo patients · 10 affected by recalls</p>
         <dl className="text-sm">
           <div><dt className="inline font-medium">Email: </dt><dd className="inline">demo@medicall.example</dd></div>
-          <div><dt className="inline font-medium">Password: </dt><dd className="inline">MedicallDemo2026!</dd></div>
+          <div><dt className="inline font-medium">Password: </dt><dd className="inline">MediCallDemo2026!</dd></div>
         </dl>
         <Button
           type="button"
@@ -94,7 +94,7 @@ function SignInPage() {
           disabled={loading}
           onClick={() => {
             setEmail("demo@medicall.example");
-            setPassword("MedicallDemo2026!");
+            setPassword("MediCallDemo2026!");
           }}
         >
           Use demo login

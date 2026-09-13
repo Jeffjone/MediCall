@@ -18,13 +18,13 @@ import { useRecallFeed, useRouteContext } from "@/routes/_authenticated/route";
 export const Route = createFileRoute("/_authenticated/recalls")({
   head: () => ({
     meta: [
-      { title: "FDA Recalls — Medicall" },
+      { title: "FDA Recalls — MediCall" },
       {
         name: "description",
         content:
           "Live FDA drug enforcement recalls with NDC codes, lot numbers, and the number of pharmacy patients affected.",
       },
-      { property: "og:title", content: "FDA Recalls — Medicall" },
+      { property: "og:title", content: "FDA Recalls — MediCall" },
       {
         property: "og:description",
         content: "Live FDA drug enforcement recalls and affected patient counts.",
@@ -120,7 +120,7 @@ function RecallsPage() {
                 </p>
                 {recall.firstSeenAt && (
                   <p className="text-xs text-muted-foreground">
-                    Added to Medicall {new Date(recall.firstSeenAt).toLocaleString()}
+                    Added to MediCall {new Date(recall.firstSeenAt).toLocaleString()}
                   </p>
                 )}
 

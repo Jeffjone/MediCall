@@ -20,13 +20,13 @@ import { useRecalls, useRouteContext } from "@/routes/_authenticated/route";
 export const Route = createFileRoute("/_authenticated/patients")({
   head: () => ({
     meta: [
-      { title: "Patients — Medicall" },
+      { title: "Patients — MediCall" },
       {
         name: "description",
         content:
           "Every pharmacy patient with their prescriptions, NDC codes, and recall status at a glance.",
       },
-      { property: "og:title", content: "Patients — Medicall" },
+      { property: "og:title", content: "Patients — MediCall" },
       {
         property: "og:description",
         content: "Pharmacy patients with prescriptions, NDC codes, and recall status.",

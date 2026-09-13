@@ -11,10 +11,10 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Set new password — Medicall" },
-      { name: "description", content: "Set a new password for your Medicall account." },
-      { property: "og:title", content: "Set password — Medicall" },
-      { property: "og:description", content: "Set a new Medicall password." },
+      { title: "Set new password — MediCall" },
+      { name: "description", content: "Set a new password for your MediCall account." },
+      { property: "og:title", content: "Set password — MediCall" },
+      { property: "og:description", content: "Set a new MediCall password." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

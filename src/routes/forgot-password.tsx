@@ -11,9 +11,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
-      { title: "Reset password — Medicall" },
-      { name: "description", content: "Send a password reset link for your Medicall account." },
-      { property: "og:title", content: "Reset password — Medicall" },
+      { title: "Reset password — MediCall" },
+      { name: "description", content: "Send a password reset link for your MediCall account." },
+      { property: "og:title", content: "Reset password — MediCall" },
       { property: "og:description", content: "Send a password reset link." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

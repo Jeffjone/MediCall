@@ -14,12 +14,12 @@ import { useRouteContext } from "@/routes/_authenticated/route";
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
     meta: [
-      { title: "Admin — Medicall" },
+      { title: "Admin — MediCall" },
       {
         name: "description",
-        content: "Approve pending pharmacy registrations on Medicall.",
+        content: "Approve pending pharmacy registrations on MediCall.",
       },
-      { property: "og:title", content: "Admin — Medicall" },
+      { property: "og:title", content: "Admin — MediCall" },
       { property: "og:description", content: "Approve pending pharmacy registrations." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -63,7 +63,7 @@ function AdminPage() {
   return (
     <AppShell
       title="Admin"
-      subtitle="Review and approve pharmacy registrations before they can access Medicall."
+      subtitle="Review and approve pharmacy registrations before they can access MediCall."
       session={session}
     >
       <Card>
