@@ -22,6 +22,13 @@
       "when": 1789267441920,
       "tag": "0002_create_fda_recalls",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789267680583,
+      "tag": "0003_create_cron_config",
+      "breakpoints": true
     }
   ]
 }

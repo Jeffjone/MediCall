@@ -14,6 +14,21 @@ export type Database = {
   }
   public: {
     Tables: {
+      cron_config: {
+        Row: {
+          cron_secret: string
+          id: boolean
+        }
+        Insert: {
+          cron_secret: string
+          id?: boolean
+        }
+        Update: {
+          cron_secret?: string
+          id?: boolean
+        }
+        Relationships: []
+      }
       fda_recalls: {
         Row: {
           city: string
