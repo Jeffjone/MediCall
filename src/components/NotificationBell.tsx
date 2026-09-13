@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { AlertTriangle, Bell, Info, PhoneCall } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -17,11 +18,12 @@ function Icon({ kind }: { kind: AppNotification["kind"] }) {
 }
 
 export function NotificationBell() {
+  const [open, setOpen] = useState(false);
   const { notifications, read, unreadCount, markRead, markAllRead } =
     useNotifications();
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" aria-label="Notifications" className="relative">
           <Bell className="h-5 w-5" />
@@ -62,7 +64,7 @@ export function NotificationBell() {
                 <li key={n.id}>
                   <Link
                     to={n.href}
-                    onClick={() => markRead(n.id)}
+                    onClick={() => { markRead(n.id); setOpen(false); }}
                     className="flex gap-3 px-4 py-3 transition-colors hover:bg-accent"
                   >
                     <span

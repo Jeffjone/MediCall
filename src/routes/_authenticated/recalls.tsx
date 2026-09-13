@@ -54,6 +54,9 @@ function RecallsPage() {
         const newness =
           Number(isNewSince(b, lastViewed)) - Number(isNewSince(a, lastViewed));
         if (newness !== 0) return newness;
+        const demoOrder = Number(b.recallNumber.startsWith("DEMO-")) - Number(a.recallNumber.startsWith("DEMO-"));
+        if (demoOrder !== 0) return demoOrder;
+        if (a.recallNumber.startsWith("DEMO-")) return (b.firstSeenAt ?? "").localeCompare(a.firstSeenAt ?? "");
         return classificationRank(a.classification) - classificationRank(b.classification);
       }),
     [recalls, lastViewed],

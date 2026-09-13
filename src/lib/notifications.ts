@@ -7,6 +7,7 @@ import {
   formatFdaDate,
   matchPatients,
   recalls,
+  type Recall,
 } from "@/lib/recall-matching";
 
 export type NotificationKind = "recall" | "affected" | "outreach";
@@ -24,12 +25,12 @@ export type AppNotification = {
 const STORAGE_KEY = "medicall.notifications.read";
 
 /** Derive the notification feed from recall + patient matching data. */
-export function buildNotifications(): AppNotification[] {
-  const matched = matchPatients();
+export function buildNotifications(recallFeed: Recall[] = recalls): AppNotification[] {
+  const matched = matchPatients(undefined, recallFeed);
   const counts = affectedCountByRecall(matched);
   const items: AppNotification[] = [];
 
-  const sorted = [...recalls].sort((a, b) => {
+  const sorted = [...recallFeed].sort((a, b) => {
     const seen = (b.firstSeenAt ?? "").localeCompare(a.firstSeenAt ?? "");
     if (seen !== 0) return seen;
     const rank = classificationRank(a.classification) - classificationRank(b.classification);
@@ -91,7 +92,7 @@ function readStored(): string[] {
 
 export function useNotifications() {
   const feed = useRecalls();
-  const notifications = useMemo(() => buildNotifications(), [feed]);
+  const notifications = useMemo(() => buildNotifications(feed), [feed]);
   const [read, setRead] = useState<string[]>([]);
 
   useEffect(() => {
