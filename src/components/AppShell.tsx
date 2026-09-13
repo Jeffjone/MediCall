@@ -58,6 +58,7 @@ export function AppShell({
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const isMobile = useIsMobile();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const base = isMobile ? [...navItems, ...mobileOnlyItems] : [...navItems];
   const items = session.role === "admin"
