@@ -10,6 +10,7 @@ import {
 import { useMemo, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import { DailyBriefing } from "@/components/DailyBriefing";
 import { InteractionGraph } from "@/components/InteractionGraph";
 import { useInteractions } from "@/lib/interaction-store";
 import { regimenFingerprint } from "@/lib/interaction-types";
