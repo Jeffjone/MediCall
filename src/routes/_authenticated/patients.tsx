@@ -86,10 +86,13 @@ function matchesFilter(m: MatchedPatient, filter: FilterKey): boolean {
   }
 }
 
+const PAGE_SIZE = 20;
+
 function PatientsPage() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("name-asc");
   const [filter, setFilter] = useState<FilterKey>("all");
+  const [page, setPage] = useState(1);
   const recalls = useRecalls();
   const matched = useMemo(() => matchPatients(undefined, recalls), [recalls]);
   const { session } = useRouteContext();
@@ -110,6 +113,12 @@ function PatientsPage() {
       })
       .sort(sortOptions[sort].compare);
   }, [matched, query, filter, sort]);
+
+  const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = visible.slice(start, start + PAGE_SIZE);
+
 
   return (
     <AppShell
