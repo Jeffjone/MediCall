@@ -9,6 +9,9 @@ export type CallRecord = {
   drugName: string;
   recallNumber: string;
   status: CallStatus;
+  /** Who was called: the patient, or their prescriber */
+  audience?: "patient" | "doctor";
+  doctorName?: string;
   startedAt: string;
   detail: string;
   conversationId?: string;
@@ -44,10 +47,11 @@ export type CallRecord = {
 
 type State = {
   byPatient: Record<string, CallStatus>;
+  byDoctor: Record<string, CallStatus>;
   log: CallRecord[];
 };
 
-let state: State = { byPatient: {}, log: [] };
+let state: State = { byPatient: {}, byDoctor: {}, log: [] };
 const listeners = new Set<() => void>();
 
 function emit() {
@@ -64,8 +68,10 @@ function getSnapshot() {
 }
 
 export function startCall(record: Omit<CallRecord, "status">) {
+  const doctor = record.audience === "doctor";
   state = {
-    byPatient: { ...state.byPatient, [record.patientId]: "dialing" },
+    byPatient: doctor ? state.byPatient : { ...state.byPatient, [record.patientId]: "dialing" },
+    byDoctor: doctor ? { ...state.byDoctor, [record.patientId]: "dialing" } : state.byDoctor,
     log: [{ ...record, status: "dialing" }, ...state.log],
   };
   emit();
@@ -79,8 +85,10 @@ export function finishCall(
   conversationId?: string,
   dialedNumber?: string,
 ) {
+  const doctor = state.log.find((entry) => entry.id === id)?.audience === "doctor";
   state = {
-    byPatient: { ...state.byPatient, [patientId]: status },
+    byPatient: doctor ? state.byPatient : { ...state.byPatient, [patientId]: status },
+    byDoctor: doctor ? { ...state.byDoctor, [patientId]: status } : state.byDoctor,
     log: state.log.map((entry) =>
       entry.id === id
         ? {
