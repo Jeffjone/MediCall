@@ -73,6 +73,19 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
       `${data.drugName} ${data.strength}, NDC ${data.ndc}. ${data.recallNumber.startsWith("DEMO-") ? "This is a fictional demo, not an FDA recall. Simulated" : "The FDA has issued a"} ` +
       `${data.classification} recall (${data.recallNumber}). Reason: ${data.recallReason}`;
 
+    const vars: Record<string, string> = {
+      patient_name: data.patientName,
+      patient_id: data.patientId,
+      drug_name: data.drugName,
+      drug_strength: data.strength,
+      ndc: data.ndc,
+      recall_number: data.recallNumber,
+      recall_reason: data.recallReason,
+      recall_classification: data.classification,
+      pharmacy_name: data.pharmacyName,
+      recall_summary: summary,
+    };
+
     try {
       const response = await fetch(
         "https://api.elevenlabs.io/v1/convai/twilio/outbound-call",
