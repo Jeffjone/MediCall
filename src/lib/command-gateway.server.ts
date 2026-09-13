@@ -1,14 +1,23 @@
 import { createOpenAICompatible } from '@ai-sdk/openai-compatible';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { geminiEndpoint } from './gemini.server';
 
 const HEADER = 'X-Lovable-AIG-Run-ID';
 export function createCommandGateway(_key: string, initial?: string) {
+  const googleKey = process.env['GOOGLE_AI_API_KEY'];
+  if (googleKey) {
+    const google = createGoogleGenerativeAI({ apiKey: googleKey });
+    return {
+      provider: (id: string) => google(id),
+      model: (_id: string) => 'gemini-3.8-flash',
+      direct: true,
+      async wrap(response: Response) { return response; },
+    };
+  }
   let runId = initial;
   let resolve: (value?: string) => void = () => {};
   const ready = new Promise<string | undefined>(r => { resolve = r; });
-  // Google's OpenAI-compatible endpoint rejects multi-step tool calling for Gemini 3
-  // (it demands thought signatures), so the command center always runs on the Lovable
-  // gateway when that key is available and only falls back to the direct Google route.
+  // Retain the managed gateway only when no personal Google key is configured.
   const lovable = process.env['LOVABLE_API_KEY'];
   const endpoint = lovable
     ? { direct: false, baseURL: 'https://ai.gateway.lovable.dev/v1', headers: { 'Lovable-API-Key': lovable, 'X-Lovable-AIG-SDK': 'vercel-ai-sdk' }, model: (id: string) => id }
