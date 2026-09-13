@@ -37,44 +37,63 @@ export const Route = createFileRoute("/_authenticated/recalls")({
 });
 
 function RecallsPage() {
-  const { recalls, source, fetchedAt } = useRecallFeed();
+  const { recalls, source, fetchedAt, lastSyncedAt } = useRecallFeed();
   const matched = useMemo(() => matchPatients(undefined, recalls), [recalls]);
   const counts = useMemo(() => affectedCountByRecall(matched), [matched]);
   const { session } = useRouteContext();
+  const [lastViewed, setLastViewed] = useState(0);
+
+  useEffect(() => {
+    setLastViewed(readLastViewed());
+    return () => markRecallsViewed();
+  }, []);
+
   const sorted = useMemo(
     () =>
-      [...recalls].sort(
-        (a, b) => classificationRank(a.classification) - classificationRank(b.classification),
-      ),
-    [recalls],
+      [...recalls].sort((a, b) => {
+        const newness =
+          Number(isNewSince(b, lastViewed)) - Number(isNewSince(a, lastViewed));
+        if (newness !== 0) return newness;
+        return classificationRank(a.classification) - classificationRank(b.classification);
+      }),
+    [recalls, lastViewed],
   );
+
+  const syncedLabel = lastSyncedAt
+    ? new Date(lastSyncedAt).toLocaleString()
+    : new Date(fetchedAt).toLocaleString();
 
   return (
     <AppShell
       title="FDA Recalls"
       subtitle={
-        source === "openfda"
-          ? `Live from the openFDA Drug Enforcement (RES) API — ${recalls.length} drug recalls, refreshed ${new Date(fetchedAt).toLocaleString()}. Matching is done on NDC.`
-          : "openFDA is unreachable right now, showing the last bundled snapshot. Matching is done on NDC."
+        source === "fallback"
+          ? "openFDA is unreachable right now, showing the last bundled snapshot. Matching is done on NDC."
+          : `${recalls.length} recalls tracked from the openFDA Drug Enforcement (RES) API. Checked automatically every 12 hours — last check ${syncedLabel}. Matching is done on NDC.`
       }
       session={session}
     >
       <div className="grid gap-4 lg:grid-cols-2">
         {sorted.map((recall) => {
           const affected = counts.get(recall.recallNumber) ?? 0;
+          const isNew = isNewSince(recall, lastViewed);
           return (
-            <Card key={recall.recallNumber}>
+            <Card key={recall.recallNumber} className={isNew ? "ring-2 ring-primary/40" : undefined}>
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between gap-3">
                   <CardTitle className="text-base leading-snug">
                     {recall.drugName}
                   </CardTitle>
-                  <Badge
-                    variant={recall.classification === "Class I" ? "destructive" : "secondary"}
-                  >
-                    {recall.classification}
-                  </Badge>
+                  <div className="flex shrink-0 items-center gap-1">
+                    {isNew && <Badge>NEW</Badge>}
+                    <Badge
+                      variant={recall.classification === "Class I" ? "destructive" : "secondary"}
+                    >
+                      {recall.classification}
+                    </Badge>
+                  </div>
                 </div>
+
                 <p className="text-xs text-muted-foreground">
                   {recall.recallNumber} · {recall.recallingFirm} · {recall.city},{" "}
                   {recall.state}
