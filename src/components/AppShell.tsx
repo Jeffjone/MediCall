@@ -14,6 +14,7 @@ import {
 import { useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
+import { BrandMark } from "@/components/BrandMark";
 import { NotificationBell } from "@/components/NotificationBell";
 import { SimulateRecallButton } from "@/components/SimulateRecallButton";
 import { Button } from "@/components/ui/button";
