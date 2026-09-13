@@ -91,9 +91,7 @@ export function AppShell({
       <aside className="hidden w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground md:flex">
         <div className="flex flex-col gap-0.5 px-5 py-6">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_color-mix(in_oklab,var(--primary)_35%,transparent)]">
-              <Pill className="h-5 w-5" />
-            </div>
+            <BrandMark className="h-9 w-9" />
             <div className="flex flex-col leading-tight">
               <span className="font-display text-lg font-bold tracking-tight">MediCall</span>
               <span className="whitespace-nowrap text-[9px] font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/50">
@@ -136,9 +134,7 @@ export function AppShell({
             <SheetContent side="left" className="w-[17rem] bg-sidebar p-0 text-sidebar-foreground">
               <SheetHeader className="px-5 py-5 text-left">
                 <SheetTitle className="flex items-center gap-2.5 text-sidebar-foreground">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                    <Pill className="h-5 w-5" />
-                  </span>
+                  <BrandMark className="h-9 w-9" />
                   <span className="flex flex-col leading-tight">
                     <span className="font-display text-lg font-bold tracking-tight">MediCall</span>
                     <span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/50">
@@ -169,9 +165,7 @@ export function AppShell({
           </Sheet>
 
           <div className="flex min-w-0 items-center gap-2 md:hidden">
-            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Pill className="h-4 w-4" />
-            </div>
+            <BrandMark className="h-7 w-7" />
             <span className="truncate font-display font-bold">MediCall</span>
           </div>
 
