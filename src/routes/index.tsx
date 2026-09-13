@@ -154,7 +154,71 @@ function LandingPage() {
             )}
           </div>
 
+          <dl className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-4 sm:grid-cols-4">
+            {[
+              { label: "FDA recalls tracked", value: live?.stats.fdaRecalls },
+              { label: "Patients monitored", value: live?.stats.totalPatients },
+              { label: "Patients flagged", value: live?.stats.affectedPatients },
+              { label: "Class I recalls", value: live?.stats.classOne },
+            ].map((s) => (
+              <div key={s.label} className="rounded-lg border bg-card px-3 py-4">
+                <dt className="text-xs text-muted-foreground">{s.label}</dt>
+                <dd className="mt-1 text-2xl font-semibold">
+                  {pulseLoading || s.value === undefined ? (
+                    <span className="inline-block h-6 w-10 animate-pulse rounded bg-muted align-middle" />
+                  ) : (
+                    s.value
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          {live?.lastSyncedAt && (
+            <p className="mt-3 text-xs text-muted-foreground">
+              FDA feed last refreshed {new Date(live.lastSyncedAt).toLocaleString()}
+            </p>
+          )}
         </section>
+
+        {(pulseLoading || live?.pulse) && (
+          <section className="mb-10">
+            <Card className="border-primary/25 bg-primary/5">
+              <CardContent className="py-5 text-left">
+                {live?.pulse ? (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-primary" />
+                      <h2 className="font-semibold">{live.pulse.headline}</h2>
+                    </div>
+                    <p className="mt-2 text-sm text-muted-foreground">{live.pulse.body}</p>
+                    {live.pulse.priorities.length > 0 && (
+                      <ul className="mt-3 flex flex-wrap gap-2">
+                        {live.pulse.priorities.map((p, i) => (
+                          <li
+                            key={i}
+                            className="rounded-full border bg-background px-3 py-1 text-xs text-muted-foreground"
+                          >
+                            {p}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    <p className="mt-3 text-xs text-muted-foreground">
+                      AI summary of the latest openFDA drug enforcement records.
+                    </p>
+                  </>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="h-4 w-52 animate-pulse rounded bg-muted" />
+                    <div className="h-3 w-full animate-pulse rounded bg-muted" />
+                    <div className="h-3 w-4/5 animate-pulse rounded bg-muted" />
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </section>
+        )}
+
 
         <section className="grid gap-4 sm:grid-cols-3">
           {features.map((f) => (
