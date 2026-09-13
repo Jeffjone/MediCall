@@ -98,7 +98,7 @@ export const getDailyBriefing = createServerFn({ method: "POST" })
     const snapshot = {
       flaggedPatients: flagged.length,
       totalPatients: stats.totalPatients,
-      classOneRecalls: stats.classOneCount,
+      classOneRecalls: stats.classOneRecalls,
       newRecallNumbers: feed.newRecallNumbers,
       lastSyncedAt: feed.lastSyncedAt,
       interactionsChecked,
