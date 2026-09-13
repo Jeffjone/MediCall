@@ -4,6 +4,7 @@ import {
   AlertTriangle,
   Camera,
   CheckCircle2,
+  ImagePlus,
   Loader2,
   Monitor,
   RotateCcw,
@@ -127,6 +128,16 @@ function ScanPage() {
               if (file) void handleFile(file);
             }}
           />
+          <input
+            ref={uploadRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              if (file) void handleFile(file);
+            }}
+          />
 
           <Card>
             <CardContent className="space-y-4 pt-6">
@@ -167,6 +178,15 @@ function ScanPage() {
                   </Button>
                 ) : null}
               </div>
+
+              <Button
+                variant="outline"
+                className="w-full"
+                disabled={busy}
+                onClick={() => uploadRef.current?.click()}
+              >
+                <ImagePlus className="mr-2 h-4 w-4" /> Upload picture
+              </Button>
             </CardContent>
           </Card>
 
