@@ -218,6 +218,7 @@ function PatientsPage() {
                   </div>
                 );
               })}
+              <RefillTracker patient={m.patient} />
             </CardContent>
           </Card>
         ))}
