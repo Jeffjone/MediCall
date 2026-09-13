@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { AnalysisReview } from "@/components/AnalysisReview";
+import { CallDoctorButton } from "@/components/CallDoctorButton";
 import { useReviews } from "@/lib/analysis-store";
 import { analysisKey } from "@/lib/analysis-types";
 import { Button } from "@/components/ui/button";
@@ -107,11 +108,11 @@ export function InitiateCallButton({
   }
 
   return (
-    <>
+    <div className="flex flex-wrap items-center justify-end gap-2">
       <AnalysisReview match={match} flagged={flagged} />
       <Button
         size={size}
-        className="gap-1"
+        className="gap-1 whitespace-nowrap"
         disabled={dialing}
         onClick={() => setOpen(true)}
       >
@@ -123,6 +124,8 @@ export function InitiateCallButton({
         {dialing ? "Dialing…" : status === "called" ? "Call again" : "Initiate Call"}
         <ChevronRight className="h-3 w-3" />
       </Button>
+
+      {status === "called" && <CallDoctorButton match={match} flagged={flagged} size={size} />}
 
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
@@ -141,6 +144,6 @@ export function InitiateCallButton({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </>
+    </div>
   );
 }
