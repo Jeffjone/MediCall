@@ -112,21 +112,30 @@ function LandingPage() {
             lets your team trigger a scripted AI outreach call the moment a recall hits.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link to="/signup">
-              <Button size="lg">
-                Register your pharmacy
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/auth">
-              <Button size="lg" variant="outline">
-                Sign in
-              </Button>
-            </Link>
+            {signedIn ? (
+              <Link to="/dashboard">
+                <Button size="lg">
+                  Go to dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/signup">
+                  <Button size="lg">
+                    Register your pharmacy
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button size="lg" variant="outline">
+                    Sign in
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
-          {checking && (
-            <p className="mt-4 text-xs text-muted-foreground">Checking your session…</p>
-          )}
+
         </section>
 
         <section className="grid gap-4 sm:grid-cols-3">
