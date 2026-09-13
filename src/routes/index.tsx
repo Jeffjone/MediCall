@@ -148,7 +148,7 @@ function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t bg-card">
+      <footer className="relative border-t bg-card">
         <div className="mx-auto grid max-w-5xl gap-8 px-6 py-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2">
