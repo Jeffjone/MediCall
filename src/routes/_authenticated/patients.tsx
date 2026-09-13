@@ -104,7 +104,7 @@ function PatientsPage() {
   return (
     <AppShell
       title="Patients"
-      subtitle="All patients on file. Rows shaded red hold at least one recalled medication."
+      subtitle={`${matched.length} patients · ${matched.filter(m => m.isFlagged).length} flagged · ${matched.filter(m => m.flagged.some(f => f.recall.recallNumber.startsWith("DEMO-"))).length} matched to demo recalls`}
       session={session}
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
@@ -197,6 +197,7 @@ function PatientsPage() {
                     </div>
                     {flagged && (
                       <div className="mt-3 space-y-2 border-t pt-3">
+                        {flagged.recall.recallNumber.startsWith("DEMO-") && <Badge variant="outline">DEMO — simulated recall</Badge>}
                         <p className="text-xs text-muted-foreground">
                           {flagged.recall.recallNumber}: {flagged.recall.reasonForRecall}
                         </p>

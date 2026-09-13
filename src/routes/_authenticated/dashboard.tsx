@@ -60,6 +60,7 @@ function Dashboard() {
   const recalls = useRecalls();
   const matched = useMemo(() => matchPatients(undefined, recalls), [recalls]);
   const stats = useMemo(() => getStats(matched, recalls), [matched, recalls]);
+  const demoCount = recalls.filter(r => r.recallNumber.startsWith("DEMO-")).length;
 
   const affected = useMemo(
     () =>
@@ -92,7 +93,7 @@ function Dashboard() {
 
   const cards = [
     { icon: Users, label: "Active Patients", value: stats.totalPatients, hint: "in the pharmacy record" },
-    { icon: AlertTriangle, label: "Open FDA Recalls", value: stats.totalRecalls, hint: "monitored by NDC" },
+    { icon: AlertTriangle, label: "Tracked Recalls", value: stats.totalRecalls, hint: `${stats.totalRecalls - demoCount} FDA · ${demoCount} demo` },
     { icon: Activity, label: "Patients Affected", value: stats.affectedPatients, hint: "matched to a recall" },
     { icon: PhoneCall, label: "Calls Placed", value: Object.values(byPatient).filter((s) => s === "called").length, hint: "this session" },
   ];
@@ -100,7 +101,7 @@ function Dashboard() {
   return (
     <AppShell
       title="Dashboard"
-      subtitle="Patient prescriptions are matched against FDA recall NDCs in real time."
+      subtitle="Patient matches across FDA recalls and clearly labeled demo simulations."
       session={session}
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -189,6 +190,7 @@ function Dashboard() {
                         {f.prescription.ndc}
                       </TableCell>
                       <TableCell>
+                        {f.recall.recallNumber.startsWith("DEMO-") && <Badge variant="outline" className="mr-1">DEMO</Badge>}
                         <Badge variant="destructive" className="whitespace-nowrap">
 
                           <AlertTriangle className="mr-1 h-3 w-3" />
