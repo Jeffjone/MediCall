@@ -9,6 +9,7 @@ import {
   OUTREACH_SYSTEM_PROMPT,
   DOCTOR_FIRST_MESSAGE,
   DOCTOR_SYSTEM_PROMPT,
+  renderScript,
 } from "@/lib/outreach-script";
 
 const CallInput = z.object({
