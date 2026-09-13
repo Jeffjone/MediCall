@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import {
   Pill,
@@ -6,12 +7,15 @@ import {
   PhoneCall,
   Users,
   ArrowRight,
+  Sparkles,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { GeometricBackdrop } from "@/components/GeometricBackdrop";
+import { getRecallPulse } from "@/lib/briefing.functions";
+import type { RecallPulse } from "@/lib/briefing.functions";
 
 export const Route = createFileRoute("/")({
   head: () => ({
