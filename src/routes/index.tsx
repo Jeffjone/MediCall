@@ -70,8 +70,14 @@ function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
+    <div className="relative min-h-screen overflow-hidden bg-background">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[120vh] overflow-hidden">
+        <div className="medicall-orb medicall-orb-a left-[-10%] top-[-8%] h-[38rem] w-[38rem] opacity-[0.28]" />
+        <div className="medicall-orb medicall-orb-b right-[-12%] top-[6%] h-[32rem] w-[32rem] opacity-[0.22]" />
+        <div className="medicall-orb medicall-orb-c left-[30%] top-[45%] h-[30rem] w-[30rem] opacity-[0.18]" />
+      </div>
+
+      <header className="relative mx-auto flex max-w-5xl items-center justify-between px-6 py-5">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
             <Pill className="h-5 w-5" />
@@ -95,7 +101,7 @@ function LandingPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 pb-20">
+      <main className="relative mx-auto max-w-5xl px-6 pb-20">
         <section className="py-16 text-center sm:py-24">
           <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-xs text-muted-foreground">
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
@@ -142,7 +148,7 @@ function LandingPage() {
         </section>
       </main>
 
-      <footer className="border-t bg-card">
+      <footer className="relative border-t bg-card">
         <div className="mx-auto grid max-w-5xl gap-8 px-6 py-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2">

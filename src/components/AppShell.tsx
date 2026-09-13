@@ -29,6 +29,7 @@ import {
 import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import type { SessionProfile } from "@/lib/profiles.functions";
+import { clearSimulatedRecalls } from "@/lib/simulate-recall.functions";
 
 const navItems = [
   { to: "/command-center", icon: Sparkles, label: "Command center" },
@@ -66,10 +67,16 @@ export function AppShell({
     : base;
 
   async function handleSignOut() {
+    // Reset the demo: drop any simulated recalls so the feed is back to FDA-only.
+    try {
+      await clearSimulatedRecalls();
+    } catch {
+      // Non-blocking — never trap the user in a signed-in state.
+    }
     await queryClient.cancelQueries();
     queryClient.clear();
     await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
+    navigate({ to: "/", replace: true });
   }
 
   const initials = session.pharmacyName

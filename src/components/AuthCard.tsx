@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Pill } from "lucide-react";
+import { Pill, ArrowLeft } from "lucide-react";
 
 export function AuthCard({
   title,
@@ -16,10 +16,21 @@ export function AuthCard({
   return (
     <div className="flex min-h-screen items-center justify-center bg-sidebar px-4 py-12">
       <div className="w-full max-w-md">
+        <Link
+          to="/"
+          className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-sidebar-foreground/60 transition-colors hover:text-sidebar-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to home
+        </Link>
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_24px_color-mix(in_oklab,var(--primary)_35%,transparent)]">
+          <Link
+            to="/"
+            aria-label="Medicall home"
+            className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_24px_color-mix(in_oklab,var(--primary)_35%,transparent)]"
+          >
             <Pill className="h-6 w-6" />
-          </div>
+          </Link>
           <div className="flex flex-col leading-tight">
             <span className="font-display text-2xl font-bold tracking-tight text-sidebar-foreground">
               Medicall

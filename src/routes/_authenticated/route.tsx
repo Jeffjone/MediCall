@@ -131,7 +131,7 @@ function AuthLayout() {
             <button
               onClick={async () => {
                 await supabase.auth.signOut();
-                navigate({ to: "/auth", replace: true });
+                navigate({ to: "/", replace: true });
               }}
               className="mt-2 text-xs font-medium text-primary hover:underline"
             >

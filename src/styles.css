@@ -173,3 +173,34 @@
   }
 
 }
+
+/* Homepage ambient background — slow drifting green orbs */
+@keyframes medicall-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33% { transform: translate3d(6vw, 4vh, 0) scale(1.12); }
+  66% { transform: translate3d(-4vw, 7vh, 0) scale(0.94); }
+}
+@keyframes medicall-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  40% { transform: translate3d(-7vw, -5vh, 0) scale(0.9); }
+  75% { transform: translate3d(5vw, 6vh, 0) scale(1.15); }
+}
+@keyframes medicall-drift-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(0.95); }
+  50% { transform: translate3d(8vw, -6vh, 0) scale(1.2); }
+}
+
+.medicall-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  background: radial-gradient(circle at 50% 50%, color-mix(in oklab, var(--primary) 55%, transparent), transparent 70%);
+  will-change: transform;
+}
+.medicall-orb-a { animation: medicall-drift-a 26s ease-in-out infinite; }
+.medicall-orb-b { animation: medicall-drift-b 34s ease-in-out infinite; }
+.medicall-orb-c { animation: medicall-drift-c 44s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .medicall-orb { animation: none; }
+}
