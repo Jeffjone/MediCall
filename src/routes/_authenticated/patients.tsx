@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
 import { InitiateCallButton } from "@/components/InitiateCallButton";
+import { RefillTracker } from "@/components/RefillTracker";
+import { patientRefillSummary } from "@/lib/refill-tracking";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -39,7 +41,13 @@ export const Route = createFileRoute("/_authenticated/patients")({
 });
 
 type SortKey = "name-asc" | "name-desc" | "flagged-first" | "flagged-last";
-type FilterKey = "all" | "flagged" | "clear" | "flagged-class1" | "flagged-class2";
+type FilterKey =
+  | "all"
+  | "flagged"
+  | "clear"
+  | "flagged-class1"
+  | "flagged-class2"
+  | "refill-overuse";
 
 const sortOptions: Record<SortKey, { label: string; compare: (a: MatchedPatient, b: MatchedPatient) => number }> = {
   "name-asc": {
@@ -70,6 +78,8 @@ function matchesFilter(m: MatchedPatient, filter: FilterKey): boolean {
       return m.flagged.some((f) => f.recall.classification === "Class I");
     case "flagged-class2":
       return m.flagged.some((f) => f.recall.classification === "Class II");
+    case "refill-overuse":
+      return patientRefillSummary(m.patient).hasOverutilization;
     case "all":
     default:
       return true;
@@ -128,6 +138,7 @@ function PatientsPage() {
               <SelectItem value="clear">Show clear only</SelectItem>
               <SelectItem value="flagged-class1">Flagged — Class I</SelectItem>
               <SelectItem value="flagged-class2">Flagged — Class II</SelectItem>
+              <SelectItem value="refill-overuse">Refill overuse</SelectItem>
             </SelectContent>
           </Select>
           <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
@@ -207,6 +218,7 @@ function PatientsPage() {
                   </div>
                 );
               })}
+              <RefillTracker patient={m.patient} />
             </CardContent>
           </Card>
         ))}
