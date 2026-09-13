@@ -90,7 +90,7 @@ function AuthLayout() {
     const affected = matched.filter((m) => m.isFlagged).length;
     const label =
       unseen.length === 1
-        ? `New FDA recall — ${unseen[0]!.drugName}`
+        ? `New ${unseen[0]?.recallNumber.startsWith("DEMO-") ? "DEMO" : "FDA"} recall — ${unseen[0]?.drugName}`
         : `${unseen.length} new FDA recalls added`;
 
     const show = affected > 0 ? toast.error : toast.info;

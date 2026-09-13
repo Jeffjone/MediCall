@@ -1,6 +1,6 @@
 import { tool } from 'ai';
 import { z } from 'zod';
-import { fetchRecalls } from './recalls.server';
+import { readStoredFeed as fetchRecalls } from './recall-sync.server';
 import { matchPatients, patients, normalizeNdc } from './recall-matching';
 import { analyseCase } from './analysis.server';
 
