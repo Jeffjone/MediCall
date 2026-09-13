@@ -87,22 +87,11 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
             agent_phone_number_id: phoneNumberId,
             to_number: toNumber,
             conversation_initiation_client_data: {
-              dynamic_variables: {
-                patient_name: data.patientName,
-                patient_id: data.patientId,
-                drug_name: data.drugName,
-                drug_strength: data.strength,
-                ndc: data.ndc,
-                recall_number: data.recallNumber,
-                recall_reason: data.recallReason,
-                recall_classification: data.classification,
-                pharmacy_name: data.pharmacyName,
-                recall_summary: summary,
-              },
+              dynamic_variables: vars,
               overrides: {
                 agent: {
-                  first_message: (data.recallNumber.startsWith("DEMO-") ? "This is a MediCall demonstration, not a real medication recall. " : "") + OUTREACH_FIRST_MESSAGE,
-                  prompt: { prompt: OUTREACH_SYSTEM_PROMPT + (data.recallNumber.startsWith("DEMO-") ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication; do not instruct medication changes based on this simulation." : "") + (approved?.script ? "\nPharmacist-approved discussion plan:\n" + approved.script : "\nNo alternative has been approved. Do not recommend a replacement.") },
+                  first_message: (data.recallNumber.startsWith("DEMO-") ? "This is a MediCall demonstration, not a real medication recall. " : "") + renderScript(OUTREACH_FIRST_MESSAGE, vars),
+                  prompt: { prompt: renderScript(OUTREACH_SYSTEM_PROMPT, vars) + (data.recallNumber.startsWith("DEMO-") ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication; do not instruct medication changes based on this simulation." : "") + (approved?.script ? "\nPharmacist-approved discussion plan:\n" + approved.script : "\nNo alternative has been approved. Do not recommend a replacement.") + `\nAuthoritative case facts for THIS call (use these exact values and no others): ${summary}. Never mention any other medication as the patient's prescription.` },
                 },
               },
             },
