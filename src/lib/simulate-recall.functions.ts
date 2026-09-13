@@ -40,3 +40,16 @@ export const simulateRecall = createServerFn({ method: "POST" })
     if (error) throw new Error("Could not save the simulated recall. Please try again.");
     return { recall, filename: `${recall.recallNumber}.json`, json: JSON.stringify(recall, null, 2) };
   });
+
+/** Remove every simulated (DEMO-) recall so the feed returns to the real FDA set. */
+export const clearSimulatedRecalls = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async () => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
+      .from("fda_recalls")
+      .delete()
+      .like("recall_number", "DEMO-%");
+    if (error) throw new Error("Could not clear simulated recalls.");
+    return { cleared: true };
+  });
