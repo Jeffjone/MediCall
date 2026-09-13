@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   LogOut,
   ShieldCheck,
-  Building2,
   Sparkles,
   ScanLine,
   Menu,
@@ -39,7 +38,6 @@ const navItems = [
   { to: "/patients", icon: Users, label: "Patients" },
   { to: "/recalls", icon: AlertTriangle, label: "Recalls" },
   { to: "/outreach", icon: PhoneCall, label: "Outreach" },
-  { to: "/profile", icon: Building2, label: "Pharmacy profile" },
 ] as const;
 
 /** Camera scanner: mobile web only. */
@@ -182,6 +180,7 @@ export function AppShell({
             <Separator orientation="vertical" className="mx-1 hidden h-6 md:block" />
             <Link
               to="/profile"
+              aria-label="Pharmacy profile"
               className="flex items-center gap-2 rounded-full border p-1 transition-colors hover:bg-accent md:px-2.5 md:py-1.5"
             >
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
