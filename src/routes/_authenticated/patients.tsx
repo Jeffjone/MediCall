@@ -41,7 +41,13 @@ export const Route = createFileRoute("/_authenticated/patients")({
 });
 
 type SortKey = "name-asc" | "name-desc" | "flagged-first" | "flagged-last";
-type FilterKey = "all" | "flagged" | "clear" | "flagged-class1" | "flagged-class2";
+type FilterKey =
+  | "all"
+  | "flagged"
+  | "clear"
+  | "flagged-class1"
+  | "flagged-class2"
+  | "refill-overuse";
 
 const sortOptions: Record<SortKey, { label: string; compare: (a: MatchedPatient, b: MatchedPatient) => number }> = {
   "name-asc": {
