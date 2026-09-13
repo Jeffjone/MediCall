@@ -9,6 +9,7 @@ import {
   ShieldCheck,
   Building2,
   Sparkles,
+  ScanLine,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
@@ -17,6 +18,7 @@ import { NotificationBell } from "@/components/NotificationBell";
 import { SimulateRecallButton } from "@/components/SimulateRecallButton";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
 import type { SessionProfile } from "@/lib/profiles.functions";
 
@@ -27,6 +29,11 @@ const navItems = [
   { to: "/recalls", icon: AlertTriangle, label: "Recalls" },
   { to: "/outreach", icon: PhoneCall, label: "Outreach" },
   { to: "/profile", icon: Building2, label: "Pharmacy profile" },
+] as const;
+
+/** Camera scanner: mobile web only. */
+const mobileOnlyItems = [
+  { to: "/scan", icon: ScanLine, label: "Scan label" },
 ] as const;
 
 export function AppShell({
@@ -42,10 +49,12 @@ export function AppShell({
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const isMobile = useIsMobile();
 
+  const base = isMobile ? [...navItems, ...mobileOnlyItems] : [...navItems];
   const items = session.role === "admin"
-    ? [...navItems, { to: "/admin", icon: ShieldCheck, label: "Admin" } as const]
-    : navItems;
+    ? [...base, { to: "/admin", icon: ShieldCheck, label: "Admin" } as const]
+    : base;
 
   async function handleSignOut() {
     await queryClient.cancelQueries();

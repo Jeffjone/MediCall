@@ -24,6 +24,7 @@ import { Route as AuthenticatedOutreachRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedPatientsRouteImport } from './routes/_authenticated/patients'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedRecallsRouteImport } from './routes/_authenticated/recalls'
+import { Route as AuthenticatedScanRouteImport } from './routes/_authenticated/scan'
 import { Route as ApiCommandRouteImport } from './routes/api/command'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksSyncRecallsRouteImport } from './routes/api/public/hooks/sync-recalls'
@@ -104,6 +105,11 @@ const AuthenticatedRecallsRoute = AuthenticatedRecallsRouteImport.update({
   path: '/recalls',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedScanRoute = AuthenticatedScanRouteImport.update({
+  id: '/scan',
+  path: '/scan',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiCommandRoute = ApiCommandRouteImport.update({
   id: '/api/command',
   path: '/api/command',
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/patients': typeof AuthenticatedPatientsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/recalls': typeof AuthenticatedRecallsRoute
+  '/scan': typeof AuthenticatedScanRoute
   '/api/command': typeof ApiCommandRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/hooks/sync-recalls': typeof ApiPublicHooksSyncRecallsRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/patients': typeof AuthenticatedPatientsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/recalls': typeof AuthenticatedRecallsRoute
+  '/scan': typeof AuthenticatedScanRoute
   '/api/command': typeof ApiCommandRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/hooks/sync-recalls': typeof ApiPublicHooksSyncRecallsRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/_authenticated/patients': typeof AuthenticatedPatientsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/recalls': typeof AuthenticatedRecallsRoute
+  '/_authenticated/scan': typeof AuthenticatedScanRoute
   '/api/command': typeof ApiCommandRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/hooks/sync-recalls': typeof ApiPublicHooksSyncRecallsRoute
@@ -197,6 +206,7 @@ export interface FileRouteTypes {
     | '/patients'
     | '/profile'
     | '/recalls'
+    | '/scan'
     | '/api/command'
     | '/.lovable/oauth/consent'
     | '/api/public/hooks/sync-recalls'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/patients'
     | '/profile'
     | '/recalls'
+    | '/scan'
     | '/api/command'
     | '/.lovable/oauth/consent'
     | '/api/public/hooks/sync-recalls'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/_authenticated/patients'
     | '/_authenticated/profile'
     | '/_authenticated/recalls'
+    | '/_authenticated/scan'
     | '/api/command'
     | '/.lovable/oauth/consent'
     | '/api/public/hooks/sync-recalls'
@@ -362,6 +374,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecallsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/scan': {
+      id: '/_authenticated/scan'
+      path: '/scan'
+      fullPath: '/scan'
+      preLoaderRoute: typeof AuthenticatedScanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/command': {
       id: '/api/command'
       path: '/api/command'
@@ -394,6 +413,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedPatientsRoute: typeof AuthenticatedPatientsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRecallsRoute: typeof AuthenticatedRecallsRoute
+  AuthenticatedScanRoute: typeof AuthenticatedScanRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -404,6 +424,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedPatientsRoute: AuthenticatedPatientsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRecallsRoute: AuthenticatedRecallsRoute,
+  AuthenticatedScanRoute: AuthenticatedScanRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
