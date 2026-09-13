@@ -104,6 +104,8 @@ Gemini can inspect the relevant records, call application tools, and return the 
 
 ## Demo
 
+[![Watch the video](https://youtube.com)](https://www.youtube.com/watch?v=qJlZBMfUTFs)
+
 Live app: https://medicallhack.lovable.app/
 
 **Suggested demo flow**
