@@ -4,6 +4,7 @@ import { convertToModelMessages, streamText, stepCountIs, validateUIMessages, ty
 import { createCommandGateway } from '@/lib/command-gateway.server';
 import { commandTools } from '@/lib/command-tools.server';
 import { gatewayMessage } from '@/lib/analysis.server';
+import { errorStatus } from '@/lib/app-errors';
 
 export const Route = createFileRoute('/api/command')({ server: { handlers: {
   POST: async ({ request }) => {
@@ -15,13 +16,21 @@ export const Route = createFileRoute('/api/command')({ server: { handlers: {
       const db = createClient(url, key, { global: { headers: { Authorization: `Bearer ${token}` } }, auth: { persistSession: false } });
       const { data, error } = await db.auth.getUser(token);
       if (error || !data.user) return new Response('Your session expired. Please sign in again.', { status: 401 });
-      const { data: profile } = await db.from('profiles').select('approval_status').eq('id', data.user.id).single();
+      const { data: profile, error: profileError } = await db.from('profiles').select('approval_status').eq('id', data.user.id).single();
+      if (profileError) return new Response('Account details could not be loaded. Please try again later.', { status: 503 });
       if (profile?.approval_status !== 'approved') return new Response('An approved pharmacy account is required.', { status: 403 });
       const apiKey = process.env['LOVABLE_API_KEY'];
       if (!apiKey) return new Response('AI is not configured.', { status: 503 });
-      const body = await request.json();
+      let body;
+      try { body = await request.json(); }
+      catch { return new Response('The command must contain valid JSON.', { status: 400 }); }
+      if (!body || !Array.isArray(body.messages) || !body.messages.length || body.messages.length > 200) {
+        return new Response('Send between 1 and 200 conversation messages. Start a new conversation if needed.', { status: 400 });
+      }
       const tools = commandTools(data.user.id, request.signal, db);
-      const messages = await validateUIMessages<UIMessage<unknown, never, InferUITools<typeof tools>>>({ messages: body.messages, tools });
+      let messages;
+      try { messages = await validateUIMessages<UIMessage<unknown, never, InferUITools<typeof tools>>>({ messages: body.messages, tools }); }
+      catch { return new Response('This conversation contains invalid messages. Please start a new conversation.', { status: 400 }); }
       const gateway = createCommandGateway(apiKey, request.headers.get('X-Lovable-AIG-Run-ID') ?? undefined);
       const result = streamText({
         model: gateway.provider('google/gemini-3.1-pro-preview'),
@@ -33,7 +42,7 @@ export const Route = createFileRoute('/api/command')({ server: { handlers: {
       return gateway.wrap(result.toUIMessageStreamResponse({ sendReasoning: true, onError: gatewayMessage }));
     } catch (error) {
       if (error instanceof Error && error.name === 'AbortError') return new Response(null, { status: 499 });
-      return new Response(gatewayMessage(error), { status: 400 });
+      return new Response(gatewayMessage(error), { status: errorStatus(error) ?? 500 });
     }
   },
 } } });

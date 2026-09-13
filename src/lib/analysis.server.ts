@@ -6,6 +6,7 @@ import { getFinancialProfile } from './financial';
 import { estimatePrices } from './drug-pricing';
 import { resolveDrug } from './rxnorm.server';
 import { matchPatients, normalizeNdc, type Recall } from './recall-matching';
+import { errorMessage } from './app-errors';
 
 function secret() { const key = process.env['LOVABLE_API_KEY']; if (!key) throw new Error('AI is not configured.'); return key; }
 export function signReceipt(payload: object) {
@@ -58,8 +59,5 @@ export async function analyseCase(patientId: string, recallNumber: string, ndc: 
 }
 
 export function gatewayMessage(error: unknown) {
-  if (error && typeof error === 'object' && 'responseBody' in error && typeof error.responseBody === 'string') {
-    try { const data = JSON.parse(error.responseBody); return String(data.message ?? data.error?.message ?? error.responseBody).slice(0, 600); } catch { return error.responseBody.slice(0, 600); }
-  }
-  return error instanceof Error ? error.message : 'Analysis failed. Please try again.';
+  return errorMessage(error);
 }
