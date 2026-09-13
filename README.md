@@ -1,9 +1,5 @@
 <div align="center">
-<img src="https://ibb.co" alt="MediCall Logo" width="450"/>
-
-# 🩺 MediCall
-
-### **Know Sooner. Act Faster.**
+<img src="MediCall Thumbnail.png" alt="MediCall Logo" width="450"/>
 
 [![Devpost Submission](https://shields.io)](https://github.com)
 [![HackRice](https://hackrice.com/)
