@@ -7,6 +7,8 @@ import { normalizeNdc } from "./recall-matching";
 import {
   OUTREACH_FIRST_MESSAGE,
   OUTREACH_SYSTEM_PROMPT,
+  DOCTOR_FIRST_MESSAGE,
+  DOCTOR_SYSTEM_PROMPT,
 } from "@/lib/outreach-script";
 
 const CallInput = z.object({
@@ -142,5 +144,106 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
         ok: false,
         message: "Could not reach the calling service. Please try again.",
       };
+    }
+  });
+
+const DoctorCallInput = z.object({
+  patientId: z.string().min(1),
+  recallNumber: z.string().min(1),
+  ndc: z.string().min(1),
+});
+
+/**
+ * Notifies the patient's prescriber about the recall and about the outreach
+ * call already placed to the patient. Demo mode dials the same verified test
+ * number as patient calls.
+ */
+export const placeDoctorCall = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => DoctorCallInput.parse(input))
+  .handler(async ({ data, context }): Promise<CallResult> => {
+    const { data: profile } = await context.supabase
+      .from("profiles")
+      .select("approval_status, pharmacy_name")
+      .eq("id", context.userId)
+      .single();
+    if (profile?.approval_status !== "approved")
+      return { ok: false, message: "An approved pharmacy account is required." };
+
+    const { readStoredFeed } = await import("./recall-sync.server");
+    const feed = await readStoredFeed();
+    const { patient, flagged } = findCase(data.patientId, data.recallNumber, data.ndc, feed.recalls);
+
+    const apiKey = process.env["ELEVENLABS_API_KEY"];
+    const agentId = process.env["ELEVENLABS_AGENT_ID"];
+    const phoneNumberId = process.env["ELEVENLABS_PHONE_NUMBER_ID"];
+    const toNumber = process.env["DEMO_CALL_NUMBER"];
+    if (!apiKey || !agentId || !phoneNumberId || !toNumber)
+      return { ok: false, message: "Calling is not fully set up yet." };
+
+    const isDemo = flagged.recall.recallNumber.startsWith("DEMO-");
+    const doctorName = flagged.prescription.prescriber || "the prescriber";
+
+    try {
+      const response = await fetch("https://api.elevenlabs.io/v1/convai/twilio/outbound-call", {
+        method: "POST",
+        headers: { "xi-api-key": apiKey, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          agent_id: agentId,
+          agent_phone_number_id: phoneNumberId,
+          to_number: toNumber,
+          conversation_initiation_client_data: {
+            dynamic_variables: {
+              doctor_name: doctorName,
+              patient_name: patient.fullName,
+              patient_id: patient.patient.id,
+              drug_name: flagged.prescription.drugName,
+              drug_strength: flagged.prescription.strength,
+              ndc: flagged.prescription.ndc,
+              recall_number: flagged.recall.recallNumber,
+              recall_reason: flagged.recall.reasonForRecall,
+              recall_classification: flagged.recall.classification,
+              pharmacy_name: profile.pharmacy_name,
+            },
+            overrides: {
+              agent: {
+                first_message:
+                  (isDemo ? "This is a MediCall demonstration, not a real medication recall. " : "") +
+                  DOCTOR_FIRST_MESSAGE,
+                prompt: {
+                  prompt:
+                    DOCTOR_SYSTEM_PROMPT +
+                    (isDemo
+                      ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication."
+                      : ""),
+                },
+              },
+            },
+          },
+        }),
+      });
+
+      const bodyText = await response.text();
+      if (!response.ok) {
+        console.error(`ElevenLabs prescriber call failed [${response.status}]: ${bodyText}`);
+        return { ok: false, message: `The calling service refused the call (${response.status}).` };
+      }
+
+      let conversationId: string | undefined;
+      try {
+        conversationId = (JSON.parse(bodyText) as { conversation_id?: string }).conversation_id;
+      } catch {
+        conversationId = undefined;
+      }
+
+      return {
+        ok: true,
+        message: `Prescriber notification requested for Dr. ${doctorName}.`,
+        dialed: toNumber,
+        ...(conversationId ? { conversationId } : {}),
+      };
+    } catch (error) {
+      console.error("ElevenLabs prescriber call error", error);
+      return { ok: false, message: "Could not reach the calling service. Please try again." };
     }
   });
