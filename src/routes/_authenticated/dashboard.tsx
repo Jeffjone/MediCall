@@ -201,11 +201,17 @@ function Dashboard() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <OutreachBadge status={byPatient[m.patient.id] ?? "idle"} />
+                        <div className="flex flex-col items-start gap-1">
+                          <OutreachBadge status={byPatient[m.patient.id] ?? "idle"} />
+                          {byDoctor[m.patient.id] === "called" && (
+                            <Badge variant="outline" className="whitespace-nowrap">Doctor notified</Badge>
+                          )}
+                        </div>
                       </TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="w-px whitespace-nowrap py-3 text-right align-middle">
                         <InitiateCallButton match={m} flagged={f} />
                       </TableCell>
+
                     </TableRow>
                   )),
                 )}
