@@ -29,10 +29,13 @@ export function buildNotifications(): AppNotification[] {
   const items: AppNotification[] = [];
 
   const sorted = [...recalls].sort((a, b) => {
+    const seen = (b.firstSeenAt ?? "").localeCompare(a.firstSeenAt ?? "");
+    if (seen !== 0) return seen;
     const rank = classificationRank(a.classification) - classificationRank(b.classification);
     if (rank !== 0) return rank;
     return b.reportDate.localeCompare(a.reportDate);
   });
+
 
   for (const recall of sorted) {
     const affected = counts.get(recall.recallNumber) ?? 0;

@@ -26,6 +26,7 @@ import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedRecallsRouteImport } from './routes/_authenticated/recalls'
 import { Route as ApiCommandRouteImport } from './routes/api/command'
 import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as ApiPublicHooksSyncRecallsRouteImport } from './routes/api/public/hooks/sync-recalls'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -113,6 +114,12 @@ const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
   path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksSyncRecallsRoute =
+  ApiPublicHooksSyncRecallsRouteImport.update({
+    id: '/api/public/hooks/sync-recalls',
+    path: '/api/public/hooks/sync-recalls',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByFullPath {
   '/recalls': typeof AuthenticatedRecallsRoute
   '/api/command': typeof ApiCommandRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/api/public/hooks/sync-recalls': typeof ApiPublicHooksSyncRecallsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -149,6 +157,7 @@ export interface FileRoutesByTo {
   '/recalls': typeof AuthenticatedRecallsRoute
   '/api/command': typeof ApiCommandRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/api/public/hooks/sync-recalls': typeof ApiPublicHooksSyncRecallsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -169,6 +178,7 @@ export interface FileRoutesById {
   '/_authenticated/recalls': typeof AuthenticatedRecallsRoute
   '/api/command': typeof ApiCommandRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
+  '/api/public/hooks/sync-recalls': typeof ApiPublicHooksSyncRecallsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/recalls'
     | '/api/command'
     | '/.lovable/oauth/consent'
+    | '/api/public/hooks/sync-recalls'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/recalls'
     | '/api/command'
     | '/.lovable/oauth/consent'
+    | '/api/public/hooks/sync-recalls'
   id:
     | '__root__'
     | '/'
@@ -226,6 +238,7 @@ export interface FileRouteTypes {
     | '/_authenticated/recalls'
     | '/api/command'
     | '/.lovable/oauth/consent'
+    | '/api/public/hooks/sync-recalls'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -239,6 +252,7 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiCommandRoute: typeof ApiCommandRoute
   DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
+  ApiPublicHooksSyncRecallsRoute: typeof ApiPublicHooksSyncRecallsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -362,6 +376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/sync-recalls': {
+      id: '/api/public/hooks/sync-recalls'
+      path: '/api/public/hooks/sync-recalls'
+      fullPath: '/api/public/hooks/sync-recalls'
+      preLoaderRoute: typeof ApiPublicHooksSyncRecallsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -400,6 +421,7 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiCommandRoute: ApiCommandRoute,
   DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
+  ApiPublicHooksSyncRecallsRoute: ApiPublicHooksSyncRecallsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

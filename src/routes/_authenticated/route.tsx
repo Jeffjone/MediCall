@@ -1,9 +1,13 @@
-import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useNavigate, useRouter } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getMySession } from "@/lib/profiles.functions";
 import { getRecallFeed } from "@/lib/recalls.functions";
-import { setRecalls } from "@/lib/recall-matching";
+import { setRecalls, matchPatients } from "@/lib/recall-matching";
+import { collectUnseenRecalls } from "@/lib/recall-news";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { Clock } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated")({
@@ -63,6 +67,47 @@ export function useRecalls() {
 function AuthLayout() {
   const { session } = Route.useRouteContext();
   const navigate = useNavigate();
+  const router = useRouter();
+  const { recalls } = Route.useLoaderData();
+
+  // Re-check the stored FDA feed twice a day for long-running sessions.
+  useEffect(() => {
+    const id = window.setInterval(
+      () => {
+        router.invalidate();
+      },
+      12 * 60 * 60 * 1000,
+    );
+    return () => window.clearInterval(id);
+  }, [router]);
+
+  // Pop an alert for every recall this browser has not seen before.
+  useEffect(() => {
+    const unseen = collectUnseenRecalls(recalls);
+    if (unseen.length === 0) return;
+
+    const matched = matchPatients(undefined, unseen);
+    const affected = matched.filter((m) => m.isFlagged).length;
+    const label =
+      unseen.length === 1
+        ? `New FDA recall — ${unseen[0]!.drugName}`
+        : `${unseen.length} new FDA recalls added`;
+
+    const show = affected > 0 ? toast.error : toast.info;
+    show(label, {
+      description:
+        affected > 0
+          ? `${affected} of your patient${affected === 1 ? "" : "s"} may be affected. Review now.`
+          : "Added to your recall list from the FDA feed.",
+      duration: 12000,
+      action: {
+        label: "View recalls",
+        onClick: () => navigate({ to: "/recalls" }),
+      },
+    });
+  }, [recalls, navigate]);
+
+
 
   if (session.approvalStatus !== "approved") {
     return (
