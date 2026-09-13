@@ -5,10 +5,14 @@ import {
   PhoneCall,
   Activity,
   Search,
+  Network,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import { InteractionGraph } from "@/components/InteractionGraph";
+import { useInteractions } from "@/lib/interaction-store";
+import { regimenFingerprint } from "@/lib/interaction-types";
 import { InitiateCallButton } from "@/components/InitiateCallButton";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -58,8 +62,11 @@ function Dashboard() {
   const { session } = useRouteContext();
 
   const recalls = useRecalls();
+  const interactions = useInteractions();
   const matched = useMemo(() => matchPatients(undefined, recalls), [recalls]);
   const stats = useMemo(() => getStats(matched, recalls), [matched, recalls]);
+  const checked = matched.filter(m => interactions[m.patient.id]?.fingerprint === regimenFingerprint(m.patient));
+  const interactionRisks = checked.filter(m => (interactions[m.patient.id]?.edges.length ?? 0) > 0);
   const demoCount = recalls.filter(r => r.recallNumber.startsWith("DEMO-")).length;
 
   const affected = useMemo(
@@ -120,6 +127,13 @@ function Dashboard() {
           </Card>
         ))}
       </div>
+
+      <section className="space-y-3 border-y py-5">
+        <div className="flex flex-wrap items-center justify-between gap-2"><h2 className="flex items-center gap-2 font-semibold"><Network className="h-5 w-5 text-warning" />Interaction risks ({interactionRisks.length})</h2><span className="text-xs text-muted-foreground">{checked.length}/{matched.length} regimens screened</span></div>
+        <p className="text-sm text-muted-foreground">Potential medication or allergy label mentions. Pharmacist review required; missing evidence is not a safety clearance.</p>
+        {interactionRisks.filter(m => m.fullName.toLowerCase().includes(query.toLowerCase())).map(m => <div key={m.patient.id} className="flex flex-wrap items-center justify-between gap-3 border-b py-3"><div className="space-y-1"><p className="font-medium">{m.fullName}</p><div className="flex gap-2"><Badge className="border-warning bg-warning/15 text-warning-foreground"><Network className="mr-1 h-3 w-3" />Interaction risk</Badge>{m.isFlagged && <Badge variant="destructive">Recall risk</Badge>}</div></div><InteractionGraph patientId={m.patient.id} name={m.fullName} /></div>)}
+        {!interactionRisks.length && <p className="text-sm">{checked.length < matched.length ? 'Interaction checks pending or incomplete.' : 'No explicit conflicts identified in available labels.'}</p>}
+      </section>
 
       {topRecall && (
         <Card className="border-destructive/30 bg-destructive/5">
