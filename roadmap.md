@@ -22,4 +22,4 @@
 # Demo recall simulation
 - [x] Add sidebar simulation, saved dummy recall and downloadable JSON.
 - [x] Refresh matching, notifications, analysis and outreach from shared recall history; label simulations as fictional.
-- [ ] Verify simulation in the signed-in browser without placing a call.
+- [x] Verify simulation in the signed-in browser without placing a call: JSON downloaded, toast appeared, saved DEMO recall displayed with four affected patients.
