@@ -19,33 +19,8 @@ export const Route = createFileRoute("/_authenticated")({
     if (error || !data.user) {
       throw redirect({ to: "/auth" });
     }
-    try {
-      const session = await getMySession();
-      return { session };
-    } catch {
-      // Profile not built yet (e.g. trigger lag). Treat as pending.
-      return {
-        session: {
-          userId: data.user.id,
-          email: data.user.email ?? "",
-          pharmacyName: "Unregistered Pharmacy",
-          pharmacyLocation: null,
-          licenseNumber: null,
-          fullName: null,
-          approvalStatus: "pending" as const,
-          role: "staff" as const,
-          phone: null,
-          streetAddress: null,
-          city: null,
-          state: null,
-          postalCode: null,
-          npiNumber: null,
-          deaNumber: null,
-          hours: null,
-          notes: null,
-        },
-      };
-    }
+    const session = await getMySession();
+    return { session };
   },
   loader: async () => {
     const feed = await getRecallFeed();

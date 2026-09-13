@@ -52,7 +52,7 @@ export async function generateBrief(kind: string, key: string, prompt: string): 
     fetch: async (input, init) => {
       const headers = new Headers(init?.headers);
       if (runId) headers.set('X-Lovable-AIG-Run-ID', runId);
-      const res = await fetch(input, { ...init, headers });
+      const res = await fetch(input, { ...init, headers, signal: AbortSignal.any([...(init?.signal ? [init.signal] : []), AbortSignal.timeout(90000)]) });
       runId = res.headers.get('X-Lovable-AIG-Run-ID') ?? runId;
       return res;
     },

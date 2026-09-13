@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { formatFdaDate } from "@/lib/recall-matching";
+import { errorMessage } from "@/lib/app-errors";
 import { scanLabel, type ScanResponse } from "@/lib/scan.functions";
 import { useRouteContext } from "@/routes/_authenticated/route";
 
@@ -64,32 +65,40 @@ function ScanPage() {
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<ScanResponse | null>(null);
 
+  const [scanError, setScanError] = useState<string | null>(null);
+
   async function handleFile(file: File) {
+    if (busy) return;
+    setScanError(null);
+    setResult(null);
+    setBusy(true);
+    try {
     if (file.size > 8 * 1024 * 1024) {
-      toast.error("That photo is too large. Take a new one.");
-      return;
+      throw new Error("That photo is too large. Choose a photo smaller than 8 MB.");
     }
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) throw new Error("Choose a JPEG, PNG, or WebP photo.");
     const image = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => resolve(String(reader.result));
-      reader.onerror = () => reject(new Error("read failed"));
+      reader.onerror = () => reject(new Error("The photo could not be read. Choose it again."));
       reader.readAsDataURL(file);
     });
     setPreview(image);
     setResult(null);
-    setBusy(true);
-    try {
       const response = await run({ data: { image } });
       setResult(response);
-      if (!response.ok) toast.error(response.message);
-    } catch {
-      toast.error("The scan failed. Try again.");
+      if (!response.ok) { setScanError(response.message); toast.error(response.message); }
+    } catch (error) {
+      const message = errorMessage(error);
+      setScanError(message);
+      toast.error(message);
     } finally {
       setBusy(false);
     }
   }
 
   function reset() {
+    setScanError(null);
     setPreview(null);
     setResult(null);
     if (inputRef.current) inputRef.current.value = "";
@@ -117,6 +126,7 @@ function ScanPage() {
         </Card>
       ) : (
         <div className="mx-auto w-full max-w-md space-y-4">
+          {scanError && <p role="alert" className="rounded-md border border-destructive/30 p-3 text-sm text-destructive">{scanError}</p>}
           <input
             ref={inputRef}
             type="file"

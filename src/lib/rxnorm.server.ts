@@ -2,13 +2,13 @@ const cache = new Map<string, { rxcui: string | null; name: string | null; statu
 export async function resolveDrug(ndc: string) {
   const cached = cache.get(ndc); if (cached) return cached;
   try {
-    const response = await fetch(`https://rxnav.nlm.nih.gov/REST/rxcui.json?idtype=NDC&id=${encodeURIComponent(ndc)}`);
+    const response = await fetch(`https://rxnav.nlm.nih.gov/REST/rxcui.json?idtype=NDC&id=${encodeURIComponent(ndc)}`, { signal: AbortSignal.timeout(10000) });
     if (!response.ok) throw new Error(`RxNorm returned ${response.status}`);
     const data = await response.json() as { idGroup?: { rxnormId?: string[] } };
     const rxcui = data.idGroup?.rxnormId?.[0] ?? null;
     let name: string | null = null;
     if (rxcui) {
-      const properties = await fetch(`https://rxnav.nlm.nih.gov/REST/rxcui/${encodeURIComponent(rxcui)}/properties.json`);
+      const properties = await fetch(`https://rxnav.nlm.nih.gov/REST/rxcui/${encodeURIComponent(rxcui)}/properties.json`, { signal: AbortSignal.timeout(10000) });
       if (properties.ok) name = ((await properties.json()) as { properties?: { name?: string } }).properties?.name ?? null;
     }
     const result = { rxcui, name, status: rxcui ? 'RxNorm identity verified; recall scope remains NDC-specific' : 'No RxNorm identifier found; exact NDC evidence retained' };

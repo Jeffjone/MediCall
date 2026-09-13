@@ -112,7 +112,12 @@ export async function readStoredFeed(): Promise<StoredFeed> {
     return (data ?? []) as unknown as Row[];
   };
 
-  let rows = await read();
+  let rows: Row[];
+  try { rows = await read(); } catch {
+    const { fetchRecalls } = await import("@/lib/recalls.server");
+    const live = await fetchRecalls();
+    return { recalls: live.recalls, source: live.source, fetchedAt: new Date().toISOString(), lastSyncedAt: null, newRecallNumbers: [] };
+  }
   const lastSynced = rows.reduce<string | null>(
     (max, r) => (!max || r.last_synced_at > max ? r.last_synced_at : max),
     null,
