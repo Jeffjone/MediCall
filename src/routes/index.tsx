@@ -36,21 +36,22 @@ export const Route = createFileRoute("/")({
 });
 
 function LandingPage() {
-  const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
     let active = true;
     supabase.auth.getSession().then(({ data }) => {
-      if (active && data.session) {
-        navigate({ to: "/dashboard", replace: true });
-      }
-      setChecking(false);
+      if (active) setSignedIn(Boolean(data.session));
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (active) setSignedIn(Boolean(session));
     });
     return () => {
       active = false;
+      sub.subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, []);
+
 
   const features = [
     {
