@@ -22,7 +22,7 @@ export function createCommandGateway(_key: string, initial?: string) {
       } catch (error) { resolve(undefined); throw error; }
     },
   });
-  return { provider, model: endpoint.model, async wrap(response: Response) {
+  return { provider, model: endpoint.model, direct: endpoint.direct, async wrap(response: Response) {
     const reader = response.body?.getReader();
     if (!reader) return response;
     const first = reader.read();
