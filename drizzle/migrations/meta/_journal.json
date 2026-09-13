@@ -50,6 +50,13 @@
       "when": 1789274489603,
       "tag": "0006_patient_interaction_checks",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1789283877140,
+      "tag": "0007_create_ai_briefings",
+      "breakpoints": true
     }
   ]
 }

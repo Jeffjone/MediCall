@@ -10,6 +10,7 @@ import {
 import { useMemo, useState } from "react";
 
 import { AppShell } from "@/components/AppShell";
+import { DailyBriefing } from "@/components/DailyBriefing";
 import { InteractionGraph } from "@/components/InteractionGraph";
 import { useInteractions } from "@/lib/interaction-store";
 import { regimenFingerprint } from "@/lib/interaction-types";
@@ -111,6 +112,8 @@ function Dashboard() {
       subtitle="Patient matches across FDA recalls and clearly labeled demo simulations."
       session={session}
     >
+      <DailyBriefing />
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((c) => (
           <Card key={c.label}>
