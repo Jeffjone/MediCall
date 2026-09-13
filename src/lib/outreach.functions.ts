@@ -196,29 +196,19 @@ export const placeDoctorCall = createServerFn({ method: "POST" })
           agent_phone_number_id: phoneNumberId,
           to_number: toNumber,
           conversation_initiation_client_data: {
-            dynamic_variables: {
-              doctor_name: doctorName,
-              patient_name: patient.fullName,
-              patient_id: patient.patient.id,
-              drug_name: flagged.prescription.drugName,
-              drug_strength: flagged.prescription.strength,
-              ndc: flagged.prescription.ndc,
-              recall_number: flagged.recall.recallNumber,
-              recall_reason: flagged.recall.reasonForRecall,
-              recall_classification: flagged.recall.classification,
-              pharmacy_name: profile.pharmacy_name,
-            },
+            dynamic_variables: docVars,
             overrides: {
               agent: {
                 first_message:
                   (isDemo ? "This is a MediCall demonstration, not a real medication recall. " : "") +
-                  DOCTOR_FIRST_MESSAGE,
+                  renderScript(DOCTOR_FIRST_MESSAGE, docVars),
                 prompt: {
                   prompt:
-                    DOCTOR_SYSTEM_PROMPT +
+                    renderScript(DOCTOR_SYSTEM_PROMPT, docVars) +
                     (isDemo
                       ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication."
-                      : ""),
+                      : "") +
+                    `\nAuthoritative case facts for THIS call (use these exact values and no others): patient ${patient.fullName} (${patient.patient.id}) takes ${flagged.prescription.drugName} ${flagged.prescription.strength}, NDC ${flagged.prescription.ndc}, recall ${flagged.recall.recallNumber} (${flagged.recall.classification}). Never mention any other medication.`,
                 },
               },
             },
