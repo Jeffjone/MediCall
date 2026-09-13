@@ -77,6 +77,7 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
       patient_name: data.patientName,
       patient_id: data.patientId,
       drug_name: data.drugName,
+      recalled_medication_name: data.drugName,
       drug_strength: data.strength,
       ndc: data.ndc,
       recall_number: data.recallNumber,
@@ -101,7 +102,7 @@ export const placeOutreachCall = createServerFn({ method: "POST" })
             to_number: toNumber,
             conversation_initiation_client_data: {
               dynamic_variables: vars,
-              overrides: {
+              conversation_config_override: {
                 agent: {
                   first_message: (data.recallNumber.startsWith("DEMO-") ? "This is a MediCall demonstration, not a real medication recall. " : "") + renderScript(OUTREACH_FIRST_MESSAGE, vars),
                   prompt: { prompt: renderScript(OUTREACH_SYSTEM_PROMPT, vars) + (data.recallNumber.startsWith("DEMO-") ? "\nThis entire call is a fictional demo. Never claim the FDA actually recalled this medication; do not instruct medication changes based on this simulation." : "") + (approved?.script ? "\nPharmacist-approved discussion plan:\n" + approved.script : "\nNo alternative has been approved. Do not recommend a replacement.") + `\nAuthoritative case facts for THIS call (use these exact values and no others): ${summary}. Never mention any other medication as the patient's prescription.` },
@@ -192,6 +193,7 @@ export const placeDoctorCall = createServerFn({ method: "POST" })
       patient_name: patient.fullName,
       patient_id: patient.patient.id,
       drug_name: flagged.prescription.drugName,
+      recalled_medication_name: flagged.prescription.drugName,
       drug_strength: flagged.prescription.strength,
       ndc: flagged.prescription.ndc,
       recall_number: flagged.recall.recallNumber,
@@ -210,7 +212,7 @@ export const placeDoctorCall = createServerFn({ method: "POST" })
           to_number: toNumber,
           conversation_initiation_client_data: {
             dynamic_variables: docVars,
-            overrides: {
+            conversation_config_override: {
               agent: {
                 first_message:
                   (isDemo ? "This is a MediCall demonstration, not a real medication recall. " : "") +
