@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
   Pill,
@@ -36,21 +36,22 @@ export const Route = createFileRoute("/")({
 });
 
 function LandingPage() {
-  const navigate = useNavigate();
-  const [checking, setChecking] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
 
   useEffect(() => {
     let active = true;
     supabase.auth.getSession().then(({ data }) => {
-      if (active && data.session) {
-        navigate({ to: "/dashboard", replace: true });
-      }
-      setChecking(false);
+      if (active) setSignedIn(Boolean(data.session));
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (active) setSignedIn(Boolean(session));
     });
     return () => {
       active = false;
+      sub.subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, []);
+
 
   const features = [
     {
@@ -111,21 +112,30 @@ function LandingPage() {
             lets your team trigger a scripted AI outreach call the moment a recall hits.
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link to="/signup">
-              <Button size="lg">
-                Register your pharmacy
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-            <Link to="/auth">
-              <Button size="lg" variant="outline">
-                Sign in
-              </Button>
-            </Link>
+            {signedIn ? (
+              <Link to="/dashboard">
+                <Button size="lg">
+                  Go to dashboard
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/signup">
+                  <Button size="lg">
+                    Register your pharmacy
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button size="lg" variant="outline">
+                    Sign in
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
-          {checking && (
-            <p className="mt-4 text-xs text-muted-foreground">Checking your session…</p>
-          )}
+
         </section>
 
         <section className="grid gap-4 sm:grid-cols-3">
