@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_briefings: {
+        Row: {
+          cache_key: string
+          content: Json
+          created_at: string
+          kind: string
+        }
+        Insert: {
+          cache_key: string
+          content: Json
+          created_at?: string
+          kind: string
+        }
+        Update: {
+          cache_key?: string
+          content?: Json
+          created_at?: string
+          kind?: string
+        }
+        Relationships: []
+      }
       cron_config: {
         Row: {
           cron_secret: string
