@@ -7,6 +7,7 @@ import { InitiateCallButton } from "@/components/InitiateCallButton";
 import { RefillTracker } from "@/components/RefillTracker";
 import { patientRefillSummary } from "@/lib/refill-tracking";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
@@ -86,10 +87,13 @@ function matchesFilter(m: MatchedPatient, filter: FilterKey): boolean {
   }
 }
 
+const PAGE_SIZE = 20;
+
 function PatientsPage() {
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortKey>("name-asc");
   const [filter, setFilter] = useState<FilterKey>("all");
+  const [page, setPage] = useState(1);
   const recalls = useRecalls();
   const matched = useMemo(() => matchPatients(undefined, recalls), [recalls]);
   const { session } = useRouteContext();
@@ -111,6 +115,12 @@ function PatientsPage() {
       .sort(sortOptions[sort].compare);
   }, [matched, query, filter, sort]);
 
+  const totalPages = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = visible.slice(start, start + PAGE_SIZE);
+
+
   return (
     <AppShell
       title="Patients"
@@ -122,13 +132,22 @@ function PatientsPage() {
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setPage(1);
+            }}
             placeholder="Search patients, medications, or NDC…"
             className="pl-9"
           />
         </div>
         <div className="flex items-center gap-3">
-          <Select value={filter} onValueChange={(v) => setFilter(v as FilterKey)}>
+          <Select
+            value={filter}
+            onValueChange={(v) => {
+              setFilter(v as FilterKey);
+              setPage(1);
+            }}
+          >
             <SelectTrigger className="h-9 w-[190px]" aria-label="Filter patients">
               <SelectValue />
             </SelectTrigger>
@@ -141,7 +160,13 @@ function PatientsPage() {
               <SelectItem value="refill-overuse">Refill overuse</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+          <Select
+            value={sort}
+            onValueChange={(v) => {
+              setSort(v as SortKey);
+              setPage(1);
+            }}
+          >
             <SelectTrigger className="h-9 w-[170px]" aria-label="Sort patients">
               <SelectValue />
             </SelectTrigger>
@@ -153,12 +178,17 @@ function PatientsPage() {
             </SelectContent>
           </Select>
         </div>
-        <span className="text-sm text-muted-foreground">{visible.length} patients</span>
+        <span className="text-sm text-muted-foreground">
+          {visible.length === 0
+            ? "No patients"
+            : `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, visible.length)} of ${visible.length} patients`}
+        </span>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        {visible.map((m) => (
+        {pageItems.map((m) => (
           <Card
+
             key={m.patient.id}
             className={m.isFlagged ? "border-destructive/40 bg-destructive/5" : ""}
           >
@@ -223,6 +253,33 @@ function PatientsPage() {
           </Card>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between gap-3 border-t pt-4">
+          <span className="text-sm text-muted-foreground">
+            Page {currentPage} of {totalPages}
+          </span>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage <= 1}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={currentPage >= totalPages}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
     </AppShell>
+
   );
 }
