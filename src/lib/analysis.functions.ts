@@ -7,7 +7,11 @@ export const analysePatient = createServerFn({ method: 'POST' }).middleware([req
   .handler(async ({ data, context }) => {
     const { data: profile } = await context.supabase.from('profiles').select('approval_status').eq('id', context.userId).single();
     if (profile?.approval_status !== 'approved') return { ok: false as const, message: 'An approved pharmacy account is required.' };
-    try { return { ok: true as const, result: await analyseCase(data.patientId, data.recallNumber, data.ndc, context.userId) }; }
+    try {
+      const { readStoredFeed } = await import('./recall-sync.server');
+      const feed = await readStoredFeed();
+      return { ok: true as const, result: await analyseCase(data.patientId, data.recallNumber, data.ndc, context.userId, feed.recalls) };
+    }
     catch (error) { return { ok: false as const, message: gatewayMessage(error) }; }
   });
 export const approveAlternative = createServerFn({ method: 'POST' }).middleware([requireSupabaseAuth])

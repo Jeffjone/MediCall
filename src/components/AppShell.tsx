@@ -14,6 +14,7 @@ import type { ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { NotificationBell } from "@/components/NotificationBell";
+import { SimulateRecallButton } from "@/components/SimulateRecallButton";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { supabase } from "@/integrations/supabase/client";
@@ -93,6 +94,7 @@ export function AppShell({
             </Link>
           ))}
         </nav>
+        <div className="mx-3 mb-3"><SimulateRecallButton /></div>
         <div className="mx-3 mb-4 rounded-lg border border-sidebar-border px-3 py-2.5 text-[11px] leading-relaxed text-sidebar-foreground/50">
           Demo mode — all outreach calls dial one verified test number.
         </div>
@@ -144,6 +146,7 @@ export function AppShell({
         </header>
 
         <main className="flex-1 space-y-6 p-6 lg:p-8">
+          <div className="md:hidden"><SimulateRecallButton /></div>
           <div className="space-y-1">
             <h1 className="font-display text-[1.65rem] font-bold tracking-tight">{title}</h1>
             <p className="text-sm text-muted-foreground">{subtitle}</p>

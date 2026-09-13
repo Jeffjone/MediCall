@@ -69,7 +69,7 @@ function RecallsPage() {
       subtitle={
         source === "fallback"
           ? "openFDA is unreachable right now, showing the last bundled snapshot. Matching is done on NDC."
-          : `${recalls.length} recalls tracked from the openFDA Drug Enforcement (RES) API. Checked automatically every 12 hours — last check ${syncedLabel}. Matching is done on NDC.`
+          : `${recalls.filter(r => !r.recallNumber.startsWith("DEMO-")).length} FDA recalls and ${recalls.filter(r => r.recallNumber.startsWith("DEMO-")).length} demo simulations tracked. Checked automatically every 12 hours — last check ${syncedLabel}. Matching is done on NDC.`
       }
       session={session}
     >
@@ -86,6 +86,7 @@ function RecallsPage() {
                   </CardTitle>
                   <div className="flex shrink-0 items-center gap-1">
                     {isNew && <Badge>NEW</Badge>}
+                    {recall.recallNumber.startsWith("DEMO-") && <Badge variant="outline">DEMO</Badge>}
                     <Badge
                       variant={recall.classification === "Class I" ? "destructive" : "secondary"}
                     >
@@ -120,7 +121,7 @@ function RecallsPage() {
                   </p>
                 )}
 
-                <a
+                {!recall.recallNumber.startsWith("DEMO-") && <a
                   href={`https://api.fda.gov/drug/enforcement.json?search=recall_number:%22${encodeURIComponent(recall.recallNumber)}%22`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -128,7 +129,7 @@ function RecallsPage() {
                 >
                   View official FDA record
                   <ExternalLink className="h-3 w-3" />
-                </a>
+                </a>}
                 <div className="flex items-center justify-between border-t pt-3 text-xs">
                   <span className="text-muted-foreground">
                     Initiated {formatFdaDate(recall.recallInitiationDate)} · {recall.status}

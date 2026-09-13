@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRecalls } from "@/routes/_authenticated/route";
 
 import {
   affectedCountByRecall,
@@ -42,7 +43,7 @@ export function buildNotifications(): AppNotification[] {
     items.push({
       id: `recall:${recall.recallNumber}`,
       kind: "recall",
-      title: `${recall.classification} recall — ${recall.drugName}`,
+      title: `${recall.recallNumber.startsWith("DEMO-") ? "DEMO · " : ""}${recall.classification} recall — ${recall.drugName}`,
       body: `${recall.recallNumber} · ${recall.reasonForRecall}`,
       timestamp: formatFdaDate(recall.reportDate),
       severity: recall.classification === "Class I" ? "critical" : "warning",
@@ -89,7 +90,8 @@ function readStored(): string[] {
 }
 
 export function useNotifications() {
-  const notifications = useMemo(() => buildNotifications(), []);
+  const feed = useRecalls();
+  const notifications = useMemo(() => buildNotifications(), [feed]);
   const [read, setRead] = useState<string[]>([]);
 
   useEffect(() => {
