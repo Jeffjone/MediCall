@@ -119,36 +119,66 @@ export function AppShell({
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center gap-4 border-b bg-card px-6 py-3.5">
-          <div className="flex items-center gap-2 md:hidden">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+        <header className="sticky top-0 z-30 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 border-b bg-card/95 px-4 py-2.5 backdrop-blur md:flex md:gap-4 md:px-6 md:py-3.5">
+          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[17rem] bg-sidebar p-0 text-sidebar-foreground">
+              <SheetHeader className="px-5 py-5 text-left">
+                <SheetTitle className="flex items-center gap-2.5 text-sidebar-foreground">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                    <Pill className="h-5 w-5" />
+                  </span>
+                  <span className="flex flex-col leading-tight">
+                    <span className="font-display text-lg font-bold tracking-tight">Medicall</span>
+                    <span className="text-[9px] font-semibold uppercase tracking-[0.12em] text-sidebar-foreground/50">
+                      Know Sooner. Act Faster.
+                    </span>
+                  </span>
+                </SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col gap-1 px-3">
+                {items.map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground/60"
+                    activeProps={{ className: "bg-sidebar-accent text-sidebar-accent-foreground" }}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    {item.label}
+                  </Link>
+                ))}
+              </nav>
+              <div className="mt-4 px-3"><SimulateRecallButton /></div>
+              <div className="mx-3 mt-3 rounded-lg border border-sidebar-border px-3 py-2.5 text-[11px] leading-relaxed text-sidebar-foreground/50">
+                Demo mode — all outreach calls dial one verified test number.
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          <div className="flex min-w-0 items-center gap-2 md:hidden">
+            <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <Pill className="h-4 w-4" />
             </div>
-            <span className="font-display font-bold">Medicall</span>
+            <span className="truncate font-display font-bold">Medicall</span>
           </div>
-          <nav className="flex gap-1 overflow-x-auto md:hidden">
-            {items.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className="rounded-md px-2 py-1 text-xs font-medium text-muted-foreground"
-                activeProps={{ className: "bg-primary/10 text-primary" }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <div className="ml-auto flex items-center gap-2">
+
+          <div className="flex items-center gap-1 md:ml-auto md:gap-2">
             <NotificationBell />
-            <Separator orientation="vertical" className="mx-1 h-6" />
+            <Separator orientation="vertical" className="mx-1 hidden h-6 md:block" />
             <Link
               to="/profile"
-              className="flex items-center gap-2 rounded-full border px-2.5 py-1.5 transition-colors hover:bg-accent"
+              className="flex items-center gap-2 rounded-full border p-1 transition-colors hover:bg-accent md:px-2.5 md:py-1.5"
             >
               <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary">
                 {initials || "RX"}
               </div>
-              <span className="hidden text-sm font-medium sm:inline">
+              <span className="hidden text-sm font-medium md:inline">
                 {session.pharmacyName}
               </span>
             </Link>
@@ -163,10 +193,9 @@ export function AppShell({
           </div>
         </header>
 
-        <main className="flex-1 space-y-6 p-6 lg:p-8">
-          <div className="md:hidden"><SimulateRecallButton /></div>
+        <main className="flex-1 space-y-5 px-4 py-5 md:space-y-6 md:p-6 lg:p-8">
           <div className="space-y-1">
-            <h1 className="font-display text-[1.65rem] font-bold tracking-tight">{title}</h1>
+            <h1 className="font-display text-xl font-bold tracking-tight sm:text-[1.65rem]">{title}</h1>
             <p className="text-sm text-muted-foreground">{subtitle}</p>
           </div>
           {children}
