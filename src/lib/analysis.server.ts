@@ -36,7 +36,7 @@ export async function analyseCase(patientId: string, recallNumber: string, ndc: 
   let runId: string | undefined;
   const provider = createOpenAI({ baseURL: 'https://ai.gateway.lovable.dev/v1', apiKey: secret(), headers: { 'Lovable-API-Key': secret(), 'X-Lovable-AIG-SDK': 'vercel-ai-sdk' }, fetch: async (input, init) => {
     const headers = new Headers(init?.headers); if (runId) headers.set('X-Lovable-AIG-Run-ID', runId);
-    const response = await fetch(input, { ...init, headers }); runId = response.headers.get('X-Lovable-AIG-Run-ID') ?? runId; return response;
+    const response = await fetch(input, { ...init, headers, signal: AbortSignal.any([...(init?.signal ? [init.signal] : []), AbortSignal.timeout(90000)]) }); runId = response.headers.get('X-Lovable-AIG-Run-ID') ?? runId; return response;
   } });
   const result = streamText({
     model: provider.responses('openai/gpt-6-astra'), maxRetries: 0,

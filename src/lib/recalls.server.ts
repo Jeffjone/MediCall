@@ -89,6 +89,7 @@ async function queryOpenFda(search: string, limit: number, sort?: string): Promi
 
   const response = await fetch(url, {
     headers: { accept: "application/json" },
+    signal: AbortSignal.timeout(15000),
   });
 
   if (!response.ok) {

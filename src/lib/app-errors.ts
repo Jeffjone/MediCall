@@ -1,11 +1,13 @@
 /** Safe messages shared by page recovery and service callers. Never display raw HTML or provider payloads. */
-export function errorStatus(error: unknown): number | undefined {
+export function errorStatus(error: unknown, seen = new Set<unknown>()): number | undefined {
   if (!error || typeof error !== 'object') return undefined;
+  if (seen.has(error)) return undefined;
+  seen.add(error);
   for (const key of ['statusCode', 'status']) {
     const value = (error as Record<string, unknown>)[key];
     if (typeof value === 'number' && value >= 400 && value <= 599) return value;
   }
-  if ('cause' in error && error.cause !== error) return errorStatus(error.cause);
+  if ('cause' in error && error.cause !== error) return errorStatus(error.cause, seen);
   return undefined;
 }
 
@@ -25,20 +27,13 @@ export function errorMessage(error: unknown): string {
     503: 'The service is temporarily unavailable. Please try again later.',
     504: 'A connected service took too long to respond. Check its status before trying again.',
   };
-  // Gateway messages explain billing/policy/validation errors more precisely.
-  if (error && typeof error === 'object' && 'responseBody' in error && typeof error.responseBody === 'string') {
-    try {
-      const body = JSON.parse(error.responseBody);
-      const message = body.message ?? body.error?.message;
-      if (typeof message === 'string' && message.trim() && !/<(?:html|body|script|!doctype)/i.test(message)) return message.slice(0, 600);
-    } catch { /* HTML and malformed upstream bodies must not leak into the UI. */ }
-  }
   if (status && messages[status]) return messages[status];
   if (error instanceof Error) {
+    if (error.name === 'TimeoutError') return messages[504]!;
     if (error.name === 'AbortError') return 'The request was cancelled.';
     if (/failed to fetch|fetch failed|networkerror|network request|load failed/i.test(error.message)) return 'Connection lost. Check your internet connection and try again.';
     if (/chunk|dynamically imported module/i.test(error.message)) return 'A new version of MediCall is available. Reload the page to continue.';
-    if (error.message && !/<(?:html|body|script|!doctype)|stack trace/i.test(error.message)) return error.message.slice(0, 600);
+    if (error.message && !/<(?:html|body|script|!doctype)|stack trace|api[_-]?key|bearer |postgres|supabase|select .* from|https?:\/\//i.test(error.message)) return error.message.slice(0, 600);
   }
   return 'Something went wrong. Please try again later.';
 }

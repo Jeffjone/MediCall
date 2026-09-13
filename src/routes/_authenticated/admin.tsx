@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, X, ShieldCheck, Building2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { errorMessage } from "@/lib/app-errors";
 import { AppShell } from "@/components/AppShell";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,7 @@ function AdminPage() {
   const approve = useServerFn(setApprovalStatus);
   const queryClient = useQueryClient();
 
-  const { data: pending = [], isLoading } = useQuery({
+  const { data: pending = [], isLoading, isError, error, refetch } = useQuery({
     queryKey: ["pending-profiles"],
     queryFn: () => fetchPending(),
   });
@@ -75,7 +76,8 @@ function AdminPage() {
           {isLoading && (
             <p className="py-8 text-center text-sm text-muted-foreground">Loading…</p>
           )}
-          {!isLoading && pending.length === 0 && (
+          {isError && <div role="alert" className="space-y-3 py-8 text-center text-sm text-destructive"><p>{errorMessage(error)}</p><Button variant="outline" onClick={() => void refetch()}>Try again</Button></div>}
+          {!isLoading && !isError && pending.length === 0 && (
             <div className="flex flex-col items-center gap-2 py-12 text-center text-sm text-muted-foreground">
               <Check className="h-6 w-6" />
               No pending registrations. Everyone is approved.

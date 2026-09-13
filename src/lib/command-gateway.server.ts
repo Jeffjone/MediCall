@@ -12,7 +12,7 @@ export function createCommandGateway(key: string, initial?: string) {
       const headers = new Headers(init?.headers);
       if (runId) headers.set(HEADER, runId);
       try {
-        const response = await fetch(input, { ...init, headers });
+        const response = await fetch(input, { ...init, headers, signal: AbortSignal.any([...(init?.signal ? [init.signal] : []), AbortSignal.timeout(90000)]) });
         runId = response.headers.get(HEADER) ?? runId;
         resolve(runId);
         return response;
